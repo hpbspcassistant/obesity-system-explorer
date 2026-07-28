@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "obesity-system-map",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "obesity-system-map",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5180",
+        "--strictPort"
+      ],
+      "port": 5180,
+      "autoPort": false
+    }
+  ]
+}

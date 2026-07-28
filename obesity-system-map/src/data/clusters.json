@@ -1,0 +1,93 @@
+{
+ "_meta": {
+  "source": "obesity_system_map_node_boxes_only.svg",
+  "description": "Legend clusters with swatch colours read from the node artwork.",
+  "order": "as printed on the original map legend"
+ },
+ "clusters": [
+  {
+   "name": "Media",
+   "swatch": "#ECEBDC",
+   "nodeCount": 6,
+   "accentFills": [
+    "#95A0A9"
+   ]
+  },
+  {
+   "name": "Social",
+   "swatch": "#F1E3CC",
+   "nodeCount": 14,
+   "accentFills": [
+    "#95A0A9",
+    "#F2E4CC"
+   ]
+  },
+  {
+   "name": "Psychological",
+   "swatch": "#F6F4DF",
+   "nodeCount": 11,
+   "accentFills": [
+    "#95A0A9",
+    "#FAE129"
+   ]
+  },
+  {
+   "name": "Economic",
+   "swatch": "#E4EDE8",
+   "nodeCount": 19,
+   "accentFills": [
+    "#7ABF82",
+    "#95A0A9",
+    "#E4EDE9"
+   ]
+  },
+  {
+   "name": "Food",
+   "swatch": "#EBEAF0",
+   "nodeCount": 16,
+   "accentFills": [
+    "#AB8DB8"
+   ]
+  },
+  {
+   "name": "Activity",
+   "swatch": "#F3E4D9",
+   "nodeCount": 13,
+   "accentFills": [
+    "#95A0A9",
+    "#E09E5D"
+   ]
+  },
+  {
+   "name": "Infrastructure",
+   "swatch": "#F4F5F6",
+   "nodeCount": 5,
+   "accentFills": [
+    "#95A0A9"
+   ]
+  },
+  {
+   "name": "Developmental",
+   "swatch": "#C3D5E8",
+   "nodeCount": 13,
+   "accentFills": []
+  },
+  {
+   "name": "Biological",
+   "swatch": "#DBDFE6",
+   "nodeCount": 7,
+   "accentFills": [
+    "#0096D4",
+    "#C3D5E8"
+   ]
+  },
+  {
+   "name": "Medical",
+   "swatch": "#DFECF4",
+   "nodeCount": 4,
+   "accentFills": [
+    "#303636"
+   ]
+  }
+ ]
+}

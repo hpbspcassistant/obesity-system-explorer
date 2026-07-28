@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+/* Force a white canvas regardless of the OS colour scheme. */
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: #ffffff;
+  color: #111827;
+}

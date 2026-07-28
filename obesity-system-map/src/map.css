@@ -1,0 +1,113 @@
+/*
+ * Selection styling for the inlined map.
+ *
+ * These rules target generated SVG markup that Tailwind's scanner never sees,
+ * so they live in plain CSS. Transitions are declared on the layer groups and
+ * the per-node groups only — never on the ~1050 individual paths — so a
+ * selection change animates a handful of elements rather than the whole map.
+ */
+
+.map-svg {
+  --dim-node: 0.15;
+  --dim-edge: 0.05;
+  --dim-filtered: 0.05;
+  --map-ease: 0.3s ease;
+}
+
+/* ---------------------------------------------------------------- edges */
+
+.map-svg [data-layer='edges'],
+.map-svg [data-layer='edge-highlight'] {
+  transition: opacity var(--map-ease);
+}
+
+/* The whole edges layer dims as one group; connected edges are re-drawn at
+   full opacity in the overlay above it, so they read as undimmed. */
+.map-svg.has-selection [data-layer='edges'] {
+  opacity: var(--dim-edge);
+}
+
+.map-svg [data-layer='edge-highlight'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-svg.has-selection [data-layer='edge-highlight'] {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------- nodes */
+
+.map-svg g[data-node-id] {
+  transform-box: fill-box;
+  transform-origin: center;
+  cursor: pointer;
+  transition:
+    opacity var(--map-ease),
+    transform var(--map-ease),
+    filter var(--map-ease);
+}
+
+.map-svg.has-selection g[data-node-id] {
+  opacity: var(--dim-node);
+}
+
+.map-svg.has-selection g[data-node-id].is-neighbour {
+  opacity: 1;
+  filter: drop-shadow(0 0 2.5px var(--node-accent, #64748b));
+}
+
+.map-svg.has-selection g[data-node-id].is-selected {
+  opacity: 1;
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 3px var(--node-accent, #64748b))
+    drop-shadow(0 0 7px var(--node-accent, #64748b));
+}
+
+/* The selected node's outline ring, thickened in its own accent colour. */
+.map-svg g[data-node-id].is-selected > path:last-of-type {
+  stroke: var(--node-accent, #64748b);
+  stroke-width: 2.5;
+}
+
+/* ------------------------------------------------------------------ labels */
+
+/* Labels live inside their node's group, so they inherit dimming and the
+   selected-node scale automatically. Clicks fall through to the box beneath. */
+.map-svg .node-label {
+  font-family: 'Segoe UI', 'Frutiger', 'Helvetica Neue', Arial, sans-serif;
+  pointer-events: none;
+  paint-order: stroke;
+  user-select: none;
+}
+
+/* ------------------------------------------------------- cluster filtering */
+
+/* Edge paths are grouped by the cluster pair they span, so filtering toggles
+   ~48 groups rather than restyling 892 paths. */
+.map-svg [data-cluster-a] {
+  transition: opacity var(--map-ease);
+}
+
+/* Listed last and matched at equal-or-higher specificity than the selection
+   rules above, so a filtered-out cluster stays hidden even while selected. */
+.map-svg g[data-node-id].is-filtered-out,
+.map-svg g[data-node-id].is-filtered-out.is-selected,
+.map-svg g[data-node-id].is-filtered-out.is-neighbour {
+  opacity: var(--dim-filtered);
+  transform: none;
+  filter: none;
+  pointer-events: none;
+}
+
+.map-svg [data-cluster-a].is-filtered-out {
+  opacity: var(--dim-filtered);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-svg [data-layer='edges'],
+  .map-svg [data-layer='edge-highlight'],
+  .map-svg g[data-node-id] {
+    transition-duration: 0.01ms;
+  }
+}

@@ -1,0 +1,9820 @@
+{
+ "_meta": {
+  "source": "obesity_system_map_complete_edge_geometry.xlsx",
+  "description": "Maps edge-layer <path> document order to connection IDs.",
+  "pathCount": 892,
+  "connectionCount": 296,
+  "orphanPathIndices": [
+   877,
+   878,
+   879
+  ],
+  "approximateRouteConnections": [
+   "C062",
+   "C075",
+   "C114",
+   "C118",
+   "C163",
+   "C280",
+   "C284",
+   "C285",
+   "C286",
+   "C287",
+   "C293"
+  ]
+ },
+ "paths": [
+  {
+   "role": "line",
+   "connections": [
+    "C220"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C220"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C220"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C123"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C123"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C123"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C195"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C195"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C195"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C034"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C034"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C034"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C047"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C047"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C047"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C093"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C093"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C093"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C070"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C070"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C070"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C104"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C104"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C104"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C112"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C112"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C112"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C117"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C117"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C117"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C118"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C118"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C118"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C027"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C027"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C027"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C028"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C028"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C028"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C166"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C166"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C166"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C110"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C110"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C110"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C100"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C100"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C100"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C139"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C139"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C139"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C163"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C163"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C163"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C164"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C164"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C164"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C124"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C124"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C124"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C134"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C134"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C134"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C105"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C105"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C105"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C113"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C113"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C113"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C146"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C146"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C146"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C040"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C040"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C040"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C043"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C043"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C043"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C042"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C042"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C042"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C004"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C004"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C004"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C007"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C007"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C007"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C011"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C011"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C011"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C065"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C065"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C065"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C048"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C048"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C048"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C035"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C035"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C035"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C075"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C075"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C075"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C026"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C026"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C026"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C045"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C045"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C045"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C017"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C017"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C017"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C094"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C094"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C094"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C008"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C008"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C008"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C006"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C006"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C006"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C066"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C066"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C066"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C014"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C014"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C014"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C015"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C015"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C015"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C129"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C129"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C129"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C128"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C128"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C128"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C024"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C024"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C024"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C059"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C059"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C059"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C049"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C049"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C049"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C091"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C091"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C091"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C140"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C140"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C140"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C231"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C231"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C231"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C071"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C071"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C071"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C199"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C199"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C199"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C125"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C125"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C125"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C147"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C147"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C147"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C219"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C219"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C219"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C230"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C230"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C230"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C115"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C115"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C115"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C141"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C141"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C141"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C116"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C116"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C116"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C144"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C144"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C144"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C021"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C021"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C021"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C020"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C020"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C020"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C137"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C137"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C137"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C138"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C138"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C138"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C038"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C038"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C038"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C046"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C046"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C046"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C178"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C178"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C178"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C182"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C182"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C182"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C183"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C183"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C183"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C044"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C044"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C044"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C031"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C031"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C031"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C063"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C063"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C063"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C083"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C083"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C083"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C013"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C013"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C013"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C076"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C076"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C076"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C136"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C136"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C136"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C080"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C080"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C080"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C081"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C081"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C081"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C162"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C162"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C162"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C087"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C087"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C087"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C068"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C068"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C068"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C179"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C179"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C179"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C025"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C025"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C025"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C032"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C032"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C032"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C069"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C069"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C069"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C088"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C088"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C088"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C165"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C165"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C165"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C126"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C126"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C126"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C037"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C037"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C037"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C005"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C005"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C005"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C167"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C167"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C167"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C130"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C130"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C130"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C092"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C092"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C092"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C131"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C131"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C131"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C160"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C160"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C160"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C064"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C064"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C064"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C073"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C073"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C073"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C036"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C036"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C036"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C204"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C204"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C204"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C221"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C221"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C221"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C114"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C114"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C114"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C053"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C053"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C053"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C152"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C152"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C152"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C150"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C150"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C150"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C151"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C151"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C151"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C127"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C127"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C127"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C193"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C193"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C193"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C171"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C171"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C171"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C121"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C121"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C121"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C176"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C176"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C176"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C175"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C175"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C175"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C174"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C174"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C174"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C177"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C177"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C177"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C224"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C224"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C224"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C173"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C173"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C173"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C196"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C196"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C196"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C248"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C248"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C248"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C215"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C215"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C215"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C218"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C218"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C218"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C217"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C217"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C217"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C228"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C228"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C228"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C188"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C188"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C188"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C097"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C097"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C097"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C078"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C078"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C078"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C111"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C111"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C111"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C168"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C168"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C168"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C194"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C194"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C194"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C108"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C108"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C108"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C186"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C186"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C186"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C107"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C107"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C107"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C172"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C172"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C172"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C245"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C245"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C245"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C106"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C106"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C106"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C290"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C290"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C290"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C295"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C295"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C295"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C229"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C229"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C229"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C198"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C198"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C198"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C214"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C214"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C214"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C054"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C054"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C054"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C237"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C237"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C237"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C170"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C170"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C170"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C009"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C009"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C009"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C077"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C077"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C077"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C003"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C003"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C003"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C050"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C050"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C050"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C211"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C211"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C211"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C019"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C019"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C019"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C216"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C216"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C216"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C212"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C212"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C212"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C155"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C155"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C155"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C157"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C157"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C157"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C158"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C158"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C158"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C213"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C213"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C213"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C180"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C180"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C180"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C153"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C153"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C153"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C132"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C132"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C132"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C181"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C181"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C181"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C079"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C079"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C079"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C098"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C098"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C098"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C096"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C096"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C096"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C099"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C099"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C099"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C227"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C227"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C227"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C084"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C084"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C084"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C033"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C033"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C033"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C051"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C051"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C051"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C187"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C187"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C187"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C184"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C184"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C184"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C200"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C200"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C200"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C016"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C016"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C016"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C085"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C085"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C085"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C156"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C156"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C156"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C159"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C159"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C159"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C122"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C122"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C122"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C101"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C101"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C101"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C103"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C103"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C103"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C102"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C102"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C102"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C145"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C145"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C145"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C086"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C086"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C086"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C169"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C169"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C169"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C120"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C120"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C120"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C058"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C058"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C058"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C001"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C001"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C001"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C023"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C023"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C023"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C201"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C201"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C201"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C270"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C270"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C270"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C265"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C265"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C265"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C259"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C259"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C259"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C222"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C222"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C222"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C203"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C203"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C203"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C225"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C225"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C225"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C244"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C244"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C244"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C243"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C243"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C243"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C072"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C072"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C072"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C133"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C133"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C133"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C291"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C291"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C291"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C292"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C292"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C292"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C296"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C296"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C296"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C242"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C242"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C242"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C241"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C241"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C241"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C232"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C232"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C232"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C205"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C205"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C205"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C090"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C090"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C090"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C109"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C109"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C109"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C246"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C246"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C246"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C289"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C289"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C289"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C233"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C233"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C233"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C250"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C250"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C250"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C249"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C249"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C249"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C253"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C253"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C253"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C257"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C257"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C257"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C275"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C275"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C275"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C274"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C274"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C274"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C276"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C276"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C276"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C273"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C273"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C273"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C235"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C235"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C235"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C223"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C223"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C223"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C192"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C192"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C192"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C263"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C263"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C263"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C260"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C260"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C260"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C240"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C240"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C240"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C234"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C234"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C234"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C148"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C148"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C148"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C055"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C055"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C055"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C272"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C272"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C272"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C262"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C262"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C262"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C271"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C271"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C271"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C074"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C074"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C074"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C266"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C266"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C266"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C268"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C268"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C268"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C226"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C226"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C226"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C267"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C267"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C267"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C161"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C161"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C161"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C189"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C189"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C189"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C247"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C247"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C247"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C041"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C041"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C041"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C060"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C060"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C060"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C061"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C061"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C061"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C029"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C029"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C029"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C254"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C254"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C254"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C202"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C202"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C202"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C258"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C258"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C258"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C261"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C261"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C261"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C264"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C264"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C264"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C190"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C190"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C190"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C143"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C143"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C143"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C142"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C142"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C142"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C149"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C149"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C149"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C022"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C022"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C022"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C119"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C119"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C119"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C082"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C082"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C082"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C278"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C278"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C278"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C288"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C288"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C288"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C185"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C185"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C185"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C191"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C191"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C191"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C287"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C287"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C287"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C286"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C286"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C286"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C285"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C285"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C285"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C284"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C284"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C284"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C277"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C277"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C277"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C284",
+    "C285",
+    "C286",
+    "C287"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C269"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C269"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C269"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C012"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C012"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C012"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C030"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C030"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C030"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C052"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C052"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C052"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C236"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C236"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C236"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C154"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C154"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C154"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C135"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C135"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C135"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C206"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C206"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C206"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C207"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C207"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C207"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C209"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C209"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C209"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C210"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C210"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C210"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C010"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C010"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C010"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C056"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C056"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C056"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C095"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C095"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C095"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C294"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C294"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C294"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C293"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C293"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C293"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C256"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C256"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C256"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C283"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C283"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C283"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C282"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C282"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C282"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C281"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C281"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C281"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C002"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C002"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C002"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C067"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C067"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C067"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C039"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C039"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C039"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C018"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C018"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C018"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C089"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C089"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C089"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C057"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C057"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C057"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C239"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C239"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C239"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C062"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C062"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C062"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C252"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C252"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C252"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C255"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C255"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C255"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C280"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C280"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C280"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C208"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C208"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C208"
+   ]
+  },
+  {
+   "role": "line"
+  },
+  {
+   "role": "markerFill"
+  },
+  {
+   "role": "markerOutline"
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C238"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C238"
+   ],
+   "markerType": "Positive arrow"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C238"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C197"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C197"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C197"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C279"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C279"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C279"
+   ]
+  },
+  {
+   "role": "markerFill",
+   "connections": [
+    "C251"
+   ],
+   "markerType": "Negative square"
+  },
+  {
+   "role": "markerOutline",
+   "connections": [
+    "C251"
+   ]
+  },
+  {
+   "role": "line",
+   "connections": [
+    "C251"
+   ]
+  }
+ ],
+ "connections": {
+  "C001": {
+   "sourceId": 1,
+   "targetId": 49,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 546,
+   "pathIndices": [
+    546,
+    547,
+    548
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C002": {
+   "sourceId": 2,
+   "targetId": 12,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 841,
+   "pathIndices": [
+    841,
+    842,
+    843
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C003": {
+   "sourceId": 2,
+   "targetId": 27,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 432,
+   "pathIndices": [
+    432,
+    433,
+    434
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C004": {
+   "sourceId": 2,
+   "targetId": 32,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 81,
+   "pathIndices": [
+    81,
+    82,
+    83
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C005": {
+   "sourceId": 2,
+   "targetId": 46,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 270,
+   "pathIndices": [
+    270,
+    271,
+    272
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C006": {
+   "sourceId": 3,
+   "targetId": 4,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 117,
+   "pathIndices": [
+    117,
+    118,
+    119
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C007": {
+   "sourceId": 3,
+   "targetId": 8,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 84,
+   "pathIndices": [
+    84,
+    85,
+    86
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C008": {
+   "sourceId": 3,
+   "targetId": 11,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 114,
+   "pathIndices": [
+    114,
+    115,
+    116
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C009": {
+   "sourceId": 3,
+   "targetId": 36,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 426,
+   "pathIndices": [
+    426,
+    427,
+    428
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C010": {
+   "sourceId": 3,
+   "targetId": 77,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 814,
+   "pathIndices": [
+    814,
+    815,
+    816
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C011": {
+   "sourceId": 4,
+   "targetId": 8,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 87,
+   "pathIndices": [
+    87,
+    88,
+    89
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C012": {
+   "sourceId": 4,
+   "targetId": 31,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 784,
+   "pathIndices": [
+    784,
+    785,
+    786
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C013": {
+   "sourceId": 5,
+   "targetId": 11,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 222,
+   "pathIndices": [
+    222,
+    223,
+    224
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C014": {
+   "sourceId": 5,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 123,
+   "pathIndices": [
+    123,
+    124,
+    125
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C015": {
+   "sourceId": 5,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 126,
+   "pathIndices": [
+    126,
+    127,
+    128
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C016": {
+   "sourceId": 6,
+   "targetId": 2,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 507,
+   "pathIndices": [
+    507,
+    508,
+    509
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C017": {
+   "sourceId": 6,
+   "targetId": 15,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 108,
+   "pathIndices": [
+    108,
+    109,
+    110
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C018": {
+   "sourceId": 6,
+   "targetId": 17,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 850,
+   "pathIndices": [
+    850,
+    851,
+    852
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C019": {
+   "sourceId": 6,
+   "targetId": 27,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 441,
+   "pathIndices": [
+    441,
+    442,
+    443
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C020": {
+   "sourceId": 7,
+   "targetId": 39,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 186,
+   "pathIndices": [
+    186,
+    187,
+    188
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C021": {
+   "sourceId": 7,
+   "targetId": 44,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 183,
+   "pathIndices": [
+    183,
+    184,
+    185
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C022": {
+   "sourceId": 7,
+   "targetId": 56,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 744,
+   "pathIndices": [
+    744,
+    745,
+    746
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C023": {
+   "sourceId": 8,
+   "targetId": 1,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 549,
+   "pathIndices": [
+    549,
+    550,
+    551
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C024": {
+   "sourceId": 8,
+   "targetId": 7,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 135,
+   "pathIndices": [
+    135,
+    136,
+    137
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C025": {
+   "sourceId": 8,
+   "targetId": 9,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 249,
+   "pathIndices": [
+    249,
+    250,
+    251
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C026": {
+   "sourceId": 8,
+   "targetId": 10,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 102,
+   "pathIndices": [
+    102,
+    103,
+    104
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C027": {
+   "sourceId": 8,
+   "targetId": 13,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 33,
+   "pathIndices": [
+    33,
+    34,
+    35
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C028": {
+   "sourceId": 8,
+   "targetId": 14,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 36,
+   "pathIndices": [
+    36,
+    37,
+    38
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C029": {
+   "sourceId": 8,
+   "targetId": 30,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 714,
+   "pathIndices": [
+    714,
+    715,
+    716
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C030": {
+   "sourceId": 8,
+   "targetId": 36,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 787,
+   "pathIndices": [
+    787,
+    788,
+    789
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C031": {
+   "sourceId": 9,
+   "targetId": 13,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 213,
+   "pathIndices": [
+    213,
+    214,
+    215
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C032": {
+   "sourceId": 9,
+   "targetId": 14,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 252,
+   "pathIndices": [
+    252,
+    253,
+    254
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C033": {
+   "sourceId": 10,
+   "targetId": 5,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 492,
+   "pathIndices": [
+    492,
+    493,
+    494
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C034": {
+   "sourceId": 10,
+   "targetId": 6,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 9,
+   "pathIndices": [
+    9,
+    10,
+    11
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C035": {
+   "sourceId": 10,
+   "targetId": 16,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 96,
+   "pathIndices": [
+    96,
+    97,
+    98
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C036": {
+   "sourceId": 10,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 294,
+   "pathIndices": [
+    294,
+    295,
+    296
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C037": {
+   "sourceId": 11,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 267,
+   "pathIndices": [
+    267,
+    268,
+    269
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C038": {
+   "sourceId": 11,
+   "targetId": 47,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 195,
+   "pathIndices": [
+    195,
+    196,
+    197
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C039": {
+   "sourceId": 12,
+   "targetId": 103,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 847,
+   "pathIndices": [
+    847,
+    848,
+    849
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C040": {
+   "sourceId": 13,
+   "targetId": 19,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 72,
+   "pathIndices": [
+    72,
+    73,
+    74
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C041": {
+   "sourceId": 13,
+   "targetId": 20,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 705,
+   "pathIndices": [
+    705,
+    706,
+    707
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C042": {
+   "sourceId": 14,
+   "targetId": 2,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 78,
+   "pathIndices": [
+    78,
+    79,
+    80
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C043": {
+   "sourceId": 14,
+   "targetId": 19,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 75,
+   "pathIndices": [
+    75,
+    76,
+    77
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C044": {
+   "sourceId": 15,
+   "targetId": 2,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 210,
+   "pathIndices": [
+    210,
+    211,
+    212
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C045": {
+   "sourceId": 15,
+   "targetId": 6,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 105,
+   "pathIndices": [
+    105,
+    106,
+    107
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C046": {
+   "sourceId": 15,
+   "targetId": 19,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 198,
+   "pathIndices": [
+    198,
+    199,
+    200
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C047": {
+   "sourceId": 15,
+   "targetId": 22,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 12,
+   "pathIndices": [
+    12,
+    13,
+    14
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C048": {
+   "sourceId": 16,
+   "targetId": 21,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 93,
+   "pathIndices": [
+    93,
+    94,
+    95
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C049": {
+   "sourceId": 16,
+   "targetId": 22,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 141,
+   "pathIndices": [
+    141,
+    142,
+    143
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C050": {
+   "sourceId": 16,
+   "targetId": 26,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 435,
+   "pathIndices": [
+    435,
+    436,
+    437
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C051": {
+   "sourceId": 16,
+   "targetId": 33,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 495,
+   "pathIndices": [
+    495,
+    496,
+    497
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C052": {
+   "sourceId": 16,
+   "targetId": 40,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 790,
+   "pathIndices": [
+    790,
+    791,
+    792
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C053": {
+   "sourceId": 16,
+   "targetId": 47,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 306,
+   "pathIndices": [
+    306,
+    307,
+    308
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C054": {
+   "sourceId": 16,
+   "targetId": 80,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 417,
+   "pathIndices": [
+    417,
+    418,
+    419
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C055": {
+   "sourceId": 16,
+   "targetId": 89,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 669,
+   "pathIndices": [
+    669,
+    670,
+    671
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C056": {
+   "sourceId": 16,
+   "targetId": 106,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 817,
+   "pathIndices": [
+    817,
+    818,
+    819
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C057": {
+   "sourceId": 17,
+   "targetId": 80,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 856,
+   "pathIndices": [
+    856,
+    857,
+    858
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C058": {
+   "sourceId": 18,
+   "targetId": 26,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 543,
+   "pathIndices": [
+    543,
+    544,
+    545
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C059": {
+   "sourceId": 19,
+   "targetId": 2,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 138,
+   "pathIndices": [
+    138,
+    139,
+    140
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C060": {
+   "sourceId": 20,
+   "targetId": 2,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 708,
+   "pathIndices": [
+    708,
+    709,
+    710
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C061": {
+   "sourceId": 20,
+   "targetId": 87,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 711,
+   "pathIndices": [
+    711,
+    712,
+    713
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C062": {
+   "sourceId": 20,
+   "targetId": 93,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 862,
+   "pathIndices": [
+    862,
+    863,
+    864
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C063": {
+   "sourceId": 21,
+   "targetId": 10,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 216,
+   "pathIndices": [
+    216,
+    217,
+    218
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C064": {
+   "sourceId": 21,
+   "targetId": 22,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 288,
+   "pathIndices": [
+    288,
+    289,
+    290
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C065": {
+   "sourceId": 21,
+   "targetId": 29,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 90,
+   "pathIndices": [
+    90,
+    91,
+    92
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C066": {
+   "sourceId": 21,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 120,
+   "pathIndices": [
+    120,
+    121,
+    122
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C067": {
+   "sourceId": 22,
+   "targetId": 12,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 844,
+   "pathIndices": [
+    844,
+    845,
+    846
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C068": {
+   "sourceId": 22,
+   "targetId": 16,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 243,
+   "pathIndices": [
+    243,
+    244,
+    245
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C069": {
+   "sourceId": 22,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 255,
+   "pathIndices": [
+    255,
+    256,
+    257
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C070": {
+   "sourceId": 22,
+   "targetId": 34,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 18,
+   "pathIndices": [
+    18,
+    19,
+    20
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C071": {
+   "sourceId": 22,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 153,
+   "pathIndices": [
+    153,
+    154,
+    155
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C072": {
+   "sourceId": 22,
+   "targetId": 50,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 579,
+   "pathIndices": [
+    579,
+    580,
+    581
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C073": {
+   "sourceId": 22,
+   "targetId": 67,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 291,
+   "pathIndices": [
+    291,
+    292,
+    293
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C074": {
+   "sourceId": 22,
+   "targetId": 95,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 681,
+   "pathIndices": [
+    681,
+    682,
+    683
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C075": {
+   "sourceId": 23,
+   "targetId": 28,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 99,
+   "pathIndices": [
+    99,
+    100,
+    101
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C076": {
+   "sourceId": 24,
+   "targetId": 16,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 225,
+   "pathIndices": [
+    225,
+    226,
+    227
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C077": {
+   "sourceId": 25,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 429,
+   "pathIndices": [
+    429,
+    430,
+    431
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C078": {
+   "sourceId": 26,
+   "targetId": 36,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 372,
+   "pathIndices": [
+    372,
+    373,
+    374
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C079": {
+   "sourceId": 27,
+   "targetId": 49,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 474,
+   "pathIndices": [
+    474,
+    475,
+    476
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C080": {
+   "sourceId": 28,
+   "targetId": 22,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 231,
+   "pathIndices": [
+    231,
+    232,
+    233
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C081": {
+   "sourceId": 28,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 234,
+   "pathIndices": [
+    234,
+    235,
+    236
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C082": {
+   "sourceId": 29,
+   "targetId": 102,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 750,
+   "pathIndices": [
+    750,
+    751,
+    752
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C083": {
+   "sourceId": 30,
+   "targetId": 11,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 219,
+   "pathIndices": [
+    219,
+    220,
+    221
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C084": {
+   "sourceId": 30,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 489,
+   "pathIndices": [
+    489,
+    490,
+    491
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C085": {
+   "sourceId": 30,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 510,
+   "pathIndices": [
+    510,
+    511,
+    512
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C086": {
+   "sourceId": 30,
+   "targetId": 87,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 534,
+   "pathIndices": [
+    534,
+    535,
+    536
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C087": {
+   "sourceId": 31,
+   "targetId": 33,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 240,
+   "pathIndices": [
+    240,
+    241,
+    242
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C088": {
+   "sourceId": 31,
+   "targetId": 39,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 258,
+   "pathIndices": [
+    258,
+    259,
+    260
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C089": {
+   "sourceId": 32,
+   "targetId": 17,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 853,
+   "pathIndices": [
+    853,
+    854,
+    855
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C090": {
+   "sourceId": 32,
+   "targetId": 42,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 606,
+   "pathIndices": [
+    606,
+    607,
+    608
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C091": {
+   "sourceId": 32,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 144,
+   "pathIndices": [
+    144,
+    145,
+    146
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C092": {
+   "sourceId": 33,
+   "targetId": 51,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 279,
+   "pathIndices": [
+    279,
+    280,
+    281
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C093": {
+   "sourceId": 34,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 15,
+   "pathIndices": [
+    15,
+    16,
+    17
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C094": {
+   "sourceId": 34,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 111,
+   "pathIndices": [
+    111,
+    112,
+    113
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C095": {
+   "sourceId": 35,
+   "targetId": 32,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 820,
+   "pathIndices": [
+    820,
+    821,
+    822
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C096": {
+   "sourceId": 35,
+   "targetId": 49,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 480,
+   "pathIndices": [
+    480,
+    481,
+    482
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C097": {
+   "sourceId": 36,
+   "targetId": 26,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 369,
+   "pathIndices": [
+    369,
+    370,
+    371
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C098": {
+   "sourceId": 36,
+   "targetId": 49,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 477,
+   "pathIndices": [
+    477,
+    478,
+    479
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C099": {
+   "sourceId": 36,
+   "targetId": 79,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 483,
+   "pathIndices": [
+    483,
+    484,
+    485
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C100": {
+   "sourceId": 37,
+   "targetId": 16,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 45,
+   "pathIndices": [
+    45,
+    46,
+    47
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C101": {
+   "sourceId": 38,
+   "targetId": 33,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 522,
+   "pathIndices": [
+    522,
+    523,
+    524
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C102": {
+   "sourceId": 38,
+   "targetId": 37,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 528,
+   "pathIndices": [
+    528,
+    529,
+    530
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C103": {
+   "sourceId": 38,
+   "targetId": 45,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 525,
+   "pathIndices": [
+    525,
+    526,
+    527
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C104": {
+   "sourceId": 39,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 21,
+   "pathIndices": [
+    21,
+    22,
+    23
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C105": {
+   "sourceId": 39,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 63,
+   "pathIndices": [
+    63,
+    64,
+    65
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C106": {
+   "sourceId": 40,
+   "targetId": 49,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 399,
+   "pathIndices": [
+    399,
+    400,
+    401
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C107": {
+   "sourceId": 41,
+   "targetId": 40,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 390,
+   "pathIndices": [
+    390,
+    391,
+    392
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C108": {
+   "sourceId": 41,
+   "targetId": 90,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 384,
+   "pathIndices": [
+    384,
+    385,
+    386
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C109": {
+   "sourceId": 42,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 609,
+   "pathIndices": [
+    609,
+    610,
+    611
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C110": {
+   "sourceId": 43,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 42,
+   "pathIndices": [
+    42,
+    43,
+    44
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C111": {
+   "sourceId": 43,
+   "targetId": 82,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 375,
+   "pathIndices": [
+    375,
+    376,
+    377
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C112": {
+   "sourceId": 44,
+   "targetId": 32,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 24,
+   "pathIndices": [
+    24,
+    25,
+    26
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C113": {
+   "sourceId": 44,
+   "targetId": 43,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 66,
+   "pathIndices": [
+    66,
+    67,
+    68
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C114": {
+   "sourceId": 44,
+   "targetId": 47,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 303,
+   "pathIndices": [
+    303,
+    304,
+    305
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C115": {
+   "sourceId": 45,
+   "targetId": 37,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 171,
+   "pathIndices": [
+    171,
+    172,
+    173
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C116": {
+   "sourceId": 45,
+   "targetId": 44,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 177,
+   "pathIndices": [
+    177,
+    178,
+    179
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C117": {
+   "sourceId": 45,
+   "targetId": 53,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 27,
+   "pathIndices": [
+    27,
+    28,
+    29
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C118": {
+   "sourceId": 45,
+   "targetId": 54,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 30,
+   "pathIndices": [
+    30,
+    31,
+    32
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C119": {
+   "sourceId": 46,
+   "targetId": 56,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 747,
+   "pathIndices": [
+    747,
+    748,
+    749
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C120": {
+   "sourceId": 46,
+   "targetId": 64,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 540,
+   "pathIndices": [
+    540,
+    541,
+    542
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C121": {
+   "sourceId": 46,
+   "targetId": 66,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 327,
+   "pathIndices": [
+    327,
+    328,
+    329
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C122": {
+   "sourceId": 46,
+   "targetId": 72,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 519,
+   "pathIndices": [
+    519,
+    520,
+    521
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C123": {
+   "sourceId": 46,
+   "targetId": 73,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 3,
+   "pathIndices": [
+    3,
+    4,
+    5
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C124": {
+   "sourceId": 47,
+   "targetId": 51,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 57,
+   "pathIndices": [
+    57,
+    58,
+    59
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C125": {
+   "sourceId": 47,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 159,
+   "pathIndices": [
+    159,
+    160,
+    161
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C126": {
+   "sourceId": 48,
+   "targetId": 5,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 264,
+   "pathIndices": [
+    264,
+    265,
+    266
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C127": {
+   "sourceId": 48,
+   "targetId": 29,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 318,
+   "pathIndices": [
+    318,
+    319,
+    320
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C128": {
+   "sourceId": 48,
+   "targetId": 39,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 132,
+   "pathIndices": [
+    132,
+    133,
+    134
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C129": {
+   "sourceId": 48,
+   "targetId": 44,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 129,
+   "pathIndices": [
+    129,
+    130,
+    131
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C130": {
+   "sourceId": 48,
+   "targetId": 55,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 276,
+   "pathIndices": [
+    276,
+    277,
+    278
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C131": {
+   "sourceId": 48,
+   "targetId": 70,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 282,
+   "pathIndices": [
+    282,
+    283,
+    284
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C132": {
+   "sourceId": 49,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 468,
+   "pathIndices": [
+    468,
+    469,
+    470
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C133": {
+   "sourceId": 50,
+   "targetId": 82,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 582,
+   "pathIndices": [
+    582,
+    583,
+    584
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C134": {
+   "sourceId": 51,
+   "targetId": 55,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 60,
+   "pathIndices": [
+    60,
+    61,
+    62
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C135": {
+   "sourceId": 52,
+   "targetId": 24,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 799,
+   "pathIndices": [
+    799,
+    800,
+    801
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C136": {
+   "sourceId": 52,
+   "targetId": 90,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 228,
+   "pathIndices": [
+    228,
+    229,
+    230
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C137": {
+   "sourceId": 53,
+   "targetId": 52,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 189,
+   "pathIndices": [
+    189,
+    190,
+    191
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C138": {
+   "sourceId": 53,
+   "targetId": 61,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 192,
+   "pathIndices": [
+    192,
+    193,
+    194
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C139": {
+   "sourceId": 53,
+   "targetId": 62,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 48,
+   "pathIndices": [
+    48,
+    49,
+    50
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C140": {
+   "sourceId": 54,
+   "targetId": 5,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 147,
+   "pathIndices": [
+    147,
+    148,
+    149
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C141": {
+   "sourceId": 54,
+   "targetId": 44,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 174,
+   "pathIndices": [
+    174,
+    175,
+    176
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C142": {
+   "sourceId": 54,
+   "targetId": 48,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 738,
+   "pathIndices": [
+    738,
+    739,
+    740
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C143": {
+   "sourceId": 54,
+   "targetId": 56,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 735,
+   "pathIndices": [
+    735,
+    736,
+    737
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C144": {
+   "sourceId": 54,
+   "targetId": 63,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 180,
+   "pathIndices": [
+    180,
+    181,
+    182
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C145": {
+   "sourceId": 54,
+   "targetId": 85,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 531,
+   "pathIndices": [
+    531,
+    532,
+    533
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C146": {
+   "sourceId": 55,
+   "targetId": 47,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 69,
+   "pathIndices": [
+    69,
+    70,
+    71
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C147": {
+   "sourceId": 55,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 162,
+   "pathIndices": [
+    162,
+    163,
+    164
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C148": {
+   "sourceId": 55,
+   "targetId": 89,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 666,
+   "pathIndices": [
+    666,
+    667,
+    668
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C149": {
+   "sourceId": 56,
+   "targetId": 5,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 741,
+   "pathIndices": [
+    741,
+    742,
+    743
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C150": {
+   "sourceId": 56,
+   "targetId": 75,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 312,
+   "pathIndices": [
+    312,
+    313,
+    314
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C151": {
+   "sourceId": 56,
+   "targetId": 81,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 315,
+   "pathIndices": [
+    315,
+    316,
+    317
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C152": {
+   "sourceId": 56,
+   "targetId": 85,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 309,
+   "pathIndices": [
+    309,
+    310,
+    311
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C153": {
+   "sourceId": 57,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 465,
+   "pathIndices": [
+    465,
+    466,
+    467
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C154": {
+   "sourceId": 58,
+   "targetId": 47,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 796,
+   "pathIndices": [
+    796,
+    797,
+    798
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C155": {
+   "sourceId": 58,
+   "targetId": 57,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 450,
+   "pathIndices": [
+    450,
+    451,
+    452
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C156": {
+   "sourceId": 58,
+   "targetId": 68,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 513,
+   "pathIndices": [
+    513,
+    514,
+    515
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C157": {
+   "sourceId": 59,
+   "targetId": 58,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 453,
+   "pathIndices": [
+    453,
+    454,
+    455
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C158": {
+   "sourceId": 59,
+   "targetId": 68,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 456,
+   "pathIndices": [
+    456,
+    457,
+    458
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C159": {
+   "sourceId": 59,
+   "targetId": 79,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 516,
+   "pathIndices": [
+    516,
+    517,
+    518
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C160": {
+   "sourceId": 60,
+   "targetId": 51,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 285,
+   "pathIndices": [
+    285,
+    286,
+    287
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C161": {
+   "sourceId": 60,
+   "targetId": 92,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 696,
+   "pathIndices": [
+    696,
+    697,
+    698
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C162": {
+   "sourceId": 61,
+   "targetId": 86,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 237,
+   "pathIndices": [
+    237,
+    238,
+    239
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C163": {
+   "sourceId": 62,
+   "targetId": 63,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 51,
+   "pathIndices": [
+    51,
+    52,
+    53
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C164": {
+   "sourceId": 62,
+   "targetId": 70,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 54,
+   "pathIndices": [
+    54,
+    55,
+    56
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C165": {
+   "sourceId": 63,
+   "targetId": 5,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 261,
+   "pathIndices": [
+    261,
+    262,
+    263
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C166": {
+   "sourceId": 63,
+   "targetId": 39,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 39,
+   "pathIndices": [
+    39,
+    40,
+    41
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C167": {
+   "sourceId": 63,
+   "targetId": 60,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 273,
+   "pathIndices": [
+    273,
+    274,
+    275
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C168": {
+   "sourceId": 64,
+   "targetId": 71,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 378,
+   "pathIndices": [
+    378,
+    379,
+    380
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C169": {
+   "sourceId": 64,
+   "targetId": 72,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 537,
+   "pathIndices": [
+    537,
+    538,
+    539
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C170": {
+   "sourceId": 64,
+   "targetId": 82,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 423,
+   "pathIndices": [
+    423,
+    424,
+    425
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C171": {
+   "sourceId": 65,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 324,
+   "pathIndices": [
+    324,
+    325,
+    326
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C172": {
+   "sourceId": 65,
+   "targetId": 64,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 393,
+   "pathIndices": [
+    393,
+    394,
+    395
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C173": {
+   "sourceId": 65,
+   "targetId": 66,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 345,
+   "pathIndices": [
+    345,
+    346,
+    347
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C174": {
+   "sourceId": 66,
+   "targetId": 33,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 336,
+   "pathIndices": [
+    336,
+    337,
+    338
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C175": {
+   "sourceId": 66,
+   "targetId": 45,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 333,
+   "pathIndices": [
+    333,
+    334,
+    335
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C176": {
+   "sourceId": 66,
+   "targetId": 72,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 330,
+   "pathIndices": [
+    330,
+    331,
+    332
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C177": {
+   "sourceId": 66,
+   "targetId": 82,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 339,
+   "pathIndices": [
+    339,
+    340,
+    341
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C178": {
+   "sourceId": 67,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 201,
+   "pathIndices": [
+    201,
+    202,
+    203
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C179": {
+   "sourceId": 67,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 246,
+   "pathIndices": [
+    246,
+    247,
+    248
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C180": {
+   "sourceId": 68,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 462,
+   "pathIndices": [
+    462,
+    463,
+    464
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C181": {
+   "sourceId": 69,
+   "targetId": 68,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 471,
+   "pathIndices": [
+    471,
+    472,
+    473
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C182": {
+   "sourceId": 70,
+   "targetId": 72,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 204,
+   "pathIndices": [
+    204,
+    205,
+    206
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C183": {
+   "sourceId": 70,
+   "targetId": 90,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 207,
+   "pathIndices": [
+    207,
+    208,
+    209
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C184": {
+   "sourceId": 71,
+   "targetId": 2,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 501,
+   "pathIndices": [
+    501,
+    502,
+    503
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C185": {
+   "sourceId": 71,
+   "targetId": 18,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 759,
+   "pathIndices": [
+    759,
+    760,
+    761
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C186": {
+   "sourceId": 71,
+   "targetId": 22,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 387,
+   "pathIndices": [
+    387,
+    388,
+    389
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C187": {
+   "sourceId": 71,
+   "targetId": 82,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 498,
+   "pathIndices": [
+    498,
+    499,
+    500
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C188": {
+   "sourceId": 71,
+   "targetId": 83,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 366,
+   "pathIndices": [
+    366,
+    367,
+    368
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C189": {
+   "sourceId": 71,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 699,
+   "pathIndices": [
+    699,
+    700,
+    701
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C190": {
+   "sourceId": 71,
+   "targetId": 99,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 732,
+   "pathIndices": [
+    732,
+    733,
+    734
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C191": {
+   "sourceId": 71,
+   "targetId": 105,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 762,
+   "pathIndices": [
+    762,
+    763,
+    764
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C192": {
+   "sourceId": 72,
+   "targetId": 64,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 651,
+   "pathIndices": [
+    651,
+    652,
+    653
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C193": {
+   "sourceId": 72,
+   "targetId": 66,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 321,
+   "pathIndices": [
+    321,
+    322,
+    323
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C194": {
+   "sourceId": 72,
+   "targetId": 105,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 381,
+   "pathIndices": [
+    381,
+    382,
+    383
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C195": {
+   "sourceId": 73,
+   "targetId": 46,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 6,
+   "pathIndices": [
+    6,
+    7,
+    8
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C196": {
+   "sourceId": 73,
+   "targetId": 72,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 348,
+   "pathIndices": [
+    348,
+    349,
+    350
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C197": {
+   "sourceId": 73,
+   "targetId": 91,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 883,
+   "pathIndices": [
+    883,
+    884,
+    885
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C198": {
+   "sourceId": 74,
+   "targetId": 79,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 411,
+   "pathIndices": [
+    411,
+    412,
+    413
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C199": {
+   "sourceId": 75,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 156,
+   "pathIndices": [
+    156,
+    157,
+    158
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C200": {
+   "sourceId": 75,
+   "targetId": 76,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 504,
+   "pathIndices": [
+    504,
+    505,
+    506
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C201": {
+   "sourceId": 75,
+   "targetId": 81,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 552,
+   "pathIndices": [
+    552,
+    553,
+    554
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C202": {
+   "sourceId": 75,
+   "targetId": 91,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 720,
+   "pathIndices": [
+    720,
+    721,
+    722
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C203": {
+   "sourceId": 75,
+   "targetId": 92,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 567,
+   "pathIndices": [
+    567,
+    568,
+    569
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C204": {
+   "sourceId": 76,
+   "targetId": 86,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 297,
+   "pathIndices": [
+    297,
+    298,
+    299
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C205": {
+   "sourceId": 76,
+   "targetId": 94,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 603,
+   "pathIndices": [
+    603,
+    604,
+    605
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C206": {
+   "sourceId": 77,
+   "targetId": 63,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 802,
+   "pathIndices": [
+    802,
+    803,
+    804
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C207": {
+   "sourceId": 77,
+   "targetId": 76,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 805,
+   "pathIndices": [
+    805,
+    806,
+    807
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C208": {
+   "sourceId": 77,
+   "targetId": 80,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 874,
+   "pathIndices": [
+    874,
+    875,
+    876
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C209": {
+   "sourceId": 77,
+   "targetId": 81,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 808,
+   "pathIndices": [
+    808,
+    809,
+    810
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C210": {
+   "sourceId": 77,
+   "targetId": 85,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 811,
+   "pathIndices": [
+    811,
+    812,
+    813
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C211": {
+   "sourceId": 78,
+   "targetId": 39,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 438,
+   "pathIndices": [
+    438,
+    439,
+    440
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C212": {
+   "sourceId": 78,
+   "targetId": 80,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 447,
+   "pathIndices": [
+    447,
+    448,
+    449
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C213": {
+   "sourceId": 79,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 459,
+   "pathIndices": [
+    459,
+    460,
+    461
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C214": {
+   "sourceId": 80,
+   "targetId": 41,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 414,
+   "pathIndices": [
+    414,
+    415,
+    416
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C215": {
+   "sourceId": 80,
+   "targetId": 74,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 354,
+   "pathIndices": [
+    354,
+    355,
+    356
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C216": {
+   "sourceId": 80,
+   "targetId": 78,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 444,
+   "pathIndices": [
+    444,
+    445,
+    446
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C217": {
+   "sourceId": 80,
+   "targetId": 79,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 360,
+   "pathIndices": [
+    360,
+    361,
+    362
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C218": {
+   "sourceId": 80,
+   "targetId": 84,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 357,
+   "pathIndices": [
+    357,
+    358,
+    359
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C219": {
+   "sourceId": 81,
+   "targetId": 72,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 165,
+   "pathIndices": [
+    165,
+    166,
+    167
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C220": {
+   "sourceId": 81,
+   "targetId": 82,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 0,
+   "pathIndices": [
+    0,
+    1,
+    2
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C221": {
+   "sourceId": 81,
+   "targetId": 86,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 300,
+   "pathIndices": [
+    300,
+    301,
+    302
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C222": {
+   "sourceId": 81,
+   "targetId": 92,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 564,
+   "pathIndices": [
+    564,
+    565,
+    566
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C223": {
+   "sourceId": 81,
+   "targetId": 97,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 648,
+   "pathIndices": [
+    648,
+    649,
+    650
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C224": {
+   "sourceId": 82,
+   "targetId": 65,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 342,
+   "pathIndices": [
+    342,
+    343,
+    344
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C225": {
+   "sourceId": 82,
+   "targetId": 92,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 570,
+   "pathIndices": [
+    570,
+    571,
+    572
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C226": {
+   "sourceId": 82,
+   "targetId": 96,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 690,
+   "pathIndices": [
+    690,
+    691,
+    692
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C227": {
+   "sourceId": 83,
+   "targetId": 2,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 486,
+   "pathIndices": [
+    486,
+    487,
+    488
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C228": {
+   "sourceId": 83,
+   "targetId": 71,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 363,
+   "pathIndices": [
+    363,
+    364,
+    365
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C229": {
+   "sourceId": 84,
+   "targetId": 79,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 408,
+   "pathIndices": [
+    408,
+    409,
+    410
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C230": {
+   "sourceId": 85,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 168,
+   "pathIndices": [
+    168,
+    169,
+    170
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C231": {
+   "sourceId": 85,
+   "targetId": 82,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 150,
+   "pathIndices": [
+    150,
+    151,
+    152
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C232": {
+   "sourceId": 85,
+   "targetId": 94,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 600,
+   "pathIndices": [
+    600,
+    601,
+    602
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C233": {
+   "sourceId": 86,
+   "targetId": 97,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 618,
+   "pathIndices": [
+    618,
+    619,
+    620
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C234": {
+   "sourceId": 86,
+   "targetId": 98,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 663,
+   "pathIndices": [
+    663,
+    664,
+    665
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C235": {
+   "sourceId": 86,
+   "targetId": 102,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 645,
+   "pathIndices": [
+    645,
+    646,
+    647
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C236": {
+   "sourceId": 86,
+   "targetId": 105,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 793,
+   "pathIndices": [
+    793,
+    794,
+    795
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C237": {
+   "sourceId": 86,
+   "targetId": 106,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 420,
+   "pathIndices": [
+    420,
+    421,
+    422
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C238": {
+   "sourceId": 87,
+   "targetId": 73,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 880,
+   "pathIndices": [
+    880,
+    881,
+    882
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C239": {
+   "sourceId": 87,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 859,
+   "pathIndices": [
+    859,
+    860,
+    861
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C240": {
+   "sourceId": 87,
+   "targetId": 94,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 660,
+   "pathIndices": [
+    660,
+    661,
+    662
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C241": {
+   "sourceId": 87,
+   "targetId": 95,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 597,
+   "pathIndices": [
+    597,
+    598,
+    599
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C242": {
+   "sourceId": 87,
+   "targetId": 102,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 594,
+   "pathIndices": [
+    594,
+    595,
+    596
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C243": {
+   "sourceId": 88,
+   "targetId": 97,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 576,
+   "pathIndices": [
+    576,
+    577,
+    578
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C244": {
+   "sourceId": 89,
+   "targetId": 92,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 573,
+   "pathIndices": [
+    573,
+    574,
+    575
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C245": {
+   "sourceId": 90,
+   "targetId": 40,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 396,
+   "pathIndices": [
+    396,
+    397,
+    398
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C246": {
+   "sourceId": 90,
+   "targetId": 73,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 612,
+   "pathIndices": [
+    612,
+    613,
+    614
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C247": {
+   "sourceId": 90,
+   "targetId": 75,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 702,
+   "pathIndices": [
+    702,
+    703,
+    704
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C248": {
+   "sourceId": 90,
+   "targetId": 80,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 351,
+   "pathIndices": [
+    351,
+    352,
+    353
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C249": {
+   "sourceId": 90,
+   "targetId": 85,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 624,
+   "pathIndices": [
+    624,
+    625,
+    626
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C250": {
+   "sourceId": 90,
+   "targetId": 86,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 621,
+   "pathIndices": [
+    621,
+    622,
+    623
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C251": {
+   "sourceId": 91,
+   "targetId": 72,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 891,
+   "pathIndices": [
+    889,
+    890,
+    891
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C252": {
+   "sourceId": 91,
+   "targetId": 92,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 865,
+   "pathIndices": [
+    865,
+    866,
+    867
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C253": {
+   "sourceId": 92,
+   "targetId": 65,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 627,
+   "pathIndices": [
+    627,
+    628,
+    629
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C254": {
+   "sourceId": 92,
+   "targetId": 75,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 717,
+   "pathIndices": [
+    717,
+    718,
+    719
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C255": {
+   "sourceId": 92,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 868,
+   "pathIndices": [
+    868,
+    869,
+    870
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C256": {
+   "sourceId": 93,
+   "targetId": 82,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 829,
+   "pathIndices": [
+    829,
+    830,
+    831
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C257": {
+   "sourceId": 94,
+   "targetId": 65,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 630,
+   "pathIndices": [
+    630,
+    631,
+    632
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C258": {
+   "sourceId": 94,
+   "targetId": 83,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 723,
+   "pathIndices": [
+    723,
+    724,
+    725
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C259": {
+   "sourceId": 94,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 561,
+   "pathIndices": [
+    561,
+    562,
+    563
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C260": {
+   "sourceId": 95,
+   "targetId": 82,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 657,
+   "pathIndices": [
+    657,
+    658,
+    659
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C261": {
+   "sourceId": 95,
+   "targetId": 83,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 726,
+   "pathIndices": [
+    726,
+    727,
+    728
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C262": {
+   "sourceId": 96,
+   "targetId": 91,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 675,
+   "pathIndices": [
+    675,
+    676,
+    677
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C263": {
+   "sourceId": 97,
+   "targetId": 82,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 654,
+   "pathIndices": [
+    654,
+    655,
+    656
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C264": {
+   "sourceId": 97,
+   "targetId": 83,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 729,
+   "pathIndices": [
+    729,
+    730,
+    731
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C265": {
+   "sourceId": 98,
+   "targetId": 94,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 558,
+   "pathIndices": [
+    558,
+    559,
+    560
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C266": {
+   "sourceId": 99,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 684,
+   "pathIndices": [
+    684,
+    685,
+    686
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C267": {
+   "sourceId": 99,
+   "targetId": 95,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 693,
+   "pathIndices": [
+    693,
+    694,
+    695
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C268": {
+   "sourceId": 99,
+   "targetId": 98,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 687,
+   "pathIndices": [
+    687,
+    688,
+    689
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C269": {
+   "sourceId": 100,
+   "targetId": 95,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 781,
+   "pathIndices": [
+    781,
+    782,
+    783
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C270": {
+   "sourceId": 100,
+   "targetId": 96,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 555,
+   "pathIndices": [
+    555,
+    556,
+    557
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C271": {
+   "sourceId": 101,
+   "targetId": 50,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 678,
+   "pathIndices": [
+    678,
+    679,
+    680
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C272": {
+   "sourceId": 101,
+   "targetId": 87,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 672,
+   "pathIndices": [
+    672,
+    673,
+    674
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C273": {
+   "sourceId": 101,
+   "targetId": 91,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 642,
+   "pathIndices": [
+    642,
+    643,
+    644
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C274": {
+   "sourceId": 101,
+   "targetId": 95,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 636,
+   "pathIndices": [
+    636,
+    637,
+    638
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C275": {
+   "sourceId": 101,
+   "targetId": 97,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 633,
+   "pathIndices": [
+    633,
+    634,
+    635
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C276": {
+   "sourceId": 101,
+   "targetId": 102,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 639,
+   "pathIndices": [
+    639,
+    640,
+    641
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C277": {
+   "sourceId": 101,
+   "targetId": 104,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 777,
+   "pathIndices": [
+    777,
+    778,
+    779
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C278": {
+   "sourceId": 101,
+   "targetId": 105,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 753,
+   "pathIndices": [
+    753,
+    754,
+    755
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C279": {
+   "sourceId": 102,
+   "targetId": 72,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 886,
+   "pathIndices": [
+    886,
+    887,
+    888
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C280": {
+   "sourceId": 102,
+   "targetId": 100,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 871,
+   "pathIndices": [
+    871,
+    872,
+    873
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C281": {
+   "sourceId": 103,
+   "targetId": 71,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 838,
+   "pathIndices": [
+    838,
+    839,
+    840
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C282": {
+   "sourceId": 103,
+   "targetId": 91,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 835,
+   "pathIndices": [
+    835,
+    836,
+    837
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C283": {
+   "sourceId": 103,
+   "targetId": 95,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 832,
+   "pathIndices": [
+    832,
+    833,
+    834
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C284": {
+   "sourceId": 104,
+   "targetId": 49,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 774,
+   "pathIndices": [
+    774,
+    775,
+    776,
+    780
+   ],
+   "mappingNote": "Shared trunk + terminal branch",
+   "exactRoute": false
+  },
+  "C285": {
+   "sourceId": 104,
+   "targetId": 57,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 771,
+   "pathIndices": [
+    771,
+    772,
+    773,
+    780
+   ],
+   "mappingNote": "Shared trunk + terminal branch",
+   "exactRoute": false
+  },
+  "C286": {
+   "sourceId": 104,
+   "targetId": 68,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 768,
+   "pathIndices": [
+    768,
+    769,
+    770,
+    780
+   ],
+   "mappingNote": "Shared trunk + terminal branch",
+   "exactRoute": false
+  },
+  "C287": {
+   "sourceId": 104,
+   "targetId": 79,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 765,
+   "pathIndices": [
+    765,
+    766,
+    767,
+    780
+   ],
+   "mappingNote": "Shared trunk + terminal branch",
+   "exactRoute": false
+  },
+  "C288": {
+   "sourceId": 105,
+   "targetId": 101,
+   "influence": "negative",
+   "markerType": "Negative square",
+   "terminalIndex": 756,
+   "pathIndices": [
+    756,
+    757,
+    758
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C289": {
+   "sourceId": 105,
+   "targetId": 106,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 615,
+   "pathIndices": [
+    615,
+    616,
+    617
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C290": {
+   "sourceId": 105,
+   "targetId": 108,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 402,
+   "pathIndices": [
+    402,
+    403,
+    404
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C291": {
+   "sourceId": 106,
+   "targetId": 91,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 585,
+   "pathIndices": [
+    585,
+    586,
+    587
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C292": {
+   "sourceId": 106,
+   "targetId": 102,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 588,
+   "pathIndices": [
+    588,
+    589,
+    590
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C293": {
+   "sourceId": 106,
+   "targetId": 107,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 826,
+   "pathIndices": [
+    826,
+    827,
+    828
+   ],
+   "mappingNote": "Exact SVG geometry; endpoint lies between/near adjacent node boxes",
+   "exactRoute": false
+  },
+  "C294": {
+   "sourceId": 107,
+   "targetId": 102,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 823,
+   "pathIndices": [
+    823,
+    824,
+    825
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C295": {
+   "sourceId": 108,
+   "targetId": 105,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 405,
+   "pathIndices": [
+    405,
+    406,
+    407
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  },
+  "C296": {
+   "sourceId": 108,
+   "targetId": 107,
+   "influence": "positive",
+   "markerType": "Positive arrow",
+   "terminalIndex": 591,
+   "pathIndices": [
+    591,
+    592,
+    593
+   ],
+   "mappingNote": "Direct endpoint match",
+   "exactRoute": true
+  }
+ }
+}
