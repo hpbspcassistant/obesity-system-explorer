@@ -116,7 +116,7 @@ export default function App() {
           onToggleCluster={toggleCluster}
           onShowAll={showAllClusters}
           onHideAll={hideAllClusters}
-          offset={selectedNode !== null}
+          hidden={selectedNode !== null}
         />
         <NodeDetailPanel
           node={selectedNode}

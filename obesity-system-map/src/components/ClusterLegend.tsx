@@ -5,8 +5,12 @@ interface ClusterLegendProps {
   onToggleCluster: (name: string) => void
   onShowAll: () => void
   onHideAll: () => void
-  /** Shifted left so the legend clears the detail panel when it is open. */
-  offset: boolean
+  /**
+   * Hidden while a node is selected: the detail panel takes that corner, and
+   * the legend's job (reading cluster colours) is not what you are doing once
+   * you have drilled into a single node.
+   */
+  hidden: boolean
 }
 
 /** Solid line ending in an arrowhead, as printed on the original legend. */
@@ -40,16 +44,28 @@ export function ClusterLegend({
   onToggleCluster,
   onShowAll,
   onHideAll,
-  offset,
+  hidden,
 }: ClusterLegendProps) {
   const activeFilterCount = hiddenClusters.size
 
   return (
     <div
-      className="pointer-events-none absolute bottom-4 right-4 z-20 transition-transform duration-300 ease-out"
-      style={{ transform: offset ? 'translateX(-22.5rem)' : undefined }}
+      aria-hidden={hidden}
+      className={[
+        'pointer-events-none absolute bottom-4 right-4 z-20',
+        // Tailwind v4 emits the standalone `translate` property rather than
+        // `transform`, so the transition must name `translate` or the slide snaps.
+        'transition-[opacity,translate] duration-300 ease-out',
+        hidden ? 'translate-y-2 opacity-0' : 'translate-y-0 opacity-100',
+      ].join(' ')}
     >
-      <div className="pointer-events-auto w-52 rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+      <div
+        className={[
+          'w-52 rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur',
+          // Must drop pointer events too, or the faded-out card still catches clicks.
+          hidden ? 'pointer-events-none' : 'pointer-events-auto',
+        ].join(' ')}
+      >
         <div className="mb-2 flex items-baseline justify-between">
           <h2 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
             Clusters
