@@ -25,6 +25,9 @@ export interface ProfileBarProps {
   unmarkedLinks: number
   reviewOpen: boolean
   onToggleReview: () => void
+  /** Whether the map is showing the profile alone. */
+  markedOnly: boolean
+  onMarkedOnlyChange: (markedOnly: boolean) => void
   onSelectProfile: (id: string | null) => void
   onNewProfile: () => void
   onEditPersona: () => void
@@ -40,6 +43,8 @@ export function ProfileBar({
   unmarkedLinks,
   reviewOpen,
   onToggleReview,
+  markedOnly,
+  onMarkedOnlyChange,
   onSelectProfile,
   onNewProfile,
   onEditPersona,
@@ -145,6 +150,45 @@ export function ProfileBar({
       </p>
 
       <span className="flex-1" />
+
+      {/* Drops everything unmarked out of the picture, so the map shows the
+          profile and nothing else — the view you would put in a report.
+          Disabled with nothing marked, where it would only ever blank the map. */}
+      <button
+        type="button"
+        role="switch"
+        aria-checked={markedOnly}
+        data-testid="marked-only"
+        disabled={markedNodes === 0}
+        onClick={() => onMarkedOnlyChange(!markedOnly)}
+        title={
+          markedNodes === 0
+            ? 'Mark something first'
+            : markedOnly
+              ? 'Show the whole map again'
+              : 'Hide everything that is not marked'
+        }
+        className={[
+          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          markedNodes === 0
+            ? 'cursor-not-allowed border-gray-200 text-gray-300'
+            : markedOnly
+              ? 'border-gray-900 bg-gray-900 text-white'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+        ].join(' ')}
+      >
+        <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
+          <path
+            d="M1 8s2.6-4.2 7-4.2S15 8 15 8s-2.6 4.2-7 4.2S1 8 1 8z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+          />
+          <circle cx="8" cy="8" r="1.8" fill="currentColor" />
+        </svg>
+        Marked only
+      </button>
 
       <button
         type="button"

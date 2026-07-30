@@ -319,6 +319,8 @@ export interface MapViewProps {
   onAnchorChange?: (rect: AnchorRect | null) => void
   /** Repaints the fills for legibility; see src/data/contrast.ts. */
   highContrast?: boolean
+  /** Drops everything unmarked out of the picture; Profile only. */
+  markedOnly?: boolean
   /** Whether to draw the navigator thumbnail. */
   showMiniMap?: boolean
   /**
@@ -374,6 +376,7 @@ export function MapView({
   anchorNodeId = null,
   onAnchorChange,
   highContrast = false,
+  markedOnly = false,
   showMiniMap = true,
   bottomInset = 0,
   ref,
@@ -1115,6 +1118,7 @@ export function MapView({
                 ? 'has-trace-lit'
                 : '',
               mode === 'profile' ? 'has-profile' : '',
+              mode === 'profile' && markedOnly ? 'marked-only' : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',
               traceFocus?.nodeIds.length ? 'has-trace-focus' : '',

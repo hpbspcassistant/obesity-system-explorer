@@ -443,6 +443,36 @@
   stroke: #231f20;
 }
 
+/* -------------------------------------------------------- marked-only view */
+
+/*
+ * The profile on its own.
+ *
+ * Everything unmarked leaves the picture rather than going quiet: this is the
+ * view you would put in a report, and a quiet grey box is still a box in it.
+ * Opacity rather than `display: none` so nothing reflows and the marked overlay
+ * layers — which are clones, not the originals — are untouched.
+ *
+ * The unmarked-link dot and its line go too. Both ends being marked does not
+ * make the connection marked, and the point of this view is that everything left
+ * standing is something the reader chose.
+ */
+.map-svg.has-profile.marked-only g[data-node-id]:not(.is-marked),
+.map-svg.has-profile.marked-only [data-layer='edges'],
+.map-svg.has-profile.marked-only [data-layer='edge-highlight'],
+.map-svg.has-profile.marked-only [data-layer='profile-link-edges'],
+.map-svg.has-profile.marked-only [data-layer='profile-link-badges'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The invisible edge targets trace every connection, marked or not, in one
+   layer. Leaving them live would let a click land on a line that is no longer
+   drawn, so the whole layer stands down and the node boxes take every click. */
+.map-svg.has-profile.marked-only [data-layer='edge-hit'] path {
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------- trace */
 
 /* Three levels, no more. The map underneath goes quiet; every path within the

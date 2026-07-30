@@ -113,6 +113,11 @@ export default function App() {
   /** Measured height of the guide card, reported by the card itself. */
   const [guideHeight, setGuideHeight] = useState(0)
   /**
+   * Whether the map shows the profile alone. Profile-only, and a view of the work
+   * rather than the work itself, so it is not stored with the profile.
+   */
+  const [markedOnly, setMarkedOnly] = useState(false)
+  /**
    * Marked counts as they stood when the current guide step opened.
    *
    * A step that waits for a mark has to mean "mark one now", not "have one
@@ -513,6 +518,16 @@ export default function App() {
   }, [])
 
   /** The header's question mark opens the menu, not the first-run tour. */
+  /**
+   * Turning the marked-only view on closes any open card. The card is anchored to
+   * a factor's box, and if that factor is one of the ones about to disappear the
+   * card is left describing something no longer on screen.
+   */
+  const changeMarkedOnly = useCallback((next: boolean) => {
+    setMarkedOnly(next)
+    if (next) setSelection(null)
+  }, [])
+
   const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
 
   const showGuideContents = useCallback(
@@ -982,6 +997,7 @@ export default function App() {
           onAnchorChange={setAnchor}
           tracePaths={tracePaths}
           traceFocus={traceFocus}
+          markedOnly={markedOnly}
           bottomInset={profiling ? PROFILE_BAR_PX : 0}
           highContrast={highContrast}
         />
@@ -1027,6 +1043,8 @@ export default function App() {
               unmarkedLinks={links.length}
               reviewOpen={reviewOpen}
               onToggleReview={() => setReviewOpen((open) => !open)}
+              markedOnly={markedOnly}
+              onMarkedOnlyChange={changeMarkedOnly}
               onSelectProfile={setActiveProfileId}
               onNewProfile={() => setPersonaForm('new')}
               onEditPersona={() => setPersonaForm('edit')}
