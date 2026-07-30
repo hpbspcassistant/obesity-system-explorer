@@ -12,6 +12,9 @@ interface MapHeaderProps {
   onResetView: () => void
   /** Multiplies the map scale — one notch per press. */
   onZoomBy: (factor: number) => void
+  /** Reopens the walkthrough. */
+  onOpenGuide: () => void
+  guideOpen: boolean
   highContrast: boolean
   onHighContrastChange: (on: boolean) => void
   /** Centre slot — the node search. */
@@ -37,6 +40,8 @@ export function MapHeader({
   onTraceDirectionChange,
   onResetView,
   onZoomBy,
+  onOpenGuide,
+  guideOpen,
   highContrast,
   onHighContrastChange,
   children,
@@ -94,6 +99,24 @@ export function MapHeader({
           <path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor" />
         </svg>
         High contrast
+      </button>
+
+      {/* Help sits before the view controls: it is about the whole tool, where
+          those two are about what you are looking at. */}
+      <button
+        type="button"
+        onClick={onOpenGuide}
+        aria-expanded={guideOpen}
+        aria-label="How this works"
+        title="How this works"
+        className={[
+          'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold',
+          guideOpen
+            ? 'border-gray-900 bg-gray-900 text-white'
+            : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50',
+        ].join(' ')}
+      >
+        ?
       </button>
 
       {/* Zoom, made visible. The wheel already zoomed, but nothing on screen

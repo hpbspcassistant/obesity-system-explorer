@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
+import { GuideCard } from './components/GuideCard'
 import { MapHeader } from './components/MapHeader'
 import {
   MapView,
@@ -9,20 +10,29 @@ import {
   type MapViewHandle,
 } from './components/MapView'
 import { NodeDetailPanel } from './components/NodeDetailPanel'
-import { SearchBar } from './components/SearchBar'
+import { SearchBar, type SearchBarHandle } from './components/SearchBar'
 import { ProfileBar } from './components/ProfileBar'
 import { ProfileCard } from './components/ProfileCard'
 import { ProfilePersonaDialog } from './components/ProfilePersonaDialog'
 import { ProfileReviewSheet } from './components/ProfileReviewSheet'
 import { TracePanel } from './components/TracePanel'
+import {
+  DEMO_QUERY,
+  DEMO_VARIABLE_LABEL,
+  GUIDE_SECTIONS,
+  type GuideActionId,
+} from './data/guide'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
   groupOfNode,
   incomingByNode,
   namesForTaxonomy,
+  nodes,
   nodesById,
   outgoingByNode,
+  variableTypes,
+  atlasClusters,
 } from './data/systemMap'
 import {
   DEFAULT_LOOP_LENGTH,
@@ -56,6 +66,7 @@ import type {
 
 const EMPTY: readonly Connection[] = Object.freeze([])
 const CONTRAST_KEY = 'obesity-system-map.highContrast'
+const GUIDE_KEY = 'obesity-system-map.guideSeen'
 const NONE_HIDDEN: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_MARKS: ReadonlySet<number> = Object.freeze(new Set<number>())
 const NO_EDGE_MARKS: ReadonlySet<string> = Object.freeze(new Set<string>())
@@ -69,6 +80,7 @@ const PROFILE_BAR_PX = 48
 
 export default function App() {
   const mapRef = useRef<MapViewHandle | null>(null)
+  const searchRef = useRef<SearchBarHandle | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const [mode, setMode] = useState<MapMode>(DEFAULT_MODE)
   const [selection, setSelection] = useState<Selection | null>(null)
@@ -78,6 +90,14 @@ export default function App() {
   // Whether the colour key is shrunk to a pill. A preference about the screen
   // rather than about the work, so it is kept across modes like High contrast.
   const [legendCollapsed, setLegendCollapsed] = useState(false)
+  // The walkthrough. Opens itself once, on the first visit only: this is a tool
+  // the same few people use repeatedly, so it must never nag. The question mark
+  // in the header brings it back for a workshop or a new colleague.
+  const [guideStep, setGuideStep] = useState<number | null>(() =>
+    localStorage.getItem(GUIDE_KEY) === '1' ? null : 0,
+  )
+  /** A group the guide hid to demonstrate filtering, to be put back after. */
+  const [guideHidGroup, setGuideHidGroup] = useState<string | null>(null)
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
@@ -298,6 +318,26 @@ export default function App() {
     [],
   )
 
+  /**
+   * Sets a group's visibility outright. The guide needs this rather than a
+   * toggle: it hides a group to show what filtering does and puts it back
+   * afterwards, and a toggle would hide the group again if the reader had already
+   * revealed it themselves in between.
+   */
+  const setGroupHidden = useCallback(
+    (name: string, hidden: boolean) => {
+      setHiddenByTaxonomy((current) => {
+        const groups = current[taxonomy]
+        if (groups.has(name) === hidden) return current
+        const next = new Set(groups)
+        if (hidden) next.add(name)
+        else next.delete(name)
+        return { ...current, [taxonomy]: next }
+      })
+    },
+    [taxonomy],
+  )
+
   const toggleGroup = useCallback(
     (name: string) => {
       setHiddenByTaxonomy((current) => {
@@ -363,9 +403,82 @@ export default function App() {
     [taxonomy],
   )
 
-  // Escape works inward-out: the card first, then the review sheet.
+  /* -------------------------------------------------------------- the guide */
+
+  const closeGuide = useCallback(() => {
+    setGuideStep(null)
+    try {
+      localStorage.setItem(GUIDE_KEY, '1')
+    } catch {
+      // Private browsing refuses writes; showing the tour twice is not worth
+      // interrupting anyone for.
+    }
+  }, [])
+
+  const openGuide = useCallback(() => setGuideStep(0), [])
+
+  /**
+   * The demonstrations.
+   *
+   * Every one runs only because the reader pressed the button, and none of them
+   * throws work away: the guide frames and reveals, but never clears a trace, a
+   * selection or a profile.
+   */
+  const runGuideAction = useCallback(
+    (id: GuideActionId) => {
+      if (id === 'frameOneVariable') {
+        // Framing one variable lands at the follow-zoom ceiling, which is the
+        // point labels become readable — the whole claim the step is making.
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        if (node) mapRef.current?.focusOnNodes([node.id])
+        return
+      }
+      if (id === 'prefillSearch') {
+        searchRef.current?.prefill(DEMO_QUERY)
+        return
+      }
+      if (id === 'hideLargestGroup') {
+        // The biggest group, so the change is impossible to miss on a map of 108
+        // boxes. Remembered so it can be put back when the reader moves on.
+        const groups =
+          taxonomy === 'type'
+            ? variableTypes.map((t) => ({ name: t.name, count: t.nodeCount }))
+            : atlasClusters.map((c) => ({ name: c.name, count: c.nodeCount }))
+        const biggest = groups.reduce(
+          (best, entry) => (entry.count > best.count ? entry : best),
+          groups[0],
+        )
+        if (!biggest) return
+        setGroupHidden(biggest.name, true)
+        setGuideHidGroup(biggest.name)
+      }
+    },
+    [taxonomy, setGroupHidden],
+  )
+
+  /**
+   * Puts the demonstrated filter back once the reader leaves that step or closes
+   * the guide. A tour that quietly leaves a fifth of the map switched off would
+   * be worse than no tour at all.
+   */
+  useEffect(() => {
+    if (!guideHidGroup) return
+    const onFilterStep =
+      guideStep !== null &&
+      GUIDE_SECTIONS.basics.steps[guideStep]?.action?.id === 'hideLargestGroup'
+    if (onFilterStep) return
+    setGroupHidden(guideHidGroup, false)
+    setGuideHidGroup(null)
+  }, [guideStep, guideHidGroup, setGroupHidden])
+
+  // Escape works inward-out: the guide first, then the card, then the review
+  // sheet. The guide is outermost because it is the thing most likely to be in
+  // the way, and the only one a reader may not realise they can dismiss.
   const selectionRef = useRef(selection)
   selectionRef.current = selection
+  const guideOpenRef = useRef(guideStep !== null)
+  guideOpenRef.current = guideStep !== null
 
   useEffect(() => {
     try {
@@ -378,12 +491,13 @@ export default function App() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return
-      if (selectionRef.current) setSelection(null)
+      if (guideOpenRef.current) closeGuide()
+      else if (selectionRef.current) setSelection(null)
       else setReviewOpen(false)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [closeGuide])
 
   const selectedNode =
     selection?.kind === 'node' ? (nodesById.get(selection.nodeId) ?? null) : null
@@ -586,10 +700,13 @@ export default function App() {
         onTraceDirectionChange={setTraceDirection}
         onResetView={() => mapRef.current?.resetView()}
         onZoomBy={(factor) => mapRef.current?.zoomBy(factor)}
+        onOpenGuide={openGuide}
+        guideOpen={guideStep !== null}
         highContrast={highContrast}
         onHighContrastChange={setHighContrast}
       >
         <SearchBar
+          ref={searchRef}
           onSelectNode={selectFromSearch}
           onClear={clearSelection}
           hiddenGroups={hiddenGroups}
@@ -731,6 +848,18 @@ export default function App() {
           onSelectNode={selectNode}
           onSelectConnection={selectConnection}
         />
+        )}
+
+        {/* Last, so it sits above every panel it might be describing. */}
+        {guideStep !== null && (
+          <GuideCard
+            section={GUIDE_SECTIONS.basics}
+            index={guideStep}
+            onIndexChange={setGuideStep}
+            onClose={closeGuide}
+            onAction={runGuideAction}
+            bottomInset={profiling ? PROFILE_BAR_PX : 0}
+          />
         )}
       </div>
     </div>

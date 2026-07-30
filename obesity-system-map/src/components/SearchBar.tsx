@@ -1,8 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  type Ref,
+} from 'react'
 
 import { groupOfNode, nodes } from '../data/systemMap'
 import { fuzzyRank } from '../lib/fuzzy'
 import type { Node, Taxonomy } from '../types'
+
+export interface SearchBarHandle {
+  /** Fills the field and opens the results, as though it had been typed. */
+  prefill: (text: string) => void
+}
 
 interface SearchBarProps {
   onSelectNode: (nodeId: number) => void
@@ -10,6 +22,7 @@ interface SearchBarProps {
   /** Groups currently filtered out, so results can flag hidden nodes. */
   hiddenGroups: ReadonlySet<string>
   taxonomy: Taxonomy
+  ref?: Ref<SearchBarHandle>
 }
 
 const MAX_RESULTS = 8
@@ -43,11 +56,28 @@ export function SearchBar({
   onClear,
   hiddenGroups,
   taxonomy,
+  ref,
 }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement | null>(null)
+
+  // Lets the guide demonstrate the search rather than describe it. It fills and
+  // opens the list but never chooses: which variable to look at is the reader's
+  // decision, and the step is about the field, not about any one result.
+  useImperativeHandle(
+    ref,
+    () => ({
+      prefill: (text: string) => {
+        setQuery(text)
+        setActiveIndex(0)
+        setOpen(text.trim().length > 0)
+        inputRef.current?.focus()
+      },
+    }),
+    [],
+  )
 
   const results = useMemo(
     () =>
