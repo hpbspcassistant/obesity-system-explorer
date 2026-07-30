@@ -21,7 +21,7 @@ import type { MapMode } from '../types'
  * and nobody finishes a nineteen-step tour. Split up, the longest run is six, and
  * somebody stuck on Profile in three months can open just that.
  */
-export type GuideSectionId = 'basics' | 'explore' | 'trace'
+export type GuideSectionId = 'basics' | 'explore' | 'trace' | 'profile'
 
 /**
  * A demonstration a step can offer. Performed by App, which owns the map handle
@@ -38,12 +38,39 @@ export type GuideActionId =
   | 'widenTrace'
   | 'exceedListCap'
   | 'playDemoRoute'
+  | 'frameMarkedNeighbourhood'
+  | 'openReview'
+
+/**
+ * Something the reader has to do before a step is satisfied.
+ *
+ * Profile's steps wait rather than demonstrate. Marking edits real saved work, so
+ * the guide will not do it on anyone's behalf — and marking is the one thing in
+ * this mode you cannot learn by watching. Waiting is also what makes the sequence
+ * hold together: each step leaves the profile in the state the next one explains.
+ */
+export type GuideAwaitId =
+  | 'hasProfile'
+  | 'markedVariable'
+  | 'markedConnection'
 
 export interface GuideStep {
   title: string
   /** Short paragraphs. Plain text: the card renders each as its own <p>. */
   body: readonly string[]
   action?: { label: string; id: GuideActionId }
+  /**
+   * Waits for the reader instead of doing it for them. `prompt` asks; `done`
+   * confirms and says what to look at. Next is never blocked — a guide that traps
+   * you until you comply is worse than one you can walk away from.
+   */
+  awaits?: { id: GuideAwaitId; prompt: string; done: string }
+  /**
+   * Where the card sits. Bottom by default; 'top' for the step that opens the
+   * review sheet, which fills the bottom of the stage and would otherwise be
+   * covered by the card describing it.
+   */
+  place?: 'top' | 'bottom'
 }
 
 export interface GuideSection {
@@ -202,10 +229,98 @@ const TRACE: GuideSection = {
   ],
 }
 
+/**
+ * Profile's walkthrough, ordered so each step leaves behind what the next one
+ * needs.
+ *
+ * Marking a variable makes the suggestion rings appear, which is what step three
+ * is about; marking one of those rings puts two connected variables in the
+ * profile, which is the only way the dot in step five can exist at all. Explaining
+ * the dot before anything is marked would be describing something that is not on
+ * screen — which is roughly the state the mode was in before this guide.
+ */
+const PROFILE: GuideSection = {
+  id: 'profile',
+  label: 'Profile',
+  blurb: 'Marking up the variables that matter for one person.',
+  mode: 'profile',
+  steps: [
+    {
+      title: 'What a profile is',
+      body: [
+        'A profile is one point of view on the map: you mark the variables and connections you judge to matter for a single person.',
+        "Marked or not — there is no scoring. And it is your judgement, not the map's.",
+      ],
+      awaits: {
+        id: 'hasProfile',
+        prompt: 'Name a persona in the box on the map to begin.',
+        done: 'Ready.',
+      },
+    },
+    {
+      title: 'Marking a variable',
+      body: [
+        'Click any variable to open its card, then press "Mark this variable".',
+        'Opening a variable never marks it. That is deliberate: you can read your way around the map without changing anything.',
+      ],
+      awaits: {
+        id: 'markedVariable',
+        prompt: 'Mark any variable to carry on.',
+        done: 'Marked — and it has its colour back.',
+      },
+    },
+    {
+      title: 'Grey, colour, and rings',
+      body: [
+        'In this mode the whole map drains to grey, and marking a variable gives it its colour back. So colour means you chose it.',
+        'A white box with a coloured ring is a suggestion: a variable one step away from something you have already marked.',
+      ],
+      action: {
+        label: 'Show me the suggestions',
+        id: 'frameMarkedNeighbourhood',
+      },
+    },
+    {
+      title: 'Follow a suggestion',
+      body: [
+        'The rings answer "where next?". Marking one extends the profile a step at a time, which is how a profile is meant to grow — by hand, not by asking the map to fill it in.',
+      ],
+      awaits: {
+        id: 'markedVariable',
+        prompt: 'Mark one of the ringed variables.',
+        done: 'Two connected variables are marked now. Look at the line between them.',
+      },
+    },
+    {
+      title: 'The dot on a line',
+      body: [
+        'When both ends of a connection are marked but the connection itself is not, a small dot appears in the middle of that line. Clicking the dot marks the connection.',
+        'It is the map noticing you probably meant to include the link. You can also tick connections directly in a variable’s card.',
+      ],
+      awaits: {
+        id: 'markedConnection',
+        prompt: 'Click a dot on the map, or tick a connection in a card.',
+        done: 'Marked — that line is now solid black.',
+      },
+    },
+    {
+      title: 'Review, and keeping your work',
+      body: [
+        'Review lists everything you have marked — variables, connections, and any links still waiting, with "Mark all" to accept them together. Anything can be unticked from there.',
+        'Profiles save in this browser as you work. Export JSON keeps a copy to share or reimport, and the three-dot menu renames and deletes.',
+      ],
+      action: { label: 'Open Review', id: 'openReview' },
+      // The sheet fills the bottom of the stage, so the card moves out of its way.
+      place: 'top',
+    },
+  ],
+}
+
 export const GUIDE_SECTIONS: Record<GuideSectionId, GuideSection> = {
   basics: BASICS,
   explore: EXPLORE,
   trace: TRACE,
+  profile: PROFILE,
 }
 
 /** Contents order. The mode you are in is floated to the top by the card. */
@@ -213,4 +328,5 @@ export const GUIDE_ORDER: readonly GuideSectionId[] = [
   'basics',
   'explore',
   'trace',
+  'profile',
 ]

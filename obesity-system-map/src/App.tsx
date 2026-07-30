@@ -112,6 +112,14 @@ export default function App() {
   const [guideHidGroup, setGuideHidGroup] = useState<string | null>(null)
   /** Measured height of the guide card, reported by the card itself. */
   const [guideHeight, setGuideHeight] = useState(0)
+  /**
+   * Marked counts as they stood when the current guide step opened.
+   *
+   * A step that waits for a mark has to mean "mark one now", not "have one
+   * marked" — otherwise a reader who already has a profile finds the step
+   * satisfied before they have done anything, and learns nothing.
+   */
+  const [guideBaseline, setGuideBaseline] = useState({ nodes: 0, edges: 0 })
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
@@ -557,6 +565,40 @@ export default function App() {
   const guideOpenRef = useRef(guide !== null)
   guideOpenRef.current = guide !== null
 
+  /* ---------------------------------------------- what a step is waiting for */
+
+  const guideSectionId = guide?.kind === 'section' ? guide.id : null
+  const guideStepIndex = guide?.kind === 'section' ? guide.step : null
+  const guideStep =
+    guideSectionId !== null && guideStepIndex !== null
+      ? (GUIDE_SECTIONS[guideSectionId].steps[guideStepIndex] ?? null)
+      : null
+
+  // Read through a ref so the snapshot below depends on the step alone. Listing
+  // the profile itself would re-snapshot on every mark, which is precisely what
+  // the baseline exists to measure against.
+  const markedCountsRef = useRef({ nodes: 0, edges: 0 })
+  markedCountsRef.current = {
+    nodes: activeProfile?.nodeIds.size ?? 0,
+    edges: activeProfile?.edgeIds.size ?? 0,
+  }
+
+  useEffect(() => {
+    setGuideBaseline(markedCountsRef.current)
+  }, [guideSectionId, guideStepIndex])
+
+  const guideAwaitMet = useMemo(() => {
+    const awaits = guideStep?.awaits
+    if (!awaits) return false
+    if (awaits.id === 'hasProfile') return activeProfile !== null
+    const counts = {
+      nodes: activeProfile?.nodeIds.size ?? 0,
+      edges: activeProfile?.edgeIds.size ?? 0,
+    }
+    if (awaits.id === 'markedVariable') return counts.nodes > guideBaseline.nodes
+    return counts.edges > guideBaseline.edges
+  }, [guideStep, activeProfile, guideBaseline])
+
   useEffect(() => {
     try {
       localStorage.setItem(CONTRAST_KEY, highContrast ? '1' : '0')
@@ -609,6 +651,8 @@ export default function App() {
         ? DETAIL_PANEL_PX
         : 0
   const profiling = mode === 'profile'
+  /** Whether the persona naming/renaming dialog is on screen. */
+  const personaDialogUp = profiling && (!activeProfile || personaForm !== null)
 
   /**
    * The factor the card hangs off. An edge card anchors to the connection's
@@ -798,6 +842,23 @@ export default function App() {
         )
         return
       }
+      if (id === 'frameMarkedNeighbourhood') {
+        // The marked variables together with the ring of suggestions around them,
+        // which is what the step is asking the reader to look at. Read-only: it
+        // moves the view and touches nothing in the profile.
+        if (!activeProfile) return
+        const marked = [...activeProfile.nodeIds]
+        if (!marked.length) return
+        // frontierOf directly rather than the memo below, which is declared after
+        // this callback; it is pure and one button press is not worth the ordering
+        // it would impose on the file.
+        frameNodes([...marked, ...frontierOf(activeProfile)])
+        return
+      }
+      if (id === 'openReview') {
+        setReviewOpen(true)
+        return
+      }
       if (id === 'playDemoRoute') {
         // Routes are sorted shortest first, and the shortest here is two hops —
         // barely a walk. Prefer the first route long enough to watch advance,
@@ -825,7 +886,7 @@ export default function App() {
         setGuideHidGroup(biggest.name)
       }
     },
-    [taxonomy, setGroupHidden, tracePaths, search, frameNodes],
+    [taxonomy, setGroupHidden, tracePaths, search, frameNodes, activeProfile],
   )
 
   /**
@@ -977,7 +1038,7 @@ export default function App() {
 
         {/* With no profile there is nothing to mark, so naming one is the only
             thing on offer and there is no way to dismiss it. */}
-        {profiling && (!activeProfile || personaForm !== null) && (
+        {personaDialogUp && (
           <ProfilePersonaDialog
             profile={personaForm === 'edit' ? activeProfile : null}
             onSave={savePersona}
@@ -1051,7 +1112,14 @@ export default function App() {
             onHeightChange={setGuideHeight}
           />
         )}
-        {guide?.kind === 'section' && (
+        {/* Stands aside for the persona dialog rather than overlapping it. The
+            card is 440px at the bottom-centre and the dialog is 352px in the
+            middle, so the two collide exactly where the dialog keeps its Start
+            profile button — a guide covering the control it is asking you to press.
+            No copy is lost by waiting: the dialog opens by explaining what a
+            profile is, which is what this step says, and the step's tick appears
+            the moment a persona is named. */}
+        {guide?.kind === 'section' && !personaDialogUp && (
           <GuideCard
             section={GUIDE_SECTIONS[guide.id]}
             index={guide.step}
@@ -1061,6 +1129,7 @@ export default function App() {
             onFinish={showGuideContents}
             bottomInset={profiling ? PROFILE_BAR_PX : 0}
             onHeightChange={setGuideHeight}
+            awaitMet={guideAwaitMet}
           />
         )}
       </div>
