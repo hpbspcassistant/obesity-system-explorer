@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
-import { GuideCard } from './components/GuideCard'
+import { GuideCard, GuideContents } from './components/GuideCard'
 import { MapHeader } from './components/MapHeader'
 import {
   MapView,
@@ -21,6 +21,7 @@ import {
   DEMO_VARIABLE_LABEL,
   GUIDE_SECTIONS,
   type GuideActionId,
+  type GuideSectionId,
 } from './data/guide'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
@@ -78,6 +79,11 @@ const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
 
+/** Either the menu of walkthroughs, or a place within one of them. */
+type GuideView =
+  | { kind: 'contents' }
+  | { kind: 'section'; id: GuideSectionId; step: number }
+
 export default function App() {
   const mapRef = useRef<MapViewHandle | null>(null)
   const searchRef = useRef<SearchBarHandle | null>(null)
@@ -93,8 +99,14 @@ export default function App() {
   // The walkthrough. Opens itself once, on the first visit only: this is a tool
   // the same few people use repeatedly, so it must never nag. The question mark
   // in the header brings it back for a workshop or a new colleague.
-  const [guideStep, setGuideStep] = useState<number | null>(() =>
-    localStorage.getItem(GUIDE_KEY) === '1' ? null : 0,
+  //
+  // A first visit goes straight into the tour rather than to the contents: being
+  // asked to choose a guide before you know what the thing is answers a question
+  // you cannot yet have.
+  const [guide, setGuide] = useState<GuideView | null>(() =>
+    localStorage.getItem(GUIDE_KEY) === '1'
+      ? null
+      : { kind: 'section', id: 'basics', step: 0 },
   )
   /** A group the guide hid to demonstrate filtering, to be put back after. */
   const [guideHidGroup, setGuideHidGroup] = useState<string | null>(null)
@@ -406,7 +418,7 @@ export default function App() {
   /* -------------------------------------------------------------- the guide */
 
   const closeGuide = useCallback(() => {
-    setGuideStep(null)
+    setGuide(null)
     try {
       localStorage.setItem(GUIDE_KEY, '1')
     } catch {
@@ -415,7 +427,33 @@ export default function App() {
     }
   }, [])
 
-  const openGuide = useCallback(() => setGuideStep(0), [])
+  /** The header's question mark opens the menu, not the first-run tour. */
+  const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
+
+  const showGuideContents = useCallback(
+    () => setGuide({ kind: 'contents' }),
+    [],
+  )
+
+  const setGuideStep = useCallback((step: number) => {
+    setGuide((current) =>
+      current?.kind === 'section' ? { ...current, step } : current,
+    )
+  }, [])
+
+  /**
+   * Starts a section, moving to the mode it describes. Its demonstrations act on
+   * that mode's interface, so running Explore's guide from inside Trace would
+   * narrate things that are not on screen.
+   */
+  const startGuideSection = useCallback(
+    (id: GuideSectionId) => {
+      const needed = GUIDE_SECTIONS[id].mode
+      if (needed && needed !== mode) changeMode(needed)
+      setGuide({ kind: 'section', id, step: 0 })
+    },
+    [mode, changeMode],
+  )
 
   /**
    * The demonstrations.
@@ -436,6 +474,33 @@ export default function App() {
       }
       if (id === 'prefillSearch') {
         searchRef.current?.prefill(DEMO_QUERY)
+        return
+      }
+      if (id === 'openDemoVariable') {
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        if (!node) return
+        setSelection({ kind: 'node', nodeId: node.id })
+        mapRef.current?.focusOnNodes([node.id], {
+          rightInset: DETAIL_PANEL_PX,
+        })
+        return
+      }
+      if (id === 'openDemoConnection') {
+        // A connection leaving the same variable the previous step opened, so the
+        // two steps read as one walk rather than jumping across the map.
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        const connection = node
+          ? (outgoingByNode.get(node.id)?.[0] ??
+            incomingByNode.get(node.id)?.[0])
+          : undefined
+        if (!connection) return
+        setSelection({ kind: 'edge', connectionId: connection.id })
+        mapRef.current?.focusOnNodes(
+          [connection.sourceId, connection.targetId],
+          { rightInset: DETAIL_PANEL_PX },
+        )
         return
       }
       if (id === 'hideLargestGroup') {
@@ -465,20 +530,21 @@ export default function App() {
   useEffect(() => {
     if (!guideHidGroup) return
     const onFilterStep =
-      guideStep !== null &&
-      GUIDE_SECTIONS.basics.steps[guideStep]?.action?.id === 'hideLargestGroup'
+      guide?.kind === 'section' &&
+      GUIDE_SECTIONS[guide.id].steps[guide.step]?.action?.id ===
+        'hideLargestGroup'
     if (onFilterStep) return
     setGroupHidden(guideHidGroup, false)
     setGuideHidGroup(null)
-  }, [guideStep, guideHidGroup, setGroupHidden])
+  }, [guide, guideHidGroup, setGroupHidden])
 
   // Escape works inward-out: the guide first, then the card, then the review
   // sheet. The guide is outermost because it is the thing most likely to be in
   // the way, and the only one a reader may not realise they can dismiss.
   const selectionRef = useRef(selection)
   selectionRef.current = selection
-  const guideOpenRef = useRef(guideStep !== null)
-  guideOpenRef.current = guideStep !== null
+  const guideOpenRef = useRef(guide !== null)
+  guideOpenRef.current = guide !== null
 
   useEffect(() => {
     try {
@@ -701,7 +767,7 @@ export default function App() {
         onResetView={() => mapRef.current?.resetView()}
         onZoomBy={(factor) => mapRef.current?.zoomBy(factor)}
         onOpenGuide={openGuide}
-        guideOpen={guideStep !== null}
+        guideOpen={guide !== null}
         highContrast={highContrast}
         onHighContrastChange={setHighContrast}
       >
@@ -851,13 +917,23 @@ export default function App() {
         )}
 
         {/* Last, so it sits above every panel it might be describing. */}
-        {guideStep !== null && (
+        {guide?.kind === 'contents' && (
+          <GuideContents
+            mode={mode}
+            onStart={startGuideSection}
+            onClose={closeGuide}
+            warnLosingTrace={tracing && traceStartId !== null}
+            bottomInset={profiling ? PROFILE_BAR_PX : 0}
+          />
+        )}
+        {guide?.kind === 'section' && (
           <GuideCard
-            section={GUIDE_SECTIONS.basics}
-            index={guideStep}
+            section={GUIDE_SECTIONS[guide.id]}
+            index={guide.step}
             onIndexChange={setGuideStep}
             onClose={closeGuide}
             onAction={runGuideAction}
+            onFinish={showGuideContents}
             bottomInset={profiling ? PROFILE_BAR_PX : 0}
           />
         )}

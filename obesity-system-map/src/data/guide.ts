@@ -12,8 +12,16 @@
  * make the thing they describe *do* something, and attention follows the change.
  */
 
-/** Sections are separately runnable; more arrive with the per-mode guides. */
-export type GuideSectionId = 'basics'
+import type { MapMode } from '../types'
+
+/**
+ * Sections run separately rather than as one queue.
+ *
+ * Covering the basics and all three modes properly takes about nineteen steps,
+ * and nobody finishes a nineteen-step tour. Split up, the longest run is six, and
+ * somebody stuck on Profile in three months can open just that.
+ */
+export type GuideSectionId = 'basics' | 'explore'
 
 /**
  * A demonstration a step can offer. Performed by App, which owns the map handle
@@ -23,6 +31,8 @@ export type GuideActionId =
   | 'frameOneVariable'
   | 'prefillSearch'
   | 'hideLargestGroup'
+  | 'openDemoVariable'
+  | 'openDemoConnection'
 
 export interface GuideStep {
   title: string
@@ -35,6 +45,20 @@ export interface GuideSection {
   id: GuideSectionId
   /** Named above the progress dots, so a long guide reads as structured. */
   label: string
+  /** One line in the contents list, saying what the section covers. */
+  blurb: string
+  /**
+   * The mode the section describes, switched to when it starts. Its
+   * demonstrations act on that mode's interface, so running it anywhere else
+   * would show nothing.
+   */
+  mode?: MapMode
+  /**
+   * Whether finishing lands on the contents rather than closing. True for the
+   * first-run tour, whose last step introduces the three modes — the moment to
+   * offer a closer look at one.
+   */
+  endsAtContents?: boolean
   steps: readonly GuideStep[]
 }
 
@@ -51,6 +75,8 @@ export const DEMO_QUERY = 'walkability'
 const BASICS: GuideSection = {
   id: 'basics',
   label: 'Getting started',
+  blurb: 'What the map is, and how to move around it.',
+  endsAtContents: true,
   steps: [
     {
       title: 'The Foresight obesity map',
@@ -92,6 +118,42 @@ const BASICS: GuideSection = {
   ],
 }
 
+const EXPLORE: GuideSection = {
+  id: 'explore',
+  label: 'Explore',
+  blurb: 'Reading variables and connections.',
+  mode: 'explore',
+  steps: [
+    {
+      title: 'Reading a variable',
+      body: [
+        'Click any box on the map. A panel opens with what that variable means, the groups it belongs to, and every connection running into and out of it.',
+        'The rest of the map fades while it is open, so you are left looking at that variable and its immediate neighbours.',
+      ],
+      action: { label: 'Open one for me', id: 'openDemoVariable' },
+    },
+    {
+      title: 'Reading a connection',
+      body: [
+        'Click an arrow instead and you get the link itself: which variable affects which, and whether more of the first means more or less of the second.',
+        'Some lines on the printed map carry several connections along the same route. Where they do, the panel lists the others sharing that line — a click cannot tell them apart, so it says so rather than guessing.',
+      ],
+      action: { label: 'Open a connection', id: 'openDemoConnection' },
+    },
+    {
+      title: 'Following the connections',
+      body: [
+        "The two lists in a variable's panel are clickable. Choosing one opens that connection, and from there you can open either end of it — which is how you walk the map a step at a time.",
+        'There is no back button yet, so to return to where you were, click the variable on the map again or search for it.',
+      ],
+    },
+  ],
+}
+
 export const GUIDE_SECTIONS: Record<GuideSectionId, GuideSection> = {
   basics: BASICS,
+  explore: EXPLORE,
 }
+
+/** Contents order. The mode you are in is floated to the top by the card. */
+export const GUIDE_ORDER: readonly GuideSectionId[] = ['basics', 'explore']
