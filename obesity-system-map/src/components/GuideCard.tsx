@@ -34,6 +34,7 @@ function GuideShell({
   ariaLabel,
   bottomInset = 0,
   onClose,
+  onHeightChange,
   right,
   children,
 }: {
@@ -41,6 +42,8 @@ function GuideShell({
   ariaLabel: string
   bottomInset?: number
   onClose: () => void
+  /** Reports how tall the card is, so framing can keep clear of it. */
+  onHeightChange?: (height: number) => void
   right?: ReactNode
   children: ReactNode
 }) {
@@ -49,6 +52,23 @@ function GuideShell({
   const ref = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     ref.current?.focus()
+  }, [])
+
+  /**
+   * Measured rather than assumed: the card's height follows its copy, which
+   * differs per step, and a framed route that lands under it is invisible.
+   */
+  const reportRef = useRef(onHeightChange)
+  reportRef.current = onHeightChange
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+    const report = () => reportRef.current?.(element.offsetHeight)
+    report()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(report)
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -100,6 +120,7 @@ export interface GuideContentsProps {
    */
   warnLosingTrace?: boolean
   bottomInset?: number
+  onHeightChange?: (height: number) => void
 }
 
 /** The menu of walkthroughs. */
@@ -109,6 +130,7 @@ export function GuideContents({
   onClose,
   warnLosingTrace = false,
   bottomInset = 0,
+  onHeightChange,
 }: GuideContentsProps) {
   const order = [...GUIDE_ORDER].sort((a, b) => {
     const rank = (id: GuideSectionId) =>
@@ -122,6 +144,7 @@ export function GuideContents({
       ariaLabel="Choose a walkthrough"
       bottomInset={bottomInset}
       onClose={onClose}
+      onHeightChange={onHeightChange}
     >
       <h2 className="text-[15px] font-semibold leading-snug text-gray-900">
         What would you like to know?
@@ -190,6 +213,7 @@ export interface GuideCardProps {
   onFinish: () => void
   /** Px of the bottom edge covered by a bar the guide does not own. */
   bottomInset?: number
+  onHeightChange?: (height: number) => void
 }
 
 export function GuideCard({
@@ -200,6 +224,7 @@ export function GuideCard({
   onAction,
   onFinish,
   bottomInset = 0,
+  onHeightChange,
 }: GuideCardProps) {
   const step = section.steps[index]
   const first = index === 0
@@ -213,6 +238,7 @@ export function GuideCard({
       ariaLabel={`${section.label}: ${step.title}`}
       bottomInset={bottomInset}
       onClose={onClose}
+      onHeightChange={onHeightChange}
       right={
         // Dots rather than "3 of 5": at five steps the shape of the row says how
         // much is left at a glance, without being read.

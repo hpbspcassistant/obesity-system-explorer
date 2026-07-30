@@ -340,6 +340,8 @@ export interface AnchorRect {
 export interface FocusOptions {
   /** Width in px covered by an overlaying panel on the right. */
   rightInset?: number
+  /** Height in px covered by an overlaying card along the bottom. */
+  bottomInset?: number
   animationTime?: number
 }
 
@@ -556,9 +558,15 @@ export function MapView({
       x1 += FOCUS_PADDING
       y1 += FOCUS_PADDING
 
-      // Centre within the space the panel leaves, not the whole wrapper.
+      // Centre within the space the panels leave, not the whole wrapper. Both
+      // insets shrink the box the factors are fitted into *and* shift its centre,
+      // which is what keeps a framed route clear of a right-hand panel and of a
+      // card along the bottom rather than merely smaller than the viewport.
       const visibleWidth = Math.max(120, host.clientWidth - (options?.rightInset ?? 0))
-      const visibleHeight = host.clientHeight
+      const visibleHeight = Math.max(
+        120,
+        host.clientHeight - (options?.bottomInset ?? 0),
+      )
 
       const scale = clamp(
         Math.min(visibleWidth / (x1 - x0), visibleHeight / (y1 - y0)),

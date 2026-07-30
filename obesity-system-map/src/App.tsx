@@ -110,6 +110,8 @@ export default function App() {
   )
   /** A group the guide hid to demonstrate filtering, to be put back after. */
   const [guideHidGroup, setGuideHidGroup] = useState<string | null>(null)
+  /** Measured height of the guide card, reported by the card itself. */
+  const [guideHeight, setGuideHeight] = useState(0)
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
@@ -321,13 +323,100 @@ export default function App() {
   )
 
   const clearSelection = useCallback(() => setSelection(null), [])
-  const selectNode = useCallback(
-    (nodeId: number) => setSelection({ kind: 'node', nodeId }),
-    [],
+
+  /**
+   * Reveals whichever filtered-out groups these factors belong to.
+   *
+   * Following a link to something the cluster filter has hidden is otherwise a
+   * dead click: the effect above clears the selection on the next render, so the
+   * card shuts itself and the view has moved for nothing. An edge needs both
+   * ends revealed, because that effect drops an edge if either endpoint is
+   * hidden.
+   */
+  const revealGroupsFor = useCallback(
+    (nodeIds: readonly number[]) => {
+      setHiddenByTaxonomy((current) => {
+        const hidden = current[taxonomy]
+        const reveal = nodeIds.flatMap((id) => {
+          const node = nodesById.get(id)
+          if (!node) return []
+          const group = groupOfNode(node, taxonomy)
+          return hidden.has(group) ? [group] : []
+        })
+        if (!reveal.length) return current
+        const next = new Set(hidden)
+        for (const group of reveal) next.delete(group)
+        return { ...current, [taxonomy]: next }
+      })
+    },
+    [taxonomy],
   )
+
+  /**
+   * Selecting from inside a card rather than from the map.
+   *
+   * A map click needs no framing: you clicked where you were already looking.
+   * A card link is the opposite — the factor or connection it names is usually
+   * off screen, or a pixel wide at the current zoom, so following the link
+   * without moving the view leaves the reader hunting for the thing they just
+   * asked to see.
+   *
+   * Framing is Explore-only. Profile's card is anchored to the factor it
+   * describes and travels with the map, so moving the map there would have the
+   * card chase its own anchor. Revealing a hidden group is not mode-specific: a
+   * dead click is a dead click everywhere.
+   */
+  /**
+   * Frames factors clear of everything currently covering the stage.
+   *
+   * Every caller already cleared the side panels; none of them knew about the
+   * guide, which sits along the bottom. So a route framed to the middle of the
+   * viewport could land underneath it — which is exactly how the last variable of
+   * a walked route ended up hidden behind the card describing the walk.
+   *
+   * The card's height is measured rather than assumed, because it follows the
+   * copy of whichever step is showing.
+   */
+  const frameNodes = useCallback(
+    (nodeIds: readonly number[], rightInset = 0) => {
+      const guideSpace =
+        guide !== null && guideHeight > 0
+          ? guideHeight + 16 + (mode === 'profile' ? PROFILE_BAR_PX : 0) + 12
+          : 0
+      mapRef.current?.focusOnNodes(nodeIds, {
+        rightInset,
+        bottomInset: guideSpace,
+      })
+    },
+    [guide, guideHeight, mode],
+  )
+
+  const selectNode = useCallback(
+    (nodeId: number) => {
+      revealGroupsFor([nodeId])
+      setSelection({ kind: 'node', nodeId })
+      if (mode === 'explore') {
+        frameNodes([nodeId], DETAIL_PANEL_PX)
+      }
+    },
+    [mode, revealGroupsFor, frameNodes],
+  )
+
   const selectConnection = useCallback(
-    (connectionId: string) => setSelection({ kind: 'edge', connectionId }),
-    [],
+    (connectionId: string) => {
+      const edge = edgeSelectionOf(connectionId)
+      // Both ends, so the arrow's direction is visible rather than only where
+      // it happens to land.
+      const ends = edge
+        ? [edge.connection.sourceId, edge.connection.targetId]
+        : []
+      revealGroupsFor(ends)
+      setSelection({ kind: 'edge', connectionId })
+      if (mode === 'explore' && ends.length) {
+        frameNodes(ends, DETAIL_PANEL_PX)
+      }
+    },
+    [mode, revealGroupsFor, frameNodes],
   )
 
   /**
@@ -368,16 +457,7 @@ export default function App() {
    */
   const selectFromSearch = useCallback(
     (nodeId: number) => {
-      const node = nodesById.get(nodeId)
-      if (node) {
-        const group = groupOfNode(node, taxonomy)
-        setHiddenByTaxonomy((current) => {
-          if (!current[taxonomy].has(group)) return current
-          const next = new Set(current[taxonomy])
-          next.delete(group)
-          return { ...current, [taxonomy]: next }
-        })
-      }
+      revealGroupsFor([nodeId])
       if (mode === 'trace') {
         // In Trace the readable way to find a factor must also start the trace.
         setTraceStartId(nodeId)
@@ -393,12 +473,9 @@ export default function App() {
       // panel covers the right of the stage, so framing has to clear it the way
       // Trace's does; Profile's card floats beside the factor and follows it, so
       // it needs no inset.
-      mapRef.current?.focusOnNodes(
-        [nodeId],
-        mode === 'explore' ? { rightInset: DETAIL_PANEL_PX } : undefined,
-      )
+      frameNodes([nodeId], mode === 'explore' ? DETAIL_PANEL_PX : 0)
     },
-    [taxonomy, mode],
+    [mode, revealGroupsFor, frameNodes],
   )
 
   const showAllGroups = useCallback(
@@ -652,7 +729,7 @@ export default function App() {
         // point labels become readable — the whole claim the step is making.
         const node =
           nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
-        if (node) mapRef.current?.focusOnNodes([node.id])
+        if (node) frameNodes([node.id])
         return
       }
       if (id === 'prefillSearch') {
@@ -664,9 +741,7 @@ export default function App() {
           nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
         if (!node) return
         setSelection({ kind: 'node', nodeId: node.id })
-        mapRef.current?.focusOnNodes([node.id], {
-          rightInset: DETAIL_PANEL_PX,
-        })
+        frameNodes([node.id], DETAIL_PANEL_PX)
         return
       }
       if (id === 'openDemoConnection') {
@@ -680,10 +755,7 @@ export default function App() {
           : undefined
         if (!connection) return
         setSelection({ kind: 'edge', connectionId: connection.id })
-        mapRef.current?.focusOnNodes(
-          [connection.sourceId, connection.targetId],
-          { rightInset: DETAIL_PANEL_PX },
-        )
+        frameNodes([connection.sourceId, connection.targetId], DETAIL_PANEL_PX)
         return
       }
       if (id === 'traceForwards') {
@@ -753,7 +825,7 @@ export default function App() {
         setGuideHidGroup(biggest.name)
       }
     },
-    [taxonomy, setGroupHidden, tracePaths, search],
+    [taxonomy, setGroupHidden, tracePaths, search, frameNodes],
   )
 
   /**
@@ -770,9 +842,9 @@ export default function App() {
       ? buildFocus(committed, animatedHops)?.nodeIds
       : [tracePaths.startId, ...tracePaths.nodeIds]
     if (framed?.length) {
-      mapRef.current?.focusOnNodes(framed, { rightInset: TRACE_PANEL_PX })
+      frameNodes(framed, TRACE_PANEL_PX)
     }
-  }, [mode, tracePaths, search, focusedRouteKey, animatedHops])
+  }, [mode, tracePaths, search, focusedRouteKey, animatedHops, frameNodes])
 
   const markedNodeIds = activeProfile?.nodeIds ?? NO_MARKS
   const markedEdgeIds = activeProfile?.edgeIds ?? NO_EDGE_MARKS
@@ -976,6 +1048,7 @@ export default function App() {
             onClose={closeGuide}
             warnLosingTrace={tracing && traceStartId !== null}
             bottomInset={profiling ? PROFILE_BAR_PX : 0}
+            onHeightChange={setGuideHeight}
           />
         )}
         {guide?.kind === 'section' && (
@@ -987,6 +1060,7 @@ export default function App() {
             onAction={runGuideAction}
             onFinish={showGuideContents}
             bottomInset={profiling ? PROFILE_BAR_PX : 0}
+            onHeightChange={setGuideHeight}
           />
         )}
       </div>

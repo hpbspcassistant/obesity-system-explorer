@@ -178,18 +178,18 @@ const TRACE: GuideSection = {
     {
       title: 'How far to follow',
       body: [
-        'A step is one arrow. The slider limits how long a chain may be, and the map then draws every path within that limit — all of them, not a sample.',
+        'A step is one arrow. The slider limits how long a chain may be.',
         'The counts underneath say how many variables and arrows are lit.',
       ],
       action: { label: 'Widen the trace', id: 'widenTrace' },
     },
     {
-      title: 'The map is complete; the list is not',
+      title: 'Why the list stops short',
       body: [
-        'Past six steps the number of distinct routes runs into the tens of thousands, so the list stops writing them out while the map carries on drawing them.',
-        'That is why the two sets of numbers stop agreeing, and why the panel says how many of the lit variables the listed routes account for.',
+        'The map draws every path within the limit you set. The list cannot: past six steps there are tens of thousands of routes, more than anyone could read.',
+        'So the list sticks to routes of six steps or fewer, and says how many lit variables it has left out.',
       ],
-      action: { label: 'Push past the list limit', id: 'exceedListCap' },
+      action: { label: 'Go past six steps', id: 'exceedListCap' },
     },
     {
       title: 'Follow one path',
