@@ -23,6 +23,7 @@ import {
   type GuideActionId,
   type GuideSectionId,
 } from './data/guide'
+import { downloadBlob } from './lib/exportImage'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -78,6 +79,12 @@ const TRACE_PANEL_PX = 368
 const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
+/**
+ * Output pixels per map unit for an exported PNG. At 1 the image is 3370px wide,
+ * which is already beyond what A4 needs at 300dpi; 2 quadruples the file for a
+ * size nobody has asked for.
+ */
+const EXPORT_SCALE = 1
 
 /** Either the menu of walkthroughs, or a place within one of them. */
 type GuideView =
@@ -117,6 +124,9 @@ export default function App() {
    * rather than the work itself, so it is not stored with the profile.
    */
   const [markedOnly, setMarkedOnly] = useState(false)
+  const [exportState, setExportState] = useState<'idle' | 'working' | 'failed'>(
+    'idle',
+  )
   /**
    * Marked counts as they stood when the current guide step opened.
    *
@@ -527,6 +537,29 @@ export default function App() {
     setMarkedOnly(next)
     if (next) setSelection(null)
   }, [])
+
+  /**
+   * Saves the map as a PNG, named after the profile it belongs to.
+   *
+   * Rasterising 2,100 elements takes a moment, so the button reports that rather
+   * than appearing to have ignored the press — and reports a failure rather than
+   * leaving someone waiting for a file that is never going to arrive.
+   */
+  const exportPng = useCallback(async () => {
+    setExportState('working')
+    try {
+      const blob = await mapRef.current?.exportPng(EXPORT_SCALE)
+      if (!blob) throw new Error('no image produced')
+      const safe = (activeProfile?.name ?? 'map')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .toLowerCase()
+      downloadBlob(blob, `profile-${safe || 'map'}${markedOnly ? '-marked' : ''}.png`)
+      setExportState('idle')
+    } catch {
+      setExportState('failed')
+      window.setTimeout(() => setExportState('idle'), 4000)
+    }
+  }, [activeProfile, markedOnly])
 
   const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
 
@@ -1045,6 +1078,8 @@ export default function App() {
               onToggleReview={() => setReviewOpen((open) => !open)}
               markedOnly={markedOnly}
               onMarkedOnlyChange={changeMarkedOnly}
+              onExportPng={exportPng}
+              exportState={exportState}
               onSelectProfile={setActiveProfileId}
               onNewProfile={() => setPersonaForm('new')}
               onEditPersona={() => setPersonaForm('edit')}

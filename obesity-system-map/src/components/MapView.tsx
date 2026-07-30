@@ -36,6 +36,7 @@ import {
 } from '../lib/annotateSvg'
 import { contrastFillCss } from '../data/contrast'
 import { extractSvgInner, readSvgViewBox } from '../lib/inlineSvg'
+import { svgToPngBlob } from '../lib/exportImage'
 import '../map.css'
 
 /**
@@ -354,6 +355,8 @@ export interface MapViewHandle {
   zoomBy: (factor: number) => void
   /** Frames the given factors, clear of any right-hand panel. */
   focusOnNodes: (nodeIds: readonly number[], options?: FocusOptions) => void
+  /** Renders the whole map, exactly as it currently looks, to a PNG. */
+  exportPng: (scale?: number) => Promise<Blob>
 }
 
 const NO_MARKS: ReadonlySet<number> = new Set()
@@ -620,10 +623,40 @@ export function MapView({
   // Snaps rather than eases: the library animates transforms with
   // requestAnimationFrame, and an instant reset is deterministic. Pass a
   // duration here (e.g. 250) to ease it instead.
+  /**
+   * The whole map as a PNG, however far in or out the view happens to be.
+   *
+   * The reference scale is fit, not the current zoom. The profile layers carry
+   * screen-pixel strokes, so exporting against the live scale would make line
+   * weights depend on how far someone had zoomed before pressing the button —
+   * the same profile coming out spidery or blunt for no stated reason. Fit is
+   * the view a whole-map export corresponds to, so it is the one to match.
+   */
+  const exportPng = useCallback(
+    async (scale = 1) => {
+      const svg = svgRef.current
+      const host = wrapperRef.current
+      if (!svg || !host) throw new Error('MapView: nothing to export yet')
+      const fit = clamp(
+        Math.min(host.clientWidth / MAP_WIDTH, host.clientHeight / MAP_HEIGHT) *
+          FIT_PADDING,
+        MIN_SCALE,
+        MAX_SCALE,
+      )
+      return svgToPngBlob(svg, { scale, referenceScale: fit })
+    },
+    [],
+  )
+
   useImperativeHandle(
     ref,
-    () => ({ resetView: () => fitToViewport(0), zoomBy, focusOnNodes }),
-    [fitToViewport, zoomBy, focusOnNodes],
+    () => ({
+      resetView: () => fitToViewport(0),
+      zoomBy,
+      focusOnNodes,
+      exportPng,
+    }),
+    [fitToViewport, zoomBy, focusOnNodes, exportPng],
   )
 
   /**
