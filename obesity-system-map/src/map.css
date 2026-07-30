@@ -14,6 +14,108 @@
   --map-ease: 0.3s ease;
 }
 
+/* --------------------------------------------------------- high contrast */
+
+/*
+ * Three separate problems, only one of which is about colour:
+ *
+ *   1. The ten fills are near-indistinguishable. Fixed by the retint rules
+ *      generated from src/data/contrast.ts, which carries the measurements.
+ *   2. Node boxes are outlined at stroke-width 0.22 MAP UNITS, which is under
+ *      a tenth of a pixel at fit zoom - so the boxes have no edge against the
+ *      white page at all. Fixed here with a non-scaling stroke.
+ *   3. Edge lines are 0.51-0.83 map units, also sub-pixel when zoomed out, so
+ *      the arrows read as faint grey haze rather than as lines.
+ *
+ * Deliberately restrained: the fills stay pastel, the outline is grey rather
+ * than black, and the edges get a floor on their width rather than a uniform
+ * heavy one. The brief was "easier to see", not "maximum contrast".
+ */
+
+/* Every box gets a real edge. first-of-type is the box fill on both plain and
+   hub nodes; the accent sits above it and must keep its own shape.
+
+   This block is deliberately placed BEFORE the selection, trace and profile
+   rings. Those match `path:last-of-type` at identical specificity to this rule,
+   and on a plain node (one path) that is the very same element, so whichever is
+   declared later wins. Declared after them, high contrast silently greyed out
+   every selection ring and trace marker on the map. */
+.map-svg.high-contrast g[data-node-id] > path:first-of-type {
+  stroke: #64748b;
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+}
+
+/* A floor on arrow width, so they survive being zoomed out. Note this flattens
+   the artwork's .51/.69/.83 variation to one width; CSS cannot express a
+   per-path max(), and the variation is invisible at these sizes anyway.
+
+   Not in Profile. Connections carry state there — black is marked, grey is
+   available — and thickening the unmarked web pushed it up towards the two
+   that mean something. Profile already pins its own widths in screen pixels,
+   so it needs no floor from here. */
+.map-svg.high-contrast:not(.has-profile) [data-layer='edges'] path {
+  stroke-width: 0.85;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The highlight overlays clone the artwork's paths and multiply their width in
+   MAP UNITS, so they shrink with zoom. Once the base edges above were pinned to
+   a constant 0.85px, the dimmed grey web was rendering WIDER on screen than the
+   teal trace drawn over it — 0.85px against 0.65px at fit zoom, and worse the
+   further out you went. Pinning the overlays too restores the hierarchy at
+   every zoom: base < everything-within-reach < the one route being read.
+
+   Excluded from Profile for the same reason as above: this layer holds the
+   available connections there, already non-scaling at their own width, and
+   1.9px put them close enough to marked's 2.6px to blur the distinction. */
+.map-svg.high-contrast:not(.has-profile) [data-layer='edge-highlight'] path {
+  stroke-width: 1.9;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-svg.high-contrast [data-layer='trace-highlight'] path {
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Dimmed states go DOWN in high contrast, not up.
+
+   The instinct was to raise them so dimmed content survives a projector, and
+   that was wrong: this mode also widens the base edges from .51 to a constant
+   0.85px, so the same opacity lays down roughly five times the ink (0.85 x 0.16
+   against 0.51 x 0.05). Widening and raising together turned the background web
+   into something that competed with the trace instead of receding behind it.
+
+   The width increase is what carries legibility here; opacity is what carries
+   the hierarchy. So the ink is spread thinner rather than piled on. */
+.map-svg.high-contrast {
+  --dim-node: 0.22;
+  --dim-edge: 0.07;
+  --dim-filtered: 0.06;
+}
+
+/* Tracing is the case with the most to push back: 296 arrows of context behind
+   a handful that matter. Taken further still, since in Trace the dimmed web is
+   there to give the route a place to sit, not to be read. */
+.map-svg.high-contrast.has-trace-lit [data-layer='edges'] {
+  opacity: 0.05;
+}
+
+.map-svg.high-contrast.has-trace-lit g[data-node-id] {
+  opacity: 0.16;
+}
+
+/* Reading one route pushes the rest of the reachable paths back. Normal mode
+   uses 0.3 on a ~0.97px stroke; this mode draws the same layer at 1.9px, so
+   holding the number would double the ink and the also-reachable paths would
+   read almost as loudly as the route being studied. Matched on ink instead:
+   1.9 x 0.16 lands near 0.97 x 0.3, so it recedes here exactly as much as it
+   does in normal mode. */
+.map-svg.high-contrast.has-trace-focus [data-layer='edge-highlight'] {
+  opacity: 0.16;
+}
+
 /* ---------------------------------------------------------------- edges */
 
 .map-svg [data-layer='edges'],
@@ -57,6 +159,14 @@
   filter: drop-shadow(0 0 2.5px var(--node-accent, #64748b));
 }
 
+/* Source and target of a selected edge: emphasised more than a neighbour,
+   but without the scale-up that marks the one node you actually clicked. */
+.map-svg.has-selection g[data-node-id].is-endpoint {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px var(--node-accent, #64748b))
+    drop-shadow(0 0 7px var(--node-accent, #64748b));
+}
+
 .map-svg.has-selection g[data-node-id].is-selected {
   opacity: 1;
   transform: scale(1.05);
@@ -70,6 +180,19 @@
   stroke-width: 2.5;
 }
 
+/* -------------------------------------------------------------- edge hits */
+
+/* Invisible click targets tracing each edge. Non-scaling stroke keeps the
+   target a constant screen width at any zoom, unlike the 0.51-unit artwork. */
+.map-svg [data-layer='edge-hit'] path {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 11;
+  vector-effect: non-scaling-stroke;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
 /* ------------------------------------------------------------------ labels */
 
 /* Labels live inside their node's group, so they inherit dimming and the
@@ -81,11 +204,334 @@
   user-select: none;
 }
 
+/* --------------------------------------------------------------- mode marks */
+
+/* Outside Profile a mark is a corner pip, not a ring. Rings are the
+   selection/trace channel, and a node can be marked *and* selected — sharing
+   one channel meant the mark silently overwrote the selection ring. */
+.map-svg .node-mark {
+  display: none;
+  fill: #7c3aed;
+  pointer-events: none;
+}
+
+.map-svg g[data-node-id].is-marked .node-mark {
+  display: inline;
+}
+
+/* Marked factors stay legible even while another node's neighbourhood is
+   showing — losing your profile behind a dim would defeat the point. */
+.map-svg.has-selection
+  g[data-node-id].is-marked:not(.is-selected):not(.is-neighbour):not(.is-endpoint) {
+  opacity: 0.55;
+}
+
+/* ----------------------------------------------------------------- profile */
+
+/*
+ * Profile drains the map, and marking gives a factor its colour back.
+ *
+ * The earlier build did the opposite: it layered a purple signal *on top of*
+ * the ten cluster fills and separated its three states by alpha alone — a
+ * #7c3aed ring for marked, the same hue at 16% for a candidate, `opacity: .4`
+ * for neutral. Three amounts of one colour, competing with ten others, none of
+ * which survived fit zoom where a node box is ~8px wide.
+ *
+ * There is no signature colour here now. Everything unmarked goes flat grey,
+ * and the ten cluster hues — the ones the printed legend already teaches —
+ * become the marking signal themselves. The three states differ by WHERE the
+ * colour is, which is a difference in kind on every axis at once:
+ *
+ *   marked    — the factor's own fill        (colour inside)
+ *   suggested — white box, coloured ring     (colour on the edge)
+ *   neutral   — flat grey, grey hairline     (no colour at all)
+ *
+ * Note what neutral is not: it is not dim. Quiet and faint are different
+ * things, and the earlier grey (#8e8b85 label on #f1f0ed, about 2.6:1) confused
+ * them. The state channel is colour, so unmarked labels can stay at full
+ * contrast and nothing is lost.
+ *
+ * Nothing here is dashed. Dash belongs to the artwork, where all 98 dashed
+ * lines are negative connections and no positive one is dashed — so a dashed
+ * overlay could only ever be misread as a claim about sign.
+ */
+
+.map-svg.has-profile {
+  --profile-grey-fill: #f4f3f1;
+  --profile-grey-line: #cfcbc4;
+  --profile-marked-line: #7d7a73;
+  /* "You are looking at this" — hue-free, so it cannot be mistaken for one of
+     the three marking states, and legible over all of them. */
+  --profile-focus: #111827;
+}
+
+/* High contrast in Profile is not the retint — see contrastFillCss(), which
+   deliberately stops at the mode boundary. Colour here already means "marked",
+   so what gets strengthened is the NODES, and only the nodes.
+
+   Connections are left exactly as they are without high contrast. They were
+   boosted here at first — the web to 0.45 opacity, available lines darkened
+   and thickened — and the result was that everything shouted: an unmarked
+   connection you have said nothing about ended up nearly as loud as one you
+   chose. Profile's connection hierarchy is narrow by design and does not have
+   the room. What high contrast buys on nodes it would spend twice over here.
+
+   Unmarked box edges are already handled: high contrast's own
+   `path:first-of-type` rule carries a pseudo-class and so outranks Profile's
+   `> path`, which lands #64748b on them — darker than Profile's own hairline
+   and exactly the intent. Only the marked outline needs saying here, because
+   Profile's `.is-marked > path:last-of-type` outranks that rule in turn. */
+.map-svg.has-profile.high-contrast {
+  --profile-marked-line: #4b4842;
+}
+
+.map-svg.has-profile g[data-node-id],
+.map-svg.has-profile [data-layer='edges'] {
+  transition:
+    fill var(--map-ease),
+    stroke var(--map-ease),
+    opacity var(--map-ease);
+}
+
+/* The profile layers belong to this mode alone; they are painted imperatively
+   and would otherwise linger over Explore and Trace. */
+.map-svg:not(.has-profile) [data-layer='profile-marked-edges'],
+.map-svg:not(.has-profile) [data-layer='profile-link-edges'],
+.map-svg:not(.has-profile) [data-layer='profile-link-badges'],
+.map-svg:not(.has-profile) [data-layer='profile-focus-node'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Neutral: every path in the group, so multi-path nodes (a fill layer plus an
+   outline-ring donut) flatten into one grey slab with no visible seams. The
+   outline is non-scaling, so a box still has a definite edge at fit zoom. */
+.map-svg.has-profile g[data-node-id] > path {
+  fill: var(--profile-grey-fill);
+  stroke: var(--profile-grey-line);
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Two hub nodes carry a white label, chosen for their dark artwork fill. Once
+   that fill is grey the label would vanish, so unmarked labels go back to the
+   ink. Marked ones keep the artwork's choice, which is correct again the moment
+   the original fill returns. */
+.map-svg.has-profile g[data-node-id]:not(.is-marked) .node-label {
+  fill: #231f20;
+}
+
+/* In Profile the colour IS the mark, so the corner pip is redundant noise. */
+.map-svg.has-profile g[data-node-id].is-marked .node-mark {
+  display: none;
+}
+
+/* Suggested: the colour it would take, but on the outline rather than in the
+   box. An outline reads as an invitation where a fill reads as a decision.
+   Only the topmost path carries the ring, so a two-path node does not draw it
+   twice. */
+.map-svg.has-profile g[data-node-id].is-candidate > path {
+  fill: #ffffff;
+  stroke: none;
+}
+
+/* --node-ring, not --node-accent: the accent is tuned for a drop-shadow and
+   leaves the pale yellow clusters at ~1.3:1 on white. See ringFrom().
+
+   --node-ring-hc takes over under high contrast, because that mode moves
+   several types to a different hue family — Social cream to pink, Biological
+   blue to teal — and a ring promising the old colour would be lying about what
+   marking this factor does. */
+.map-svg.has-profile g[data-node-id].is-candidate > path:last-of-type {
+  stroke: var(--node-ring-hc, var(--node-ring, #475569));
+  stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Marked: the factor's own colour, straight back. Flattened across every path
+   so a hub node reads as one solid box rather than a ring over a base.
+
+   This is the one place in Profile that shows a cluster colour, so it is the
+   one place high contrast has anything to repaint — and it is exactly what the
+   retint is for. Contrast supplies the value through a variable rather than by
+   overriding the fill, so the flattening survives. */
+.map-svg.has-profile g[data-node-id].is-marked > path {
+  fill: var(--node-colour-hc, var(--node-colour, #eceadc));
+  stroke: none;
+}
+
+.map-svg.has-profile g[data-node-id].is-marked > path:last-of-type {
+  stroke: var(--profile-marked-line);
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Which factor the card is open on. The ring itself is drawn outside the box by
+   NodeHalos, so it never competes with the box's own edge. */
+.map-svg.has-profile g[data-node-id].is-selected {
+  transform: scale(1.04);
+}
+
+.map-svg.has-profile g[data-node-id]:focus {
+  outline: none;
+}
+
+.map-svg.has-profile g[data-node-id]:focus-visible > path:last-of-type {
+  stroke: var(--profile-focus);
+  stroke-width: 2;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The artwork's own edges go quiet, and stay there.
+
+   An earlier version stepped this down to 0.1 the moment anything was marked,
+   on the theory that the overlay now had something to say. It did not survive
+   contact: marking one factor wiped out the other 295 connections, which are
+   exactly what you read to decide what to mark next. One marked factor is the
+   *start* of a profile, not the end of needing the map. So there is a single
+   value, high enough to read at 1:1 — the marked layer stands out on its own
+   terms, not by everything else disappearing. */
+.map-svg.has-profile [data-layer='edges'] {
+  opacity: 0.3;
+}
+
+/*
+ * Connections come in two states, and they are told apart by COLOUR:
+ *
+ *   marked    — the artwork's own ink, 2.6px      (black is a decision)
+ *   available — warm grey #8a857c, 1.6px          (grey is an offer)
+ *
+ * "Available" covers both the connections of the factor you currently have
+ * open and the ones whose two ends are both marked; they are the same offer,
+ * and the accept-dot marks out the second kind without needing a third look.
+ *
+ * These were once separated by weight alone — 1.5px against 2.6px — which read
+ * as one thing at two strengths rather than two states. Grey against black is a
+ * difference in kind while still, correctly, looking like the lesser claim.
+ */
+
+/* The connections of whichever factor is open, lifted out of the fade. Same
+   mechanism Explore uses, but without Explore's dimming of everything else:
+   `has-selection` is not set in Profile, so only this layer reacts. */
+.map-svg.has-profile [data-layer='edge-highlight'] {
+  opacity: 1;
+}
+
+/* Constant screen width across all three overlays, so a connection is as
+   visible at fit zoom as at 1:1 — the old ones scaled with the artwork and
+   vanished below a pixel. None of them touches stroke-dasharray: a negative
+   connection has to stay visibly negative in every state. */
+.map-svg.has-profile [data-layer='edge-highlight'] path,
+.map-svg [data-layer='profile-marked-edges'] path,
+.map-svg [data-layer='profile-link-edges'] path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The target on a connection whose two ends are both marked but which is not
+   marked itself. This used to be a list in the panel that grew quadratically
+   and could not be dismissed.
+
+   Both discs are zero-length round-capped strokes, so their size comes from
+   stroke-width and holds constant in screen pixels at any zoom. On hover the
+   grey goes to black — a preview of the marked state it is offering. */
+.map-svg [data-layer='profile-link-badges'] path {
+  transition: stroke var(--map-ease);
+}
+
+.map-svg [data-layer='profile-link-badges'] g:hover path {
+  stroke: #231f20;
+}
+
+/* ------------------------------------------------------------------- trace */
+
+/* Three levels, no more. The map underneath goes quiet; every path within the
+   step limit is drawn as the normal display, not as background; the route being
+   read glows. An earlier build drew the honest full-reach layer as near-invisible
+   grey under a brighter "study" layer, which made the truth look like noise. */
+.map-svg [data-layer='edge-highlight'],
+.map-svg [data-layer='trace-highlight'] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--map-ease);
+}
+
+.map-svg.has-trace [data-layer='edge-highlight'],
+.map-svg.has-trace [data-layer='trace-highlight'] {
+  opacity: 1;
+}
+
+/* `has-trace-lit` rather than `has-trace`: the starting factor's ring and halo
+   hang off `has-trace`, so they survive even when the answer is "nothing" —
+   but nothing gets dimmed when there is nothing to dim against. */
+.map-svg.has-trace-lit [data-layer='edges'] {
+  opacity: var(--dim-edge);
+}
+
+.map-svg.has-trace-lit g[data-node-id] {
+  opacity: var(--dim-node);
+}
+
+/* On a path within the limit. */
+.map-svg.has-trace g[data-node-id].is-path,
+.map-svg.has-trace g[data-node-id].is-trace-start,
+.map-svg.has-trace g[data-node-id].is-trace-core {
+  opacity: 1;
+}
+
+/* Reading one route pushes the rest of the paths back, but never hides them. */
+.map-svg.has-trace-focus [data-layer='edge-highlight'] {
+  opacity: 0.3;
+}
+
+.map-svg.has-trace-focus g[data-node-id].is-path:not(.is-focus):not(.is-trace-start) {
+  opacity: 0.4;
+}
+
+.map-svg.has-trace-focus g[data-node-id].is-focus {
+  opacity: 1;
+}
+
+/* Non-scaling strokes: these are landmarks, so they hold a constant width on
+   screen. At fit zoom a 3-unit stroke renders under a pixel, which is why the
+   starting factor was almost impossible to pick out. */
+.map-svg g[data-node-id].is-trace-start > path:last-of-type {
+  stroke: #0f766e;
+  stroke-width: 3.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-svg g[data-node-id].is-focus > path:last-of-type {
+  stroke: #0f766e;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The destination. Orange echoes the energy-balance rings the original map
+   draws at its centre, so arrival reads as arrival. */
+.map-svg g[data-node-id].is-trace-core > path:last-of-type {
+  stroke: #e87722;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The halo fades in with the trace. Its width is screen-space (see
+   TraceStartMarker), unlike a drop-shadow, whose blur radius is in user units
+   and so shrinks away at exactly the zoom levels where it is needed most. */
+.map-svg [data-layer='trace-start-marker'] {
+  opacity: 0;
+  transition: opacity var(--map-ease);
+}
+
+.map-svg.has-trace [data-layer='trace-start-marker'] {
+  opacity: 1;
+}
+
 /* ------------------------------------------------------- cluster filtering */
 
-/* Edge paths are grouped by the cluster pair they span, so filtering toggles
-   ~48 groups rather than restyling 892 paths. */
-.map-svg [data-cluster-a] {
+/* Edge paths are grouped by the combination of both taxonomies, so either can
+   filter at group level — 78 groups rather than 892 paths. */
+.map-svg [data-edge-group] {
   transition: opacity var(--map-ease);
 }
 
@@ -93,6 +539,7 @@
    rules above, so a filtered-out cluster stays hidden even while selected. */
 .map-svg g[data-node-id].is-filtered-out,
 .map-svg g[data-node-id].is-filtered-out.is-selected,
+.map-svg g[data-node-id].is-filtered-out.is-endpoint,
 .map-svg g[data-node-id].is-filtered-out.is-neighbour {
   opacity: var(--dim-filtered);
   transform: none;
@@ -100,8 +547,10 @@
   pointer-events: none;
 }
 
-.map-svg [data-cluster-a].is-filtered-out {
+.map-svg [data-edge-group].is-filtered-out {
   opacity: var(--dim-filtered);
+  /* A faded-out edge must not remain clickable via the hit layer. */
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

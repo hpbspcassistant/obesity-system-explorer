@@ -1,14 +1,15 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { nodes } from '../data/systemMap'
+import { groupOfNode, nodes } from '../data/systemMap'
 import { fuzzyRank } from '../lib/fuzzy'
-import type { Node } from '../types'
+import type { Node, Taxonomy } from '../types'
 
 interface SearchBarProps {
   onSelectNode: (nodeId: number) => void
   onClear: () => void
-  /** Clusters currently filtered out, so results can flag hidden nodes. */
-  hiddenClusters: ReadonlySet<string>
+  /** Groups currently filtered out, so results can flag hidden nodes. */
+  hiddenGroups: ReadonlySet<string>
+  taxonomy: Taxonomy
 }
 
 const MAX_RESULTS = 8
@@ -40,7 +41,8 @@ function HighlightedLabel({
 export function SearchBar({
   onSelectNode,
   onClear,
-  hiddenClusters,
+  hiddenGroups,
+  taxonomy,
 }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
@@ -184,7 +186,7 @@ export function SearchBar({
             ) : (
               results.map((result, index) => {
                 const node = result.item
-                const hidden = hiddenClusters.has(node.mapCluster)
+                const hidden = hiddenGroups.has(groupOfNode(node, taxonomy))
                 return (
                   <li key={node.id} role="option" aria-selected={index === activeIndex}>
                     <button

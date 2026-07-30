@@ -1,10 +1,10 @@
 {
  "_meta": {
-  "source": "obesity_system_map_node_boxes_only.svg",
-  "description": "Legend clusters with swatch colours read from the node artwork.",
-  "order": "as printed on the original map legend"
+  "description": "Two taxonomies. `variableTypes` are the map's colour groupings (swatches read from the node artwork). `atlasClusters` are the Foresight atlas's own clusters, which cross-cut them and have no colour in the artwork.",
+  "variableTypeSource": "obesity_system_map_node_boxes_only.svg",
+  "atlasClusterSource": "07-1177-obesity-system-atlas.pdf, via node.atlasCluster"
  },
- "clusters": [
+ "variableTypes": [
   {
    "name": "Media",
    "swatch": "#ECEBDC",
@@ -88,6 +88,40 @@
    "accentFills": [
     "#303636"
    ]
+  }
+ ],
+ "atlasClusters": [
+  {
+   "name": "Engine",
+   "nodeCount": 6
+  },
+  {
+   "name": "Physiology",
+   "nodeCount": 19
+  },
+  {
+   "name": "Individual physical activity",
+   "nodeCount": 11
+  },
+  {
+   "name": "Physical activity environment",
+   "nodeCount": 13
+  },
+  {
+   "name": "Food consumption",
+   "nodeCount": 15
+  },
+  {
+   "name": "Food production",
+   "nodeCount": 17
+  },
+  {
+   "name": "Individual psychology",
+   "nodeCount": 10
+  },
+  {
+   "name": "Social psychology",
+   "nodeCount": 17
   }
  ]
 }

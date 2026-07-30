@@ -1,5 +1,6 @@
 import type { EdgeGeometry } from '../types'
 import type { LabelLayout } from './labelLayout'
+import { hexToHsl, ringFrom } from './ringColour'
 
 /**
  * Attaches identity attributes to the inlined SVG layers so the static artwork
@@ -77,27 +78,6 @@ export function annotateEdges(inner: string, geometry: EdgeGeometry): string {
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
-/** #RGB or #RRGGBB -> [h, s, l] with s/l in 0..1. */
-function hexToHsl(hex: string): [number, number, number] | null {
-  const m = /^#([\da-f]{3}|[\da-f]{6})$/i.exec(hex.trim())
-  if (!m) return null
-  const raw = m[1].length === 3 ? m[1].replace(/./g, (c) => c + c) : m[1]
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(raw.slice(i, i + 2), 16) / 255)
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const l = (max + min) / 2
-  const d = max - min
-  if (d === 0) return [0, 0, l]
-  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-  const h =
-    max === r
-      ? ((g - b) / d + (g < b ? 6 : 0)) / 6
-      : max === g
-        ? ((b - r) / d + 2) / 6
-        : ((r - g) / d + 4) / 6
-  return [h, s, l]
-}
-
 /**
  * Cluster fills are pale by design, so they read as nothing when used for a
  * glow. Push saturation up and lightness down to get a visible accent that is
@@ -122,20 +102,27 @@ function accentFrom(hex: string): string {
  * the rendered result. Order *within* a node is preserved exactly.
  */
 export interface NodeGroupOptions {
-  clusterOf: (nodeId: number) => string | undefined
+  /** Both taxonomies, tagged separately so either can drive the filter. */
+  taxonomiesOf: (nodeId: number) => { type?: string; cluster?: string }
   /**
    * Optional label layout. Text is nested inside the node's own group so it
    * inherits selection scaling, cluster dimming and hit-testing without any
    * extra bookkeeping.
    */
   labelFor?: (nodeId: number, fill: string | undefined) => LabelLayout | null
+  /**
+   * Corner position for the "marked" pip. Marks get their own visual channel
+   * so they never overwrite the selection ring — a node can be both, and both
+   * must stay readable.
+   */
+  pipFor?: (nodeId: number) => { cx: number; cy: number } | null
 }
 
 export function groupNodePaths(
   inner: string,
   options: NodeGroupOptions,
 ): string {
-  const { clusterOf, labelFor } = options
+  const { taxonomiesOf, labelFor, pipFor } = options
   const root = parseFragment(inner, 'nodes layer')
   const paths = drawablePaths(root)
   if (paths.length === 0) throw new Error('annotateSvg: nodes layer has no paths')
@@ -169,8 +156,9 @@ export function groupNodePaths(
     const label = bucket[0].getAttribute('data-node-label')
     if (label) group.setAttribute('data-node-label', label)
 
-    const cluster = clusterOf(id)
-    if (cluster) group.setAttribute('data-cluster', cluster)
+    const taxonomies = taxonomiesOf(id)
+    if (taxonomies.type) group.setAttribute('data-type', taxonomies.type)
+    if (taxonomies.cluster) group.setAttribute('data-cluster', taxonomies.cluster)
 
     // The colour a label sits on is the topmost *filled* surface, i.e. the last
     // painted path that is not an outline ring. Accent hub nodes paint their
@@ -190,7 +178,8 @@ export function groupNodePaths(
     if (fill) {
       group.setAttribute(
         'style',
-        `--node-colour:${fill};--node-accent:${accentFrom(fill)}`,
+        `--node-colour:${fill};--node-accent:${accentFrom(fill)};` +
+          `--node-ring:${ringFrom(fill)}`,
       )
     }
 
@@ -221,6 +210,16 @@ export function groupNodePaths(
       group.appendChild(text)
     }
 
+    const pip = pipFor?.(id)
+    if (pip) {
+      const dot = doc.createElementNS(SVG_NS, 'circle')
+      dot.setAttribute('class', 'node-mark')
+      dot.setAttribute('cx', pip.cx.toFixed(2))
+      dot.setAttribute('cy', pip.cy.toFixed(2))
+      dot.setAttribute('r', '3.6')
+      group.appendChild(dot)
+    }
+
     parent.appendChild(group)
   }
 
@@ -234,25 +233,37 @@ export function groupNodePaths(
  * measuring their endpoints against every node box. Their cluster pair is
  * therefore inferred, not sourced — recorded here so the inference is visible.
  */
-const ORPHAN_CLUSTER_PAIR: [string, string] = ['Economic', 'Infrastructure']
+const ORPHAN_TYPE_PAIR: [string, string] = ['Economic', 'Infrastructure']
+const ORPHAN_CLUSTER_PAIR: [string, string] = [
+  'Food production',
+  'Physical activity environment',
+]
 
-export interface EdgeClusterLookup {
-  /** Cluster pair for a connection, or undefined if it cannot be resolved. */
-  pairForConnection: (connectionId: string) => [string, string] | undefined
+export interface TaxonomyPairs {
+  typePair: [string, string]
+  clusterPair: [string, string]
+}
+
+export interface EdgeTaxonomyLookup {
+  pairsForConnection: (connectionId: string) => TaxonomyPairs | undefined
 }
 
 /**
- * Regroups edge paths by the cluster pair they connect, so a cluster filter
- * toggles ~48 groups instead of restyling 892 individual paths.
+ * Regroups edge paths by the *combination* of both taxonomies, so either can
+ * filter at group level. The two cross-cut, so grouping by one alone would put
+ * mixed values of the other inside a single group and make that filter wrong.
+ *
+ * 78 combined groups for 892 paths — still two orders of magnitude fewer
+ * elements to restyle than touching paths individually.
  *
  * Reordering is lossless here: every drawn element in the edges layer is the
  * same colour (#231f20 fill and stroke), so paint order among edges cannot
  * change the rendered result. Groups are created inside the clipped <g> so the
  * layer's clip-path still applies.
  */
-export function groupEdgePathsByCluster(
+export function groupEdgePathsByTaxonomy(
   inner: string,
-  lookup: EdgeClusterLookup,
+  lookup: EdgeTaxonomyLookup,
 ): string {
   const root = parseFragment(inner, 'edges layer')
   const paths = drawablePaths(root)
@@ -262,32 +273,33 @@ export function groupEdgePathsByCluster(
   if (!parent) throw new Error('annotateSvg: edge paths have no parent')
 
   const order: string[] = []
-  const buckets = new Map<string, { pair: [string, string]; paths: SVGPathElement[] }>()
+  const buckets = new Map<string, { pairs: TaxonomyPairs; paths: SVGPathElement[] }>()
 
   for (const path of paths) {
     const ids = path.getAttribute('data-connection-ids')?.split(' ').filter(Boolean) ?? []
-    const pairs = ids
-      .map((id) => lookup.pairForConnection(id))
-      .filter((p): p is [string, string] => !!p)
-      .map((p) => [...p].sort() as [string, string])
+    const resolved = ids
+      .map((id) => lookup.pairsForConnection(id))
+      .filter((p): p is TaxonomyPairs => !!p)
 
-    // A shared path must resolve to a single pair to be groupable. All four
-    // connections on the one shared path agree, but guard rather than assume.
-    const distinct = new Set(pairs.map((p) => p.join('|')))
-    let pair: [string, string]
-    if (ids.length === 0) {
-      pair = ORPHAN_CLUSTER_PAIR
-    } else if (distinct.size === 1) {
-      pair = pairs[0]
-    } else {
-      // Ambiguous: give this path its own group so filtering stays correct.
-      pair = pairs[0] ?? ORPHAN_CLUSTER_PAIR
+    const keyOf = (p: TaxonomyPairs) =>
+      `${p.typePair.join('|')}::${p.clusterPair.join('|')}`
+    const distinct = new Set(resolved.map(keyOf))
+
+    const orphan: TaxonomyPairs = {
+      typePair: ORPHAN_TYPE_PAIR,
+      clusterPair: ORPHAN_CLUSTER_PAIR,
     }
+    // A shared path must resolve to one combination to be groupable; the one
+    // shared trunk's four connections agree, but guard rather than assume.
+    const pairs = ids.length === 0 ? orphan : (resolved[0] ?? orphan)
+    const key =
+      distinct.size > 1
+        ? `mixed:${path.getAttribute('data-path-index')}`
+        : keyOf(pairs)
 
-    const key = distinct.size > 1 ? `mixed:${path.getAttribute('data-path-index')}` : pair.join('|')
     let bucket = buckets.get(key)
     if (!bucket) {
-      bucket = { pair, paths: [] }
+      bucket = { pairs, paths: [] }
       buckets.set(key, bucket)
       order.push(key)
     }
@@ -298,13 +310,63 @@ export function groupEdgePathsByCluster(
   for (const key of order) {
     const bucket = buckets.get(key)!
     const group = doc.createElementNS(SVG_NS, 'g')
-    group.setAttribute('data-cluster-a', bucket.pair[0])
-    group.setAttribute('data-cluster-b', bucket.pair[1])
+    group.setAttribute('data-edge-group', '')
+    group.setAttribute('data-type-a', bucket.pairs.typePair[0])
+    group.setAttribute('data-type-b', bucket.pairs.typePair[1])
+    group.setAttribute('data-cluster-a', bucket.pairs.clusterPair[0])
+    group.setAttribute('data-cluster-b', bucket.pairs.clusterPair[1])
     for (const path of bucket.paths) group.appendChild(path)
     parent.appendChild(group)
   }
 
   return serializeChildren(root)
+}
+
+/**
+ * Builds an invisible layer of fat strokes tracing the visible edges, so edges
+ * can actually be clicked.
+ *
+ * The drawn lines are 0.51 units wide on a 3370-unit canvas — far below a
+ * pixel at fit zoom. `vector-effect: non-scaling-stroke` keeps the hit stroke a
+ * constant width in screen pixels at every zoom level, so the target neither
+ * vanishes when zoomed out nor swells when zoomed in.
+ *
+ * Cluster-pair groups are preserved so the hit layer inherits the same filter
+ * state as the artwork; a filtered-out cluster must not be clickable.
+ */
+export function buildEdgeHitLayer(annotatedEdgesInner: string): string {
+  const root = parseFragment(annotatedEdgesInner, 'edges layer (hit)')
+  const doc = root.ownerDocument
+  const container = doc.createElementNS(SVG_NS, 'g')
+
+  for (const group of root.querySelectorAll('g[data-edge-group]')) {
+    const hitGroup = doc.createElementNS(SVG_NS, 'g')
+    hitGroup.setAttribute('data-edge-group', '')
+    for (const attr of ['data-type-a', 'data-type-b', 'data-cluster-a', 'data-cluster-b']) {
+      hitGroup.setAttribute(attr, group.getAttribute(attr) ?? '')
+    }
+
+    for (const path of group.querySelectorAll('path')) {
+      // Markers are tiny and sit under the node boxes; the line is the target.
+      if (path.getAttribute('data-edge-role') !== 'line') continue
+      const ids = path.getAttribute('data-connection-ids')
+      if (!ids) continue
+
+      const hit = doc.createElementNS(SVG_NS, 'path')
+      hit.setAttribute('d', path.getAttribute('d') ?? '')
+      const transform = path.getAttribute('transform')
+      if (transform) hit.setAttribute('transform', transform)
+      hit.setAttribute('data-connection-ids', ids)
+      hit.setAttribute('data-hit', '')
+      const index = path.getAttribute('data-path-index')
+      if (index) hit.setAttribute('data-path-index', index)
+      hitGroup.appendChild(hit)
+    }
+
+    if (hitGroup.childNodes.length > 0) container.appendChild(hitGroup)
+  }
+
+  return serializeChildren(container)
 }
 
 export interface NodeLayerCheck {

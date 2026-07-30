@@ -1,5 +1,6 @@
 import type { Connection, Node } from '../types'
 import { nodesById } from '../data/systemMap'
+import { DetailPanel, PanelSection } from './DetailPanel'
 
 interface NodeDetailPanelProps {
   node: Node | null
@@ -7,6 +8,7 @@ interface NodeDetailPanelProps {
   incoming: readonly Connection[]
   onClose: () => void
   onSelectNode: (nodeId: number) => void
+  onSelectConnection: (connectionId: string) => void
 }
 
 function InfluenceTag({ connection }: { connection: Connection }) {
@@ -15,9 +17,7 @@ function InfluenceTag({ connection }: { connection: Connection }) {
     <span
       className={[
         'ml-2 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide',
-        positive
-          ? 'bg-emerald-50 text-emerald-700'
-          : 'bg-rose-50 text-rose-700',
+        positive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700',
       ].join(' ')}
     >
       {connection.influence}
@@ -29,22 +29,15 @@ function ConnectionList({
   title,
   connections,
   direction,
-  onSelectNode,
+  onSelectConnection,
 }: {
   title: string
   connections: readonly Connection[]
   direction: 'out' | 'in'
-  onSelectNode: (nodeId: number) => void
+  onSelectConnection: (connectionId: string) => void
 }) {
   return (
-    <section className="border-t border-gray-200 px-5 py-4">
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-        {title}
-        <span className="ml-1.5 rounded bg-gray-100 px-1.5 py-0.5 text-gray-600">
-          {connections.length}
-        </span>
-      </h3>
-
+    <PanelSection title={title} count={connections.length}>
       {connections.length === 0 ? (
         <p className="text-sm text-gray-400">None</p>
       ) : (
@@ -55,15 +48,19 @@ function ConnectionList({
             const other = nodesById.get(otherId)
             return (
               <li key={connection.id}>
+                {/* Selects the connection, not the node: the list is about
+                    edges, and the edge panel links on to both endpoints. */}
                 <button
                   type="button"
-                  onClick={() => onSelectNode(otherId)}
+                  onClick={() => onSelectConnection(connection.id)}
                   className="flex w-full items-start rounded px-1.5 py-1 text-left text-sm text-gray-700 hover:bg-gray-100"
                 >
                   <span className="mr-1.5 shrink-0 text-gray-400">
                     {direction === 'out' ? '→' : '←'}
                   </span>
-                  <span className="flex-1">{other?.label ?? `Node ${otherId}`}</span>
+                  <span className="flex-1">
+                    {other?.label ?? `Node ${otherId}`}
+                  </span>
                   <InfluenceTag connection={connection} />
                 </button>
               </li>
@@ -71,7 +68,7 @@ function ConnectionList({
           })}
         </ul>
       )}
-    </section>
+    </PanelSection>
   )
 }
 
@@ -80,72 +77,53 @@ export function NodeDetailPanel({
   outgoing,
   incoming,
   onClose,
-  onSelectNode,
+  onSelectConnection,
 }: NodeDetailPanelProps) {
   return (
-    <aside
-      aria-hidden={!node}
-      className={[
-        'absolute inset-y-0 right-0 z-10 flex w-[22rem] max-w-[85vw] flex-col',
-        'border-l border-gray-200 bg-white shadow-xl',
-        'transition-transform duration-300 ease-out',
-        node ? 'translate-x-0' : 'translate-x-full',
-      ].join(' ')}
+    <DetailPanel
+      open={node !== null}
+      title={node?.label ?? ''}
+      subtitle={
+        node && (
+          // Two distinct taxonomies, so both are named rather than one being
+          // shown bare as "the cluster": mapCluster is the artwork's colour
+          // grouping, atlasCluster is the Foresight atlas's own classification.
+          <dl className="flex flex-wrap gap-x-4 gap-y-0.5 text-[11px]">
+            <div className="flex gap-1">
+              <dt className="text-gray-400">Cluster</dt>
+              <dd className="font-medium text-gray-700">{node.atlasCluster}</dd>
+            </div>
+            <div className="flex gap-1">
+              <dt className="text-gray-400">Type</dt>
+              <dd className="font-medium text-gray-700">{node.mapCluster}</dd>
+            </div>
+          </dl>
+        )
+      }
+      onClose={onClose}
     >
       {node && (
         <>
-          <header className="flex items-start justify-between gap-3 px-5 py-4">
-            <div>
-              <h2 className="text-base font-semibold leading-snug text-gray-900">
-                {node.label}
-              </h2>
-              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-500">
-                {node.mapCluster}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close details"
-              className="-mr-1 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-            >
-              <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
-                <path
-                  d="M5 5l10 10M15 5L5 15"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </button>
-          </header>
+          <PanelSection title="Definition">
+            <p className="text-sm leading-relaxed text-gray-700">
+              {node.definition}
+            </p>
+          </PanelSection>
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <section className="border-t border-gray-200 px-5 py-4">
-              <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Definition
-              </h3>
-              <p className="text-sm leading-relaxed text-gray-700">
-                {node.definition}
-              </p>
-            </section>
-
-            <ConnectionList
-              title="Outgoing"
-              connections={outgoing}
-              direction="out"
-              onSelectNode={onSelectNode}
-            />
-            <ConnectionList
-              title="Incoming"
-              connections={incoming}
-              direction="in"
-              onSelectNode={onSelectNode}
-            />
-          </div>
+          <ConnectionList
+            title="Outgoing"
+            connections={outgoing}
+            direction="out"
+            onSelectConnection={onSelectConnection}
+          />
+          <ConnectionList
+            title="Incoming"
+            connections={incoming}
+            direction="in"
+            onSelectConnection={onSelectConnection}
+          />
         </>
       )}
-    </aside>
+    </DetailPanel>
   )
 }

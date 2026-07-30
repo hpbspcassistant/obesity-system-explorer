@@ -1,0 +1,2546 @@
+{
+ "_meta": {
+  "source": "Derived from obesity_system_data.json by scripts/build_loops.py",
+  "description": "Every feedback loop up to 6 factors long. nodeIds lists the loop in causal order without repeating the opening factor; the loop closes from the last back to the first. Loop counts explode with length, so this is a hard cap on what is known, not a display limit.",
+  "maxLength": 6,
+  "totalLoops": 193,
+  "reinforcing": 115,
+  "balancing": 78,
+  "verifiedAgainst": "obesity_system_map_feedback_loops.xlsx",
+  "factorsInReinforcingLoop": 73
+ },
+ "loops": [
+  {
+   "id": "L003",
+   "nodeIds": [
+    6,
+    15
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L007",
+   "nodeIds": [
+    16,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L005",
+   "nodeIds": [
+    26,
+    36
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L010",
+   "nodeIds": [
+    46,
+    73
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L012",
+   "nodeIds": [
+    64,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L011",
+   "nodeIds": [
+    66,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L008",
+   "nodeIds": [
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L006",
+   "nodeIds": [
+    75,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L009",
+   "nodeIds": [
+    78,
+    80
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L002",
+   "nodeIds": [
+    91,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L004",
+   "nodeIds": [
+    101,
+    105
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L001",
+   "nodeIds": [
+    105,
+    108
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L021",
+   "nodeIds": [
+    5,
+    46,
+    56
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L016",
+   "nodeIds": [
+    10,
+    16,
+    21
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": false
+  },
+  {
+   "id": "L015",
+   "nodeIds": [
+    16,
+    21,
+    22
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L013",
+   "nodeIds": [
+    41,
+    90,
+    80
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L019",
+   "nodeIds": [
+    47,
+    51,
+    55
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L018",
+   "nodeIds": [
+    64,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L017",
+   "nodeIds": [
+    65,
+    66,
+    82
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L014",
+   "nodeIds": [
+    75,
+    81,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L020",
+   "nodeIds": [
+    75,
+    91,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L032",
+   "nodeIds": [
+    2,
+    12,
+    103,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L031",
+   "nodeIds": [
+    2,
+    27,
+    49,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L037",
+   "nodeIds": [
+    2,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L036",
+   "nodeIds": [
+    5,
+    32,
+    46,
+    56
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L033",
+   "nodeIds": [
+    12,
+    103,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L042",
+   "nodeIds": [
+    22,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L023",
+   "nodeIds": [
+    22,
+    95,
+    83,
+    71
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L035",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    73
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L034",
+   "nodeIds": [
+    46,
+    56,
+    85,
+    73
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L025",
+   "nodeIds": [
+    46,
+    64,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L024",
+   "nodeIds": [
+    46,
+    66,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L029",
+   "nodeIds": [
+    64,
+    71,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L043",
+   "nodeIds": [
+    64,
+    71,
+    91,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L028",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L026",
+   "nodeIds": [
+    65,
+    66,
+    82,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L022",
+   "nodeIds": [
+    71,
+    99,
+    95,
+    83
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L040",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    91
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L041",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    102
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L039",
+   "nodeIds": [
+    72,
+    105,
+    106,
+    91
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L038",
+   "nodeIds": [
+    72,
+    105,
+    106,
+    102
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L030",
+   "nodeIds": [
+    73,
+    91,
+    92,
+    75
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L027",
+   "nodeIds": [
+    75,
+    81,
+    82,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L078",
+   "nodeIds": [
+    2,
+    12,
+    103,
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L080",
+   "nodeIds": [
+    2,
+    12,
+    103,
+    95,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L079",
+   "nodeIds": [
+    2,
+    27,
+    49,
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L085",
+   "nodeIds": [
+    2,
+    32,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L087",
+   "nodeIds": [
+    2,
+    46,
+    64,
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L086",
+   "nodeIds": [
+    2,
+    46,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L057",
+   "nodeIds": [
+    5,
+    11,
+    32,
+    46,
+    56
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L083",
+   "nodeIds": [
+    5,
+    46,
+    66,
+    45,
+    54
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L045",
+   "nodeIds": [
+    16,
+    40,
+    49,
+    71,
+    22
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L073",
+   "nodeIds": [
+    16,
+    80,
+    79,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L044",
+   "nodeIds": [
+    17,
+    80,
+    78,
+    39,
+    32
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L071",
+   "nodeIds": [
+    18,
+    26,
+    36,
+    49,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L072",
+   "nodeIds": [
+    18,
+    26,
+    36,
+    79,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": false
+  },
+  {
+   "id": "L091",
+   "nodeIds": [
+    22,
+    32,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L093",
+   "nodeIds": [
+    22,
+    46,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L092",
+   "nodeIds": [
+    22,
+    67,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L084",
+   "nodeIds": [
+    32,
+    46,
+    66,
+    45,
+    44
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L081",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    92,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L051",
+   "nodeIds": [
+    46,
+    56,
+    81,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L049",
+   "nodeIds": [
+    46,
+    56,
+    81,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L046",
+   "nodeIds": [
+    46,
+    56,
+    85,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L052",
+   "nodeIds": [
+    46,
+    56,
+    85,
+    94,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L053",
+   "nodeIds": [
+    46,
+    64,
+    71,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 5,
+   "touchesEngine": true
+  },
+  {
+   "id": "L048",
+   "nodeIds": [
+    46,
+    64,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L054",
+   "nodeIds": [
+    46,
+    66,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L050",
+   "nodeIds": [
+    46,
+    72,
+    64,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L047",
+   "nodeIds": [
+    46,
+    72,
+    66,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L082",
+   "nodeIds": [
+    46,
+    73,
+    91,
+    92,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L069",
+   "nodeIds": [
+    49,
+    71,
+    105,
+    101,
+    104
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L067",
+   "nodeIds": [
+    57,
+    71,
+    105,
+    101,
+    104
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L063",
+   "nodeIds": [
+    64,
+    71,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L094",
+   "nodeIds": [
+    64,
+    71,
+    91,
+    92,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L065",
+   "nodeIds": [
+    64,
+    71,
+    99,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L064",
+   "nodeIds": [
+    64,
+    72,
+    66,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L062",
+   "nodeIds": [
+    64,
+    82,
+    65,
+    66,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L061",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L066",
+   "nodeIds": [
+    64,
+    82,
+    96,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L055",
+   "nodeIds": [
+    66,
+    82,
+    92,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L056",
+   "nodeIds": [
+    66,
+    82,
+    96,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L068",
+   "nodeIds": [
+    68,
+    71,
+    105,
+    101,
+    104
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L076",
+   "nodeIds": [
+    71,
+    99,
+    98,
+    94,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L074",
+   "nodeIds": [
+    71,
+    105,
+    101,
+    95,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L077",
+   "nodeIds": [
+    71,
+    105,
+    101,
+    97,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L075",
+   "nodeIds": [
+    71,
+    105,
+    101,
+    104,
+    79
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L090",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    87,
+    73
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L059",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    87,
+    91
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L060",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    87,
+    102
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L089",
+   "nodeIds": [
+    72,
+    105,
+    106,
+    107,
+    102
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L088",
+   "nodeIds": [
+    72,
+    105,
+    108,
+    107,
+    102
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L070",
+   "nodeIds": [
+    75,
+    76,
+    94,
+    91,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L058",
+   "nodeIds": [
+    75,
+    81,
+    97,
+    82,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L145",
+   "nodeIds": [
+    2,
+    12,
+    103,
+    95,
+    83,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L144",
+   "nodeIds": [
+    2,
+    32,
+    17,
+    80,
+    79,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L171",
+   "nodeIds": [
+    2,
+    32,
+    46,
+    64,
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L174",
+   "nodeIds": [
+    2,
+    32,
+    46,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L169",
+   "nodeIds": [
+    2,
+    46,
+    56,
+    81,
+    97,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L123",
+   "nodeIds": [
+    2,
+    46,
+    56,
+    85,
+    94,
+    83
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L170",
+   "nodeIds": [
+    2,
+    46,
+    66,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L173",
+   "nodeIds": [
+    2,
+    46,
+    72,
+    64,
+    71,
+    83
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L172",
+   "nodeIds": [
+    2,
+    46,
+    73,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L161",
+   "nodeIds": [
+    5,
+    11,
+    47,
+    73,
+    46,
+    56
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L158",
+   "nodeIds": [
+    5,
+    32,
+    42,
+    73,
+    46,
+    56
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L162",
+   "nodeIds": [
+    5,
+    32,
+    46,
+    66,
+    45,
+    54
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L160",
+   "nodeIds": [
+    5,
+    46,
+    66,
+    45,
+    54,
+    48
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L157",
+   "nodeIds": [
+    5,
+    46,
+    66,
+    45,
+    54,
+    56
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L163",
+   "nodeIds": [
+    5,
+    46,
+    66,
+    45,
+    54,
+    63
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L159",
+   "nodeIds": [
+    5,
+    46,
+    72,
+    66,
+    45,
+    54
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L136",
+   "nodeIds": [
+    6,
+    15,
+    22,
+    16,
+    21,
+    10
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": false
+  },
+  {
+   "id": "L146",
+   "nodeIds": [
+    12,
+    103,
+    95,
+    83,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L166",
+   "nodeIds": [
+    16,
+    22,
+    46,
+    66,
+    45,
+    37
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L140",
+   "nodeIds": [
+    16,
+    26,
+    36,
+    49,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L141",
+   "nodeIds": [
+    16,
+    26,
+    36,
+    79,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L143",
+   "nodeIds": [
+    16,
+    80,
+    74,
+    79,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L142",
+   "nodeIds": [
+    16,
+    80,
+    84,
+    79,
+    71,
+    22
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L139",
+   "nodeIds": [
+    17,
+    80,
+    79,
+    71,
+    22,
+    32
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L178",
+   "nodeIds": [
+    22,
+    32,
+    46,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L181",
+   "nodeIds": [
+    22,
+    34,
+    73,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L176",
+   "nodeIds": [
+    22,
+    34,
+    73,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L185",
+   "nodeIds": [
+    22,
+    46,
+    66,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L177",
+   "nodeIds": [
+    22,
+    46,
+    73,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L184",
+   "nodeIds": [
+    22,
+    50,
+    82,
+    65,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L183",
+   "nodeIds": [
+    22,
+    67,
+    46,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L182",
+   "nodeIds": [
+    22,
+    67,
+    73,
+    46,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L179",
+   "nodeIds": [
+    22,
+    67,
+    73,
+    72,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L180",
+   "nodeIds": [
+    22,
+    95,
+    82,
+    65,
+    64,
+    71
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L168",
+   "nodeIds": [
+    32,
+    46,
+    66,
+    45,
+    54,
+    44
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L167",
+   "nodeIds": [
+    32,
+    46,
+    72,
+    66,
+    45,
+    44
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L151",
+   "nodeIds": [
+    33,
+    51,
+    55,
+    73,
+    46,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L152",
+   "nodeIds": [
+    33,
+    51,
+    55,
+    73,
+    72,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L186",
+   "nodeIds": [
+    43,
+    73,
+    46,
+    66,
+    45,
+    44
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L187",
+   "nodeIds": [
+    43,
+    73,
+    72,
+    66,
+    45,
+    44
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L125",
+   "nodeIds": [
+    43,
+    82,
+    65,
+    66,
+    45,
+    44
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L164",
+   "nodeIds": [
+    44,
+    47,
+    73,
+    46,
+    66,
+    45
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L165",
+   "nodeIds": [
+    44,
+    47,
+    73,
+    72,
+    66,
+    45
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L153",
+   "nodeIds": [
+    45,
+    53,
+    62,
+    70,
+    72,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L117",
+   "nodeIds": [
+    45,
+    54,
+    48,
+    70,
+    72,
+    66
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L156",
+   "nodeIds": [
+    45,
+    54,
+    56,
+    81,
+    72,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L154",
+   "nodeIds": [
+    45,
+    54,
+    85,
+    73,
+    46,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L155",
+   "nodeIds": [
+    45,
+    54,
+    85,
+    73,
+    72,
+    66
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 0,
+   "touchesEngine": true
+  },
+  {
+   "id": "L118",
+   "nodeIds": [
+    45,
+    54,
+    85,
+    82,
+    65,
+    66
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L116",
+   "nodeIds": [
+    45,
+    54,
+    85,
+    94,
+    65,
+    66
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L147",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    76,
+    94,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L110",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    81,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L107",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    81,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L149",
+   "nodeIds": [
+    46,
+    56,
+    75,
+    91,
+    92,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L106",
+   "nodeIds": [
+    46,
+    56,
+    81,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L104",
+   "nodeIds": [
+    46,
+    56,
+    81,
+    92,
+    75,
+    73
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L100",
+   "nodeIds": [
+    46,
+    56,
+    81,
+    97,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 5,
+   "touchesEngine": true
+  },
+  {
+   "id": "L097",
+   "nodeIds": [
+    46,
+    56,
+    85,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L103",
+   "nodeIds": [
+    46,
+    64,
+    71,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 5,
+   "touchesEngine": true
+  },
+  {
+   "id": "L148",
+   "nodeIds": [
+    46,
+    64,
+    71,
+    91,
+    92,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L105",
+   "nodeIds": [
+    46,
+    64,
+    72,
+    66,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L112",
+   "nodeIds": [
+    46,
+    64,
+    82,
+    92,
+    75,
+    73
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L109",
+   "nodeIds": [
+    46,
+    66,
+    72,
+    64,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L111",
+   "nodeIds": [
+    46,
+    66,
+    82,
+    92,
+    75,
+    73
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L099",
+   "nodeIds": [
+    46,
+    72,
+    64,
+    71,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 5,
+   "touchesEngine": true
+  },
+  {
+   "id": "L098",
+   "nodeIds": [
+    46,
+    72,
+    64,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L102",
+   "nodeIds": [
+    46,
+    72,
+    66,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L150",
+   "nodeIds": [
+    46,
+    72,
+    105,
+    101,
+    87,
+    73
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L108",
+   "nodeIds": [
+    46,
+    73,
+    72,
+    64,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L101",
+   "nodeIds": [
+    46,
+    73,
+    72,
+    66,
+    82,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L130",
+   "nodeIds": [
+    64,
+    71,
+    82,
+    65,
+    66,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L127",
+   "nodeIds": [
+    64,
+    71,
+    82,
+    92,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L131",
+   "nodeIds": [
+    64,
+    71,
+    82,
+    96,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 5,
+   "touchesEngine": true
+  },
+  {
+   "id": "L134",
+   "nodeIds": [
+    64,
+    71,
+    99,
+    91,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L193",
+   "nodeIds": [
+    64,
+    71,
+    99,
+    95,
+    82,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L192",
+   "nodeIds": [
+    64,
+    71,
+    99,
+    98,
+    94,
+    65
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L188",
+   "nodeIds": [
+    64,
+    71,
+    105,
+    101,
+    91,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L189",
+   "nodeIds": [
+    64,
+    71,
+    105,
+    101,
+    102,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L190",
+   "nodeIds": [
+    64,
+    71,
+    105,
+    106,
+    91,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L191",
+   "nodeIds": [
+    64,
+    71,
+    105,
+    106,
+    102,
+    72
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": true
+  },
+  {
+   "id": "L129",
+   "nodeIds": [
+    64,
+    72,
+    66,
+    82,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L126",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    65,
+    66,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L128",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    75,
+    73,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L135",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    75,
+    81,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L133",
+   "nodeIds": [
+    64,
+    82,
+    92,
+    75,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L132",
+   "nodeIds": [
+    64,
+    82,
+    96,
+    91,
+    92,
+    65
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L119",
+   "nodeIds": [
+    65,
+    66,
+    82,
+    96,
+    91,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L115",
+   "nodeIds": [
+    66,
+    82,
+    92,
+    75,
+    73,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L114",
+   "nodeIds": [
+    66,
+    82,
+    92,
+    75,
+    81,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": true
+  },
+  {
+   "id": "L113",
+   "nodeIds": [
+    66,
+    82,
+    92,
+    75,
+    91,
+    72
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L096",
+   "nodeIds": [
+    71,
+    105,
+    101,
+    87,
+    94,
+    83
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L095",
+   "nodeIds": [
+    71,
+    105,
+    101,
+    87,
+    95,
+    83
+   ],
+   "type": "balancing",
+   "negativeLinks": 1,
+   "touchesEngine": false
+  },
+  {
+   "id": "L175",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    87,
+    73,
+    91
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 4,
+   "touchesEngine": true
+  },
+  {
+   "id": "L124",
+   "nodeIds": [
+    72,
+    105,
+    101,
+    87,
+    94,
+    91
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L120",
+   "nodeIds": [
+    75,
+    76,
+    86,
+    97,
+    82,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L137",
+   "nodeIds": [
+    75,
+    76,
+    86,
+    106,
+    91,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  },
+  {
+   "id": "L121",
+   "nodeIds": [
+    75,
+    81,
+    82,
+    96,
+    91,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L122",
+   "nodeIds": [
+    75,
+    81,
+    86,
+    97,
+    82,
+    92
+   ],
+   "type": "balancing",
+   "negativeLinks": 3,
+   "touchesEngine": true
+  },
+  {
+   "id": "L138",
+   "nodeIds": [
+    75,
+    81,
+    86,
+    106,
+    91,
+    92
+   ],
+   "type": "reinforcing",
+   "negativeLinks": 2,
+   "touchesEngine": false
+  }
+ ]
+}

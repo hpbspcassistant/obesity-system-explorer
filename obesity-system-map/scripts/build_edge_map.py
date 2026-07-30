@@ -287,26 +287,52 @@ found = set(cluster_fills)
 check("legend order covers every cluster", found == set(LEGEND_ORDER),
       f"missing={sorted(found - set(LEGEND_ORDER))} extra={sorted(set(LEGEND_ORDER) - found)}")
 
-clusters_out = []
+types_out = []
 for name in LEGEND_ORDER:
     counts = cluster_fills[name]
     swatch, _ = counts.most_common(1)[0]
     members = [n["id"] for n in data["nodes"] if n["mapCluster"] == name]
-    clusters_out.append({
+    types_out.append({
         "name": name,
         "swatch": swatch,
         "nodeCount": len(members),
         "accentFills": sorted(f for f in counts if f != swatch),
     })
 
+# The Foresight atlas's own taxonomy, which cross-cuts the map's colour
+# groupings — neither nests inside the other. Carried on every node as
+# `atlasCluster`; verified above against the workbook's transcription of the
+# atlas table. No swatch: the artwork has no colour for these, so inventing one
+# would show a colour that appears nowhere on the map.
+atlas_counts = Counter(n["atlasCluster"] for n in data["nodes"])
+ATLAS_ORDER = [
+    "Engine", "Physiology", "Individual physical activity",
+    "Physical activity environment", "Food consumption", "Food production",
+    "Individual psychology", "Social psychology",
+]
+check("atlas order covers every atlas cluster",
+      set(ATLAS_ORDER) == set(atlas_counts),
+      f"missing={sorted(set(atlas_counts) - set(ATLAS_ORDER))} "
+      f"extra={sorted(set(ATLAS_ORDER) - set(atlas_counts))}")
+
+atlas_out = [
+    {"name": name, "nodeCount": atlas_counts[name]} for name in ATLAS_ORDER
+]
+
 (OUT_DIR / "clusters.json").write_text(
     json.dumps({
         "_meta": {
-            "source": "obesity_system_map_node_boxes_only.svg",
-            "description": "Legend clusters with swatch colours read from the node artwork.",
-            "order": "as printed on the original map legend",
+            "description": (
+                "Two taxonomies. `variableTypes` are the map's colour groupings "
+                "(swatches read from the node artwork). `atlasClusters` are the "
+                "Foresight atlas's own clusters, which cross-cut them and have "
+                "no colour in the artwork."
+            ),
+            "variableTypeSource": "obesity_system_map_node_boxes_only.svg",
+            "atlasClusterSource": "07-1177-obesity-system-atlas.pdf, via node.atlasCluster",
         },
-        "clusters": clusters_out,
+        "variableTypes": types_out,
+        "atlasClusters": atlas_out,
     }, indent=1),
     encoding="utf-8",
 )

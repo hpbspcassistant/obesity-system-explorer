@@ -35,6 +35,31 @@ export interface Connection {
   sign: Sign;
 }
 
+/**
+ * The three tools. Explore is home base and the default: read-only looking
+ * around. Trace and Profile change what a click does, which is why the active
+ * mode is indicated loudly rather than subtly.
+ */
+export type MapMode = 'explore' | 'trace' | 'profile';
+
+/**
+ * Which way a trace walks the arrows.
+ *
+ * `downstream` follows them outward from a cause to what it affects;
+ * `upstream` follows them backward from an outcome to what feeds into it;
+ * `loops` asks whether the arrows come back round to where they started.
+ *
+ * `loops` is not a direction in the same sense — it is answered from the
+ * precomputed loop set rather than by walking — so the functions in `lib/trace`
+ * must never be called with it. `lib/loops` covers it instead.
+ */
+export type TraceDirection = 'downstream' | 'upstream' | 'loops';
+
+/** What the map currently has selected. The two kinds are mutually exclusive. */
+export type Selection =
+  | { kind: 'node'; nodeId: number }
+  | { kind: 'edge'; connectionId: string };
+
 /* ------------------------------------------------------------------ geometry */
 
 /** What a given <path> in the edges layer draws. */
@@ -74,14 +99,32 @@ export interface ConnectionGeometry {
   exactRoute: boolean;
 }
 
-/** A legend entry: cluster name plus the swatch colour read from the artwork. */
-export interface ClusterMeta {
+/**
+ * Which of the two node taxonomies the legend is filtering by.
+ *
+ * `type` is the map's own colour grouping (Media, Social, Economic …);
+ * `cluster` is the Foresight atlas's classification (Physiology, Engine …).
+ * They cross-cut — neither is a subdivision of the other.
+ */
+export type Taxonomy = 'type' | 'cluster';
+
+/** A variable type: the map's colour grouping, with its swatch from the artwork. */
+export interface VariableTypeMeta {
   name: string;
-  /** Modal node fill for the cluster — what the printed legend shows. */
+  /** Modal node fill for the type — what the printed legend shows. */
   swatch: string;
   nodeCount: number;
-  /** Other fills in the cluster (highlighted hub nodes, outline rings). */
+  /** Other fills in the type (highlighted hub nodes, outline rings). */
   accentFills: string[];
+}
+
+/**
+ * An atlas cluster. Deliberately has no swatch: the artwork colours nodes by
+ * variable type, so any colour here would appear nowhere on the map.
+ */
+export interface AtlasClusterMeta {
+  name: string;
+  nodeCount: number;
 }
 
 export interface EdgeGeometry {

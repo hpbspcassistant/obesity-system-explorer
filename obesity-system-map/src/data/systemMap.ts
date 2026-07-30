@@ -1,4 +1,11 @@
-import type { ClusterMeta, Connection, EdgeGeometry, Node } from '../types'
+import type {
+  AtlasClusterMeta,
+  Connection,
+  EdgeGeometry,
+  Node,
+  Taxonomy,
+  VariableTypeMeta,
+} from '../types'
 import type { NodeBox } from '../lib/labelLayout'
 import rawClusters from './clusters.json'
 import rawGeometry from './edge_geometry.json'
@@ -45,21 +52,57 @@ function groupBy(pick: (c: Connection) => number): Map<number, Connection[]> {
 export const outgoingByNode = groupBy((c) => c.sourceId)
 export const incomingByNode = groupBy((c) => c.targetId)
 
-/** Legend clusters in printed-map order, with swatches read from the artwork. */
-export const clusters = (rawClusters as unknown as { clusters: ClusterMeta[] })
-  .clusters
+const rawTaxonomies = rawClusters as unknown as {
+  variableTypes: VariableTypeMeta[]
+  atlasClusters: AtlasClusterMeta[]
+}
 
-export const clusterNames = clusters.map((c) => c.name)
+/** The map's colour groupings, in printed-legend order, swatches from artwork. */
+export const variableTypes = rawTaxonomies.variableTypes
+/** The Foresight atlas's own clusters. No swatches — see AtlasClusterMeta. */
+export const atlasClusters = rawTaxonomies.atlasClusters
 
-/** Cluster pair a connection spans, used to group edge paths for filtering. */
-export function clusterPairForConnection(
+export const variableTypeNames = variableTypes.map((t) => t.name)
+export const atlasClusterNames = atlasClusters.map((c) => c.name)
+
+export function namesForTaxonomy(taxonomy: Taxonomy): string[] {
+  return taxonomy === 'type' ? variableTypeNames : atlasClusterNames
+}
+
+/** The node's group under a given taxonomy. */
+export function groupOfNode(node: Node, taxonomy: Taxonomy): string {
+  return taxonomy === 'type' ? node.mapCluster : node.atlasCluster
+}
+
+export interface ConnectionTaxonomyPairs {
+  /** Variable types of the two endpoints, sorted. */
+  typePair: [string, string]
+  /** Atlas clusters of the two endpoints, sorted. */
+  clusterPair: [string, string]
+}
+
+/**
+ * Both taxonomies for a connection's endpoints. Edge paths are grouped by the
+ * *combination*, so a single set of groups can be filtered by either taxonomy
+ * without regrouping — the two cross-cut, so one grouping alone cannot serve
+ * both.
+ */
+export function taxonomyPairsForConnection(
   connectionId: string,
-): [string, string] | undefined {
+): ConnectionTaxonomyPairs | undefined {
   const connection = connectionsById.get(connectionId)
   if (!connection) return undefined
-  const source = nodesById.get(connection.sourceId)?.mapCluster
-  const target = nodesById.get(connection.targetId)?.mapCluster
-  return source && target ? [source, target] : undefined
+  const source = nodesById.get(connection.sourceId)
+  const target = nodesById.get(connection.targetId)
+  if (!source || !target) return undefined
+
+  const sortPair = (a: string, b: string): [string, string] =>
+    a <= b ? [a, b] : [b, a]
+
+  return {
+    typePair: sortPair(source.mapCluster, target.mapCluster),
+    clusterPair: sortPair(source.atlasCluster, target.atlasCluster),
+  }
 }
 
 export interface Neighbourhood {
@@ -72,6 +115,42 @@ export interface Neighbourhood {
   neighbourIds: number[]
   /** Edge-layer path indices to raise out of the dimmed layer. */
   pathIndices: number[]
+}
+
+export interface EdgeSelection {
+  connection: Connection
+  source: Node | undefined
+  target: Node | undefined
+  /** Edge-layer path indices to raise out of the dimmed layer. */
+  pathIndices: number[]
+  /** Other connections drawn by the same shared line, if any. */
+  sharesLineWith: string[]
+}
+
+/** Everything the map needs to highlight when an edge is selected. */
+export function edgeSelectionOf(connectionId: string): EdgeSelection | null {
+  const connection = connectionsById.get(connectionId)
+  if (!connection) return null
+
+  const geometry = edgeGeometry.connections[connectionId]
+  const pathIndices = geometry?.pathIndices ?? []
+
+  // A shared trunk serves several connections; surface that rather than
+  // pretending the click resolved to exactly one edge.
+  const shared = new Set<string>()
+  for (const index of pathIndices) {
+    for (const id of edgeGeometry.paths[index]?.connections ?? []) {
+      if (id !== connectionId) shared.add(id)
+    }
+  }
+
+  return {
+    connection,
+    source: nodesById.get(connection.sourceId),
+    target: nodesById.get(connection.targetId),
+    pathIndices,
+    sharesLineWith: [...shared],
+  }
 }
 
 /** Everything the map needs to highlight when a node is selected. */

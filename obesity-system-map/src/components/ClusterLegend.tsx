@@ -1,16 +1,18 @@
-import { clusters } from '../data/systemMap'
+import { contrastSwatch } from '../data/contrast'
+import { atlasClusters, variableTypes } from '../data/systemMap'
+import type { Taxonomy } from '../types'
 
 interface ClusterLegendProps {
-  hiddenClusters: ReadonlySet<string>
-  onToggleCluster: (name: string) => void
+  taxonomy: Taxonomy
+  onTaxonomyChange: (taxonomy: Taxonomy) => void
+  hiddenGroups: ReadonlySet<string>
+  onToggleGroup: (name: string) => void
   onShowAll: () => void
   onHideAll: () => void
-  /**
-   * Hidden while a node is selected: the detail panel takes that corner, and
-   * the legend's job (reading cluster colours) is not what you are doing once
-   * you have drilled into a single node.
-   */
+  /** Hidden while something is selected; the detail panel takes that corner. */
   hidden: boolean
+  /** Legend swatches follow the map's palette; see src/data/contrast.ts. */
+  highContrast: boolean
 }
 
 /** Solid line ending in an arrowhead, as printed on the original legend. */
@@ -39,14 +41,47 @@ function NegativeIcon() {
   )
 }
 
+const TABS: { id: Taxonomy; label: string; title: string }[] = [
+  {
+    id: 'type',
+    label: 'Type',
+    title: "The map's colour groupings — what the printed legend shows",
+  },
+  {
+    id: 'cluster',
+    label: 'Cluster',
+    title: "The Foresight atlas's own classification",
+  },
+]
+
 export function ClusterLegend({
-  hiddenClusters,
-  onToggleCluster,
+  taxonomy,
+  onTaxonomyChange,
+  hiddenGroups,
+  onToggleGroup,
   onShowAll,
   onHideAll,
   hidden,
+  highContrast,
 }: ClusterLegendProps) {
-  const activeFilterCount = hiddenClusters.size
+  const entries =
+    taxonomy === 'type'
+      ? variableTypes.map((t) => ({
+          name: t.name,
+          nodeCount: t.nodeCount,
+          // A legend showing the artwork's pastel while the map shows the
+          // retint would be worse than either on its own.
+          swatch: (highContrast
+            ? (contrastSwatch(t.name) ?? t.swatch)
+            : t.swatch) as string | undefined,
+        }))
+      : atlasClusters.map((c) => ({
+          name: c.name,
+          nodeCount: c.nodeCount,
+          swatch: undefined,
+        }))
+
+  const shown = entries.length - hiddenGroups.size
 
   return (
     <div
@@ -61,50 +96,84 @@ export function ClusterLegend({
     >
       <div
         className={[
-          'w-52 rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur',
-          // Must drop pointer events too, or the faded-out card still catches clicks.
+          'w-56 rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur',
           hidden ? 'pointer-events-none' : 'pointer-events-auto',
         ].join(' ')}
       >
-        <div className="mb-2 flex items-baseline justify-between">
-          <h2 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-            Clusters
-          </h2>
-          {activeFilterCount > 0 && (
-            <span className="text-[10px] font-medium text-gray-400">
-              {clusters.length - activeFilterCount}/{clusters.length} shown
-            </span>
-          )}
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <div
+            role="radiogroup"
+            aria-label="Group nodes by"
+            className="inline-flex rounded-full bg-gray-100 p-0.5"
+          >
+            {TABS.map((tab) => {
+              const active = tab.id === taxonomy
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  data-taxonomy={tab.id}
+                  title={tab.title}
+                  onClick={() => onTaxonomyChange(tab.id)}
+                  className={[
+                    'rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors',
+                    active
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-800',
+                  ].join(' ')}
+                >
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+          <span className="shrink-0 text-[10px] font-medium text-gray-400">
+            {shown}/{entries.length}
+          </span>
         </div>
 
         <ul className="space-y-1">
-          {clusters.map((cluster) => {
-            const hidden = hiddenClusters.has(cluster.name)
+          {entries.map((entry) => {
+            const isHidden = hiddenGroups.has(entry.name)
             return (
-              <li key={cluster.name}>
+              <li key={entry.name}>
                 <button
                   type="button"
-                  aria-pressed={!hidden}
-                  onClick={() => onToggleCluster(cluster.name)}
-                  title={`${cluster.nodeCount} nodes — click to ${hidden ? 'show' : 'hide'}`}
+                  aria-pressed={!isHidden}
+                  onClick={() => onToggleGroup(entry.name)}
+                  title={`${entry.nodeCount} factors — click to ${isHidden ? 'show' : 'hide'}`}
                   className={[
                     'flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[11px]',
                     'border transition-colors duration-150',
-                    hidden
+                    isHidden
                       ? 'border-dashed border-gray-300 text-gray-400'
                       : 'border-transparent text-gray-800 hover:border-gray-300 hover:bg-gray-50',
                   ].join(' ')}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="h-3.5 w-6 shrink-0 rounded-[3px] border"
-                    style={{
-                      backgroundColor: hidden ? 'transparent' : cluster.swatch,
-                      borderColor: hidden ? '#cbd5e1' : '#9EA4AB',
-                    }}
-                  />
-                  <span className={hidden ? 'line-through' : undefined}>
-                    {cluster.name}
+                  {entry.swatch ? (
+                    <span
+                      aria-hidden="true"
+                      className="h-3.5 w-6 shrink-0 rounded-[3px] border"
+                      style={{
+                        backgroundColor: isHidden ? 'transparent' : entry.swatch,
+                        borderColor: isHidden ? '#cbd5e1' : '#9EA4AB',
+                      }}
+                    />
+                  ) : (
+                    // Atlas clusters have no colour in the artwork, so the count
+                    // stands in for a swatch rather than inventing a hue that
+                    // appears nowhere on the map.
+                    <span
+                      aria-hidden="true"
+                      className="w-6 shrink-0 text-right text-[10px] tabular-nums text-gray-400"
+                    >
+                      {entry.nodeCount}
+                    </span>
+                  )}
+                  <span className={isHidden ? 'line-through' : undefined}>
+                    {entry.name}
                   </span>
                 </button>
               </li>
