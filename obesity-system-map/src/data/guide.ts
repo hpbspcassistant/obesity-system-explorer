@@ -135,16 +135,14 @@ const EXPLORE: GuideSection = {
     {
       title: 'Reading a connection',
       body: [
-        'Click an arrow instead and you get the link itself: which variable affects which, and whether more of the first means more or less of the second.',
-        'Some lines on the printed map carry several connections along the same route. Where they do, the panel lists the others sharing that line — a click cannot tell them apart, so it says so rather than guessing.',
+        'Click an arrow instead and you get the link itself: which variable affects which.',
       ],
       action: { label: 'Open a connection', id: 'openDemoConnection' },
     },
     {
       title: 'Following the connections',
       body: [
-        "The two lists in a variable's panel are clickable. Choosing one opens that connection, and from there you can open either end of it — which is how you walk the map a step at a time.",
-        'There is no back button yet, so to return to where you were, click the variable on the map again or search for it.',
+        "The two lists in a variable's panel are clickable. Choosing one opens that connection, and from there you can open either end of it.",
       ],
     },
   ],
