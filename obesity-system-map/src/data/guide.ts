@@ -21,7 +21,7 @@ import type { MapMode } from '../types'
  * and nobody finishes a nineteen-step tour. Split up, the longest run is six, and
  * somebody stuck on Profile in three months can open just that.
  */
-export type GuideSectionId = 'basics' | 'explore'
+export type GuideSectionId = 'basics' | 'explore' | 'trace'
 
 /**
  * A demonstration a step can offer. Performed by App, which owns the map handle
@@ -33,6 +33,11 @@ export type GuideActionId =
   | 'hideLargestGroup'
   | 'openDemoVariable'
   | 'openDemoConnection'
+  | 'traceForwards'
+  | 'startDemoTrace'
+  | 'widenTrace'
+  | 'exceedListCap'
+  | 'playDemoRoute'
 
 export interface GuideStep {
   title: string
@@ -148,10 +153,64 @@ const EXPLORE: GuideSection = {
   ],
 }
 
+const TRACE: GuideSection = {
+  id: 'trace',
+  label: 'Trace',
+  blurb: 'Following cause and effect from one variable.',
+  mode: 'trace',
+  steps: [
+    {
+      title: 'Pick a direction first',
+      body: [
+        'The three buttons at the top decide what clicking a variable means: follow the arrows forward from a cause, follow them backward from an outcome, or look for loops that come back round to where they started.',
+        'Choose before you click, because the same variable answers a different question in each.',
+      ],
+      action: { label: 'Show me forwards', id: 'traceForwards' },
+    },
+    {
+      title: 'Choose a starting variable',
+      body: [
+        'Click a variable on the map, or search for one. It takes a teal ring, and the panel says how much of the map lies downstream of it.',
+        'Clicking it again, or clicking empty space, clears the trace.',
+      ],
+      action: { label: 'Start a trace for me', id: 'startDemoTrace' },
+    },
+    {
+      title: 'How far to follow',
+      body: [
+        'A step is one arrow. The slider limits how long a chain may be, and the map then draws every path within that limit — all of them, not a sample.',
+        'The counts underneath say how many variables and arrows are lit.',
+      ],
+      action: { label: 'Widen the trace', id: 'widenTrace' },
+    },
+    {
+      title: 'The map is complete; the list is not',
+      body: [
+        'Past six steps the number of distinct routes runs into the tens of thousands, so the list stops writing them out while the map carries on drawing them.',
+        'That is why the two sets of numbers stop agreeing, and why the panel says how many of the lit variables the listed routes account for.',
+      ],
+      action: { label: 'Push past the list limit', id: 'exceedListCap' },
+    },
+    {
+      title: 'Follow one path',
+      body: [
+        'Hover a route in the list to preview it on the map, and click it to keep it there.',
+        'Then press Trace on that route to walk it one arrow at a time. Each line says whether that link pushes its target up or down, and orange marks arrival at the energy core.',
+      ],
+      action: { label: 'Walk a route', id: 'playDemoRoute' },
+    },
+  ],
+}
+
 export const GUIDE_SECTIONS: Record<GuideSectionId, GuideSection> = {
   basics: BASICS,
   explore: EXPLORE,
+  trace: TRACE,
 }
 
 /** Contents order. The mode you are in is floated to the top by the card. */
-export const GUIDE_ORDER: readonly GuideSectionId[] = ['basics', 'explore']
+export const GUIDE_ORDER: readonly GuideSectionId[] = [
+  'basics',
+  'explore',
+  'trace',
+]

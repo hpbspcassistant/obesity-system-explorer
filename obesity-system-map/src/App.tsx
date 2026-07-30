@@ -455,72 +455,6 @@ export default function App() {
     [mode, changeMode],
   )
 
-  /**
-   * The demonstrations.
-   *
-   * Every one runs only because the reader pressed the button, and none of them
-   * throws work away: the guide frames and reveals, but never clears a trace, a
-   * selection or a profile.
-   */
-  const runGuideAction = useCallback(
-    (id: GuideActionId) => {
-      if (id === 'frameOneVariable') {
-        // Framing one variable lands at the follow-zoom ceiling, which is the
-        // point labels become readable — the whole claim the step is making.
-        const node =
-          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
-        if (node) mapRef.current?.focusOnNodes([node.id])
-        return
-      }
-      if (id === 'prefillSearch') {
-        searchRef.current?.prefill(DEMO_QUERY)
-        return
-      }
-      if (id === 'openDemoVariable') {
-        const node =
-          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
-        if (!node) return
-        setSelection({ kind: 'node', nodeId: node.id })
-        mapRef.current?.focusOnNodes([node.id], {
-          rightInset: DETAIL_PANEL_PX,
-        })
-        return
-      }
-      if (id === 'openDemoConnection') {
-        // A connection leaving the same variable the previous step opened, so the
-        // two steps read as one walk rather than jumping across the map.
-        const node =
-          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
-        const connection = node
-          ? (outgoingByNode.get(node.id)?.[0] ??
-            incomingByNode.get(node.id)?.[0])
-          : undefined
-        if (!connection) return
-        setSelection({ kind: 'edge', connectionId: connection.id })
-        mapRef.current?.focusOnNodes(
-          [connection.sourceId, connection.targetId],
-          { rightInset: DETAIL_PANEL_PX },
-        )
-        return
-      }
-      if (id === 'hideLargestGroup') {
-        // The biggest group, so the change is impossible to miss on a map of 108
-        // boxes. Remembered so it can be put back when the reader moves on.
-        const groups =
-          taxonomy === 'type'
-            ? variableTypes.map((t) => ({ name: t.name, count: t.nodeCount }))
-            : atlasClusters.map((c) => ({ name: c.name, count: c.nodeCount }))
-        const biggest = groups.reduce(
-          (best, entry) => (entry.count > best.count ? entry : best),
-          groups[0],
-        )
-        if (!biggest) return
-        setGroupHidden(biggest.name, true)
-        setGuideHidGroup(biggest.name)
-      }
-    },
-    [taxonomy, setGroupHidden],
-  )
 
   /**
    * Puts the demonstrated filter back once the reader leaves that step or closes
@@ -703,6 +637,124 @@ export default function App() {
     setHoveredRouteKey(null)
     setAnimatedHops(null)
   }, [])
+
+  /**
+   * The demonstrations.
+   *
+   * Every one runs only because the reader pressed the button, and none of them
+   * throws work away: the guide frames and reveals, but never clears a trace, a
+   * selection or a profile.
+   */
+  const runGuideAction = useCallback(
+    (id: GuideActionId) => {
+      if (id === 'frameOneVariable') {
+        // Framing one variable lands at the follow-zoom ceiling, which is the
+        // point labels become readable — the whole claim the step is making.
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        if (node) mapRef.current?.focusOnNodes([node.id])
+        return
+      }
+      if (id === 'prefillSearch') {
+        searchRef.current?.prefill(DEMO_QUERY)
+        return
+      }
+      if (id === 'openDemoVariable') {
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        if (!node) return
+        setSelection({ kind: 'node', nodeId: node.id })
+        mapRef.current?.focusOnNodes([node.id], {
+          rightInset: DETAIL_PANEL_PX,
+        })
+        return
+      }
+      if (id === 'openDemoConnection') {
+        // A connection leaving the same variable the previous step opened, so the
+        // two steps read as one walk rather than jumping across the map.
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        const connection = node
+          ? (outgoingByNode.get(node.id)?.[0] ??
+            incomingByNode.get(node.id)?.[0])
+          : undefined
+        if (!connection) return
+        setSelection({ kind: 'edge', connectionId: connection.id })
+        mapRef.current?.focusOnNodes(
+          [connection.sourceId, connection.targetId],
+          { rightInset: DETAIL_PANEL_PX },
+        )
+        return
+      }
+      if (id === 'traceForwards') {
+        setTraceDirection('downstream')
+        return
+      }
+      if (id === 'startDemoTrace') {
+        // Forwards as well as a start: every step after this one talks about
+        // what lies downstream and about arriving at the energy core, and
+        // neither is true of a backward trace or a loop search.
+        setTraceDirection('downstream')
+        const node =
+          nodes.find((n) => n.label === DEMO_VARIABLE_LABEL) ?? nodes[0]
+        if (!node) return
+        setTraceStartId(node.id)
+        setFocusedRouteKey(null)
+        setAnimatedHops(null)
+        // Reset the limit explicitly rather than relying on the effect that does
+        // it when the start changes: run the walkthrough twice and the start is
+        // already this variable, so that effect never fires and the slider is left
+        // wherever it was. It was sitting at maximum, which left the next step's
+        // "widen the trace" with nothing to widen and the step after it pushing
+        // the slider backwards.
+        setMaxSteps(DEFAULT_MAX_STEPS)
+        return
+      }
+      if (id === 'widenTrace') {
+        // Two steps further out, capped at this start's full reach so the slider
+        // is never pushed past its own end.
+        setMaxSteps((current) =>
+          Math.min(current + 2, tracePaths?.stepsForAll ?? current),
+        )
+        return
+      }
+      if (id === 'exceedListCap') {
+        // Just past the point the list gives up, which is the whole subject of
+        // the step: the map keeps drawing, the list stops writing.
+        setMaxSteps(
+          Math.min(LIST_MAX_HOPS + 2, tracePaths?.stepsForAll ?? LIST_MAX_HOPS),
+        )
+        return
+      }
+      if (id === 'playDemoRoute') {
+        // Routes are sorted shortest first, and the shortest here is two hops —
+        // barely a walk. Prefer the first route long enough to watch advance,
+        // while staying short enough not to outstay the step.
+        const routes = search?.routes ?? []
+        const route =
+          routes.find((r) => r.length >= 3 && r.length <= 5) ?? routes[0]
+        if (!route) return
+        setFocusedRouteKey(route.key)
+        setAnimatedHops(0)
+      }
+      if (id === 'hideLargestGroup') {
+        // The biggest group, so the change is impossible to miss on a map of 108
+        // boxes. Remembered so it can be put back when the reader moves on.
+        const groups =
+          taxonomy === 'type'
+            ? variableTypes.map((t) => ({ name: t.name, count: t.nodeCount }))
+            : atlasClusters.map((c) => ({ name: c.name, count: c.nodeCount }))
+        const biggest = groups.reduce(
+          (best, entry) => (entry.count > best.count ? entry : best),
+          groups[0],
+        )
+        if (!biggest) return
+        setGroupHidden(biggest.name, true)
+        setGuideHidGroup(biggest.name)
+      }
+    },
+    [taxonomy, setGroupHidden, tracePaths, search],
+  )
 
   /**
    * Re-frames the map on what the trace has revealed. Uses instant transforms:
