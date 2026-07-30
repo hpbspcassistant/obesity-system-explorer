@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 
+import { NO_DEFINITION, definitionOf } from '../data/systemMap'
 import type { EdgeSelection } from '../data/systemMap'
 import type { AnchorRect } from './MapView'
 import { ConnectionRow, InfluenceTag } from './ProfileControls'
@@ -245,9 +246,15 @@ function NodeBody({
         what="factor"
       />
 
-      <p className="mt-2 text-[11.5px] leading-relaxed text-gray-600">
-        {node.definition}
-      </p>
+      {definitionOf(node) ? (
+        <p className="mt-2 text-[11.5px] leading-relaxed text-gray-600">
+          {definitionOf(node)}
+        </p>
+      ) : (
+        <p className="mt-2 text-[11.5px] italic leading-relaxed text-gray-400">
+          {NO_DEFINITION}
+        </p>
+      )}
 
       {outgoing.length > 0 && (
         <>

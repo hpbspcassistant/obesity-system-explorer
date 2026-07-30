@@ -56,7 +56,9 @@ export function ModeSwitcher({ mode, onModeChange }: ModeSwitcherProps) {
             data-mode={m.id}
             onClick={() => onModeChange(m.id)}
             className={[
-              'flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors',
+              // py-2 rather than py-1: this is the control that decides what a
+              // click on the map means, and it gets pressed from a lectern.
+              'flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-medium transition-colors',
               active
                 ? 'bg-white text-gray-900 shadow-sm'
                 : 'text-gray-500 hover:text-gray-800',

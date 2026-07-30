@@ -1,4 +1,4 @@
-import { nodesById } from '../data/systemMap'
+import { NO_DEFINITION, definitionOf, nodesById } from '../data/systemMap'
 import { MAX_LOOP_LENGTH, type LoopSearch } from '../lib/loops'
 import { LIST_MAX_HOPS, TOTAL_FACTORS, isEnergyCore } from '../lib/trace'
 import type { PathSet, Route, RouteSearch } from '../lib/trace'
@@ -157,6 +157,8 @@ export function TracePanel({
   const listCap = Math.min(maxSteps, LIST_MAX_HOPS)
   const listIsBehindMap = paths !== null && maxSteps > LIST_MAX_HOPS
 
+  const startNode = startId === null ? null : (nodesById.get(startId) ?? null)
+
   return (
     <aside className="absolute inset-y-0 right-0 z-10 flex w-[23rem] max-w-[85vw] flex-col border-l border-gray-200 bg-white shadow-xl">
       <header className="px-4 py-3">
@@ -179,7 +181,7 @@ export function TracePanel({
           <Section title="Starting from">
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium text-gray-900">
-                {nodesById.get(startId)?.label}
+                {startNode?.label}
               </p>
               <button
                 type="button"
@@ -225,6 +227,32 @@ export function TracePanel({
                 </span>
               )}
             </p>
+
+            {/*
+             * What the factor actually means, so Trace is self-contained.
+             *
+             * Trace deliberately does not open a detail panel — a click here
+             * picks a starting factor and nothing else — which left "what does
+             * this factor mean?" answerable only in Explore. Switching modes to
+             * find out cleared the trace on the way, so reading a definition
+             * cost you the work that prompted the question.
+             *
+             * Below the reach line rather than above it: the reach is the answer
+             * the mode exists to give, and this is the supporting detail.
+             */}
+            {startNode && (
+              <p
+                data-testid="start-definition"
+                className={[
+                  'mt-2 border-t border-gray-100 pt-2 text-[11px] leading-relaxed',
+                  definitionOf(startNode)
+                    ? 'text-gray-600'
+                    : 'italic text-gray-400',
+                ].join(' ')}
+              >
+                {definitionOf(startNode) ?? NO_DEFINITION}
+              </p>
+            )}
           </Section>
 
           {direction === 'downstream' && isEnergyCore(startId) && (

@@ -74,6 +74,27 @@ export function groupOfNode(node: Node, taxonomy: Taxonomy): string {
   return taxonomy === 'type' ? node.mapCluster : node.atlasCluster
 }
 
+/** Any run of dash-like characters, which is how "undocumented" is recorded. */
+const DASH_ONLY = /^[\s\-‐-―]*$/
+
+/**
+ * A node's definition, or null where the atlas never wrote one.
+ *
+ * 22 of the 108 variables carry a bare em-dash instead of prose. Rendered
+ * verbatim under a "Definition" heading that reads as a broken panel rather
+ * than as "nobody documented this", so callers get null and say so in words.
+ */
+export function definitionOf(node: Node): string | null {
+  const text = node.definition?.trim() ?? ''
+  return text && !DASH_ONLY.test(text) ? text : null
+}
+
+/**
+ * Shared wording for the gap. Lives here rather than in each component so the
+ * three places a definition appears cannot drift apart.
+ */
+export const NO_DEFINITION = 'No definition recorded in the source atlas.'
+
 export interface ConnectionTaxonomyPairs {
   /** Variable types of the two endpoints, sorted. */
   typePair: [string, string]

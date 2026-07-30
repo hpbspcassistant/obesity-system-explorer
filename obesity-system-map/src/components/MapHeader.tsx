@@ -10,11 +10,20 @@ interface MapHeaderProps {
   traceDirection: TraceDirection
   onTraceDirectionChange: (direction: TraceDirection) => void
   onResetView: () => void
+  /** Multiplies the map scale — one notch per press. */
+  onZoomBy: (factor: number) => void
   highContrast: boolean
   onHighContrastChange: (on: boolean) => void
   /** Centre slot — the node search. */
   children?: ReactNode
 }
+
+/**
+ * One press of the zoom buttons. Matches roughly three wheel notches, which is
+ * enough to feel like progress on a map spanning a 240x scale range without
+ * overshooting the level where labels become readable.
+ */
+const ZOOM_STEP = 1.4
 
 /**
  * Single header row: identity on the left, mode switcher beside it, search in
@@ -27,6 +36,7 @@ export function MapHeader({
   traceDirection,
   onTraceDirectionChange,
   onResetView,
+  onZoomBy,
   highContrast,
   onHighContrastChange,
   children,
@@ -66,7 +76,7 @@ export function MapHeader({
         onClick={() => onHighContrastChange(!highContrast)}
         title="Stronger fills and outlines, for projectors and small labels"
         className={[
-          'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium',
+          'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-medium',
           highContrast
             ? 'border-gray-900 bg-gray-900 text-white'
             : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50',
@@ -86,23 +96,61 @@ export function MapHeader({
         High contrast
       </button>
 
-      <button
-        type="button"
-        onClick={onResetView}
-        className="flex shrink-0 items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-      >
-        <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
-          <path
-            d="M2 8a6 6 0 1 1 1.8 4.3M2 12.5V8.6h3.9"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Reset view
-      </button>
+      {/* Zoom, made visible. The wheel already zoomed, but nothing on screen
+          said so — and with the whole 3370px map fitted to the viewport the
+          labels start at about 3px, so "how do I make this readable" is the
+          first question every user has. Fit stays alongside as the way back. */}
+      <div className="flex shrink-0 items-center gap-0.5 rounded-full border border-gray-200 bg-white p-0.5">
+        <ZoomButton
+          label="Zoom out"
+          onClick={() => onZoomBy(1 / ZOOM_STEP)}
+          d="M4 8h8"
+        />
+        <ZoomButton
+          label="Zoom in"
+          onClick={() => onZoomBy(ZOOM_STEP)}
+          d="M8 4v8M4 8h8"
+        />
+        <button
+          type="button"
+          onClick={onResetView}
+          title="Fit the whole map in the window"
+          className="rounded-full px-2.5 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100"
+        >
+          Fit
+        </button>
+      </div>
     </header>
+  )
+}
+
+/** Square icon button, sized so it is comfortable to hit from a lectern. */
+function ZoomButton({
+  label,
+  onClick,
+  d,
+}: {
+  label: string
+  onClick: () => void
+  d: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="flex h-8 w-8 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100"
+    >
+      <svg viewBox="0 0 16 16" className="h-4 w-4" aria-hidden="true">
+        <path
+          d={d}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      </svg>
+    </button>
   )
 }

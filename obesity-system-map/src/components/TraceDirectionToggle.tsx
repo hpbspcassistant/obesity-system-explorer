@@ -34,7 +34,9 @@ export function TraceDirectionToggle({
             title={option.description}
             onClick={() => onDirectionChange(option.id)}
             className={[
-              'whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition-colors',
+              // Height matched to the mode switcher beside it; the width is left
+              // alone, since these three labels already crowd the header.
+              'whitespace-nowrap rounded-full px-3 py-2 text-xs font-medium transition-colors',
               active
                 ? 'bg-gray-900 text-white'
                 : 'text-gray-500 hover:text-gray-800',

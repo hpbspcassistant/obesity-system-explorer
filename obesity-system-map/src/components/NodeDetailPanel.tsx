@@ -1,5 +1,5 @@
 import type { Connection, Node } from '../types'
-import { nodesById } from '../data/systemMap'
+import { NO_DEFINITION, definitionOf, nodesById } from '../data/systemMap'
 import { DetailPanel, PanelSection } from './DetailPanel'
 
 interface NodeDetailPanelProps {
@@ -105,9 +105,17 @@ export function NodeDetailPanel({
       {node && (
         <>
           <PanelSection title="Definition">
-            <p className="text-sm leading-relaxed text-gray-700">
-              {node.definition}
-            </p>
+            {definitionOf(node) ? (
+              <p className="text-sm leading-relaxed text-gray-700">
+                {definitionOf(node)}
+              </p>
+            ) : (
+              // Named as a gap in the source rather than shown as a bare dash,
+              // which read as a rendering fault.
+              <p className="text-sm italic leading-relaxed text-gray-400">
+                {NO_DEFINITION}
+              </p>
+            )}
           </PanelSection>
 
           <ConnectionList

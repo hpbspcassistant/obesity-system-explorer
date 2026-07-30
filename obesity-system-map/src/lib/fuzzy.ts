@@ -109,18 +109,46 @@ export interface Ranked<T> {
   indices: number[]
 }
 
-/** Ranks items best-first, dropping non-matches. Ties break alphabetically. */
+/**
+ * Relevance floor, measured as score per character of the query.
+ *
+ * Being a subsequence is far too weak a test on labels this long: "portion" is a
+ * subsequence of "Appropriateness of Maternal Body Composition", and "school" of
+ * "Psychological Ambivalence" — which was that query's *only* match, so the field
+ * confidently offered one unrelated factor and nothing else.
+ *
+ * The scores already separate the two cleanly; they just were not being used to
+ * reject anything. Measured against all 108 real labels, every match a person
+ * would want scores at least 9.5 per character and every match they would not
+ * scores at most 8.4, so the gap is wide and 9 sits inside it.
+ *
+ * Per character rather than absolute, because the bonuses accumulate as the query
+ * grows: one fixed floor would judge "tv" and "genetic predisposition" by
+ * completely different standards.
+ */
+const MIN_SCORE_PER_CHAR = 9
+
+/**
+ * Ranks items best-first, dropping non-matches and matches too weak to be worth
+ * offering. Ties break alphabetically.
+ */
 export function fuzzyRank<T>(
   query: string,
   items: readonly T[],
   toText: (item: T) => string,
   limit = 8,
 ): Ranked<T>[] {
+  // Same normalisation fuzzyMatch applies, so the floor scales with what was
+  // actually matched rather than with the spaces the user happened to type.
+  const needle = query.toLowerCase().replace(/\s+/g, '')
+  if (!needle) return []
+  const floor = needle.length * MIN_SCORE_PER_CHAR
+
   const ranked: Ranked<T>[] = []
 
   for (const item of items) {
     const match = fuzzyMatch(query, toText(item))
-    if (match) {
+    if (match && match.score >= floor) {
       ranked.push({ item, score: match.score, indices: match.indices })
     }
   }

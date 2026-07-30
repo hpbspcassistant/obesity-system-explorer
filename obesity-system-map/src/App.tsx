@@ -60,8 +60,12 @@ const NONE_HIDDEN: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_MARKS: ReadonlySet<number> = Object.freeze(new Set<number>())
 const NO_EDGE_MARKS: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_LINKS: readonly string[] = Object.freeze([])
-/** Width of the trace panel (w-[22rem]), so framing clears it. */
-const TRACE_PANEL_PX = 352
+/** Width of the trace panel (w-[23rem]), so framing clears it. */
+const TRACE_PANEL_PX = 368
+/** Width of Explore's detail panel (w-[22rem]) — same job, different panel. */
+const DETAIL_PANEL_PX = 352
+/** Height of Profile's bottom bar (h-12), so the legend clears it. */
+const PROFILE_BAR_PX = 48
 
 export default function App() {
   const mapRef = useRef<MapViewHandle | null>(null)
@@ -71,6 +75,9 @@ export default function App() {
   // One hidden set per taxonomy, so switching between them does not discard
   // the filter you already built on the other.
   const [taxonomy, setTaxonomy] = useState<Taxonomy>('type')
+  // Whether the colour key is shrunk to a pill. A preference about the screen
+  // rather than about the work, so it is kept across modes like High contrast.
+  const [legendCollapsed, setLegendCollapsed] = useState(false)
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
@@ -327,11 +334,17 @@ export default function App() {
         return
       }
       setSelection({ kind: 'node', nodeId })
-      // Searching in Profile used to leave the map exactly where it was, so the
-      // one instruction on screen — "click a factor on the map" — was given
-      // without any way to find where that factor is. Trace already framed its
-      // results; Profile now does too.
-      if (mode === 'profile') mapRef.current?.focusOnNodes([nodeId])
+      // Every mode now goes to what you searched for. Explore was the last one
+      // that did not, and it was the worst place to leave it out: zoomed in, a
+      // search opened a panel about a factor sitting thousands of pixels off
+      // screen, so the map appeared not to have responded at all. Explore's
+      // panel covers the right of the stage, so framing has to clear it the way
+      // Trace's does; Profile's card floats beside the factor and follows it, so
+      // it needs no inset.
+      mapRef.current?.focusOnNodes(
+        [nodeId],
+        mode === 'explore' ? { rightInset: DETAIL_PANEL_PX } : undefined,
+      )
     },
     [taxonomy, mode],
   )
@@ -392,6 +405,18 @@ export default function App() {
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
+
+  /**
+   * How far the legend has to sit in from the right to clear whatever panel is
+   * open. Trace's panel is always there; Explore's only once something is
+   * selected; Profile's card floats and moves, so it is left to overlap.
+   */
+  const legendRightInset =
+    mode === 'trace'
+      ? TRACE_PANEL_PX
+      : mode === 'explore' && selection !== null
+        ? DETAIL_PANEL_PX
+        : 0
   const profiling = mode === 'profile'
 
   /**
@@ -560,6 +585,7 @@ export default function App() {
         traceDirection={traceDirection}
         onTraceDirectionChange={setTraceDirection}
         onResetView={() => mapRef.current?.resetView()}
+        onZoomBy={(factor) => mapRef.current?.zoomBy(factor)}
         highContrast={highContrast}
         onHighContrastChange={setHighContrast}
       >
@@ -588,6 +614,7 @@ export default function App() {
           onAnchorChange={setAnchor}
           tracePaths={tracePaths}
           traceFocus={traceFocus}
+          bottomInset={profiling ? PROFILE_BAR_PX : 0}
           highContrast={highContrast}
         />
 
@@ -671,7 +698,9 @@ export default function App() {
             onClear={clearTrace}
           />
         )}
-        {mode === 'explore' && (
+        {/* Every mode, always. The filter it houses applies to the map in all
+            three, so hiding the box in two of them left the filter switched on
+            with no way to switch it off. */}
         <ClusterLegend
           taxonomy={taxonomy}
           onTaxonomyChange={setTaxonomy}
@@ -679,10 +708,12 @@ export default function App() {
           onToggleGroup={toggleGroup}
           onShowAll={showAllGroups}
           onHideAll={hideAllGroups}
-          hidden={selection !== null}
+          collapsed={legendCollapsed}
+          onCollapsedChange={setLegendCollapsed}
+          rightInset={legendRightInset}
+          bottomInset={profiling ? PROFILE_BAR_PX : 0}
           highContrast={highContrast}
         />
-        )}
         {mode === 'explore' && (
         <NodeDetailPanel
           node={selectedNode}

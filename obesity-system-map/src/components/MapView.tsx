@@ -321,6 +321,11 @@ export interface MapViewProps {
   highContrast?: boolean
   /** Whether to draw the navigator thumbnail. */
   showMiniMap?: boolean
+  /**
+   * Px of the bottom edge covered by a bar the map does not own, so the
+   * navigator can sit above it rather than half underneath.
+   */
+  bottomInset?: number
   ref?: Ref<MapViewHandle>
 }
 
@@ -341,6 +346,8 @@ export interface FocusOptions {
 export interface MapViewHandle {
   /** Scales the map back to fit the viewport and re-centres it. */
   resetView: () => void
+  /** Multiplies the current scale about the middle of the viewport. */
+  zoomBy: (factor: number) => void
   /** Frames the given factors, clear of any right-hand panel. */
   focusOnNodes: (nodeIds: readonly number[], options?: FocusOptions) => void
 }
@@ -366,6 +373,7 @@ export function MapView({
   onAnchorChange,
   highContrast = false,
   showMiniMap = true,
+  bottomInset = 0,
   ref,
 }: MapViewProps) {
   const apiRef = useRef<ReactZoomPanPinchRef | null>(null)
@@ -570,13 +578,41 @@ export function MapView({
     [],
   )
 
+  /**
+   * Zoom from a button rather than the wheel.
+   *
+   * Same multiplicative step as the wheel handler, but anchored to the middle of
+   * the viewport: there is no cursor to zoom about, and the centre is the only
+   * point a user can predict will stay put.
+   */
+  const zoomBy = useCallback((factor: number) => {
+    const api = apiRef.current
+    const host = wrapperRef.current
+    if (!api || !host) return
+
+    const { scale, positionX, positionY } = api.state
+    const next = clamp(scale * factor, MIN_SCALE, MAX_SCALE)
+    if (next === scale) return
+
+    const cx = host.clientWidth / 2
+    const cy = host.clientHeight / 2
+    const ratio = next / scale
+
+    api.setTransform(
+      cx - (cx - positionX) * ratio,
+      cy - (cy - positionY) * ratio,
+      next,
+      0,
+    )
+  }, [])
+
   // Snaps rather than eases: the library animates transforms with
   // requestAnimationFrame, and an instant reset is deterministic. Pass a
   // duration here (e.g. 250) to ease it instead.
   useImperativeHandle(
     ref,
-    () => ({ resetView: () => fitToViewport(0), focusOnNodes }),
-    [fitToViewport, focusOnNodes],
+    () => ({ resetView: () => fitToViewport(0), zoomBy, focusOnNodes }),
+    [fitToViewport, zoomBy, focusOnNodes],
   )
 
   /**
@@ -1119,7 +1155,13 @@ export function MapView({
         </TransformComponent>
 
         {showMiniMap && (
-          <div className="pointer-events-none absolute bottom-4 left-4 z-20">
+          // Lifted clear of any bar the map does not own — Profile's strip used
+          // to cover the bottom quarter of the navigator, including the corner of
+          // the viewport rectangle you drag to move around.
+          <div
+            className="pointer-events-none absolute left-4 z-20"
+            style={{ bottom: 16 + bottomInset }}
+          >
             <div className="pointer-events-auto overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-1 shadow-lg backdrop-blur">
               <MiniMap
                 width={168}

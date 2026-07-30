@@ -9,8 +9,13 @@ interface ClusterLegendProps {
   onToggleGroup: (name: string) => void
   onShowAll: () => void
   onHideAll: () => void
-  /** Hidden while something is selected; the detail panel takes that corner. */
-  hidden: boolean
+  /** Shrunk to a pill. A user preference, so it survives mode switches. */
+  collapsed: boolean
+  onCollapsedChange: (collapsed: boolean) => void
+  /** Px covered by a side panel, so the legend sits beside it, not under it. */
+  rightInset?: number
+  /** Px covered by a bottom bar, for the same reason. */
+  bottomInset?: number
   /** Legend swatches follow the map's palette; see src/data/contrast.ts. */
   highContrast: boolean
 }
@@ -54,6 +59,25 @@ const TABS: { id: Taxonomy; label: string; title: string }[] = [
   },
 ]
 
+/**
+ * The colour key and the cluster filter.
+ *
+ * Both live here because they are the same question asked twice — "what do these
+ * colours mean" and "show me only these" — and answering one usually leads
+ * straight to the other.
+ *
+ * It used to render in Explore alone, and to slide away entirely whenever
+ * anything was selected. Two things followed from that, both bad. The key
+ * vanished at the exact moment a factor's colour became relevant, and Profile —
+ * whose whole visual language is "a marked factor gets its cluster colour back"
+ * — never had a key at all. And because the filter is housed in the same box,
+ * changing a filter meant closing whatever you were reading, changing it, then
+ * finding your way back.
+ *
+ * So it now shows in every mode and stays put. Panels no longer hide it: it is
+ * offset clear of them, and it collapses to a pill when the corner is genuinely
+ * needed for something else.
+ */
 export function ClusterLegend({
   taxonomy,
   onTaxonomyChange,
@@ -61,7 +85,10 @@ export function ClusterLegend({
   onToggleGroup,
   onShowAll,
   onHideAll,
-  hidden,
+  collapsed,
+  onCollapsedChange,
+  rightInset = 0,
+  bottomInset = 0,
   highContrast,
 }: ClusterLegendProps) {
   const entries =
@@ -82,25 +109,64 @@ export function ClusterLegend({
         }))
 
   const shown = entries.length - hiddenGroups.size
+  const filtering = hiddenGroups.size > 0
+
+  // Sits below the review sheet and the profile bar on purpose (z-10): those are
+  // deliberate full-attention surfaces, and a key that paints over them would be
+  // worse than one briefly covered. Panels are cleared by the insets instead.
+  //
+  // The offsets snap rather than ease. Transitioning `right` animates layout, and
+  // a half-finished slide leaves the box overlapping the very panel the offset
+  // exists to clear — a position that is merely correct beats one that is
+  // usually correct and prettier on the way.
+  const shell = 'absolute z-10 flex flex-col'
+  const position = { right: 16 + rightInset, bottom: 16 + bottomInset }
+  /**
+   * Never taller than the stage leaves room for. Percentages on an absolutely
+   * positioned box resolve against its containing block, so this is the stage's
+   * height less the offset it already sits at and a matching gap on top. Without
+   * it the box runs off the top of a short laptop window and takes the taxonomy
+   * tabs with it — the one control you cannot do without.
+   */
+  const maxHeight = `calc(100% - ${32 + bottomInset}px)`
+
+  if (collapsed) {
+    return (
+      <div className={shell} style={position}>
+        <button
+          type="button"
+          onClick={() => onCollapsedChange(false)}
+          aria-expanded={false}
+          title="Show the colour key and cluster filter"
+          className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/95 px-3 py-2 text-[11px] font-medium text-gray-700 shadow-lg backdrop-blur hover:bg-gray-50"
+        >
+          {/* A few swatches, so the pill says "colour key" without the words. */}
+          <span aria-hidden="true" className="flex shrink-0 gap-0.5">
+            {entries.slice(0, 3).map((entry) => (
+              <span
+                key={entry.name}
+                className="h-3 w-3 rounded-[2px] border border-gray-300"
+                style={{ backgroundColor: entry.swatch ?? '#e5e7eb' }}
+              />
+            ))}
+          </span>
+          Key &amp; filters
+          {/* Only when something is hidden: otherwise the badge would imply a
+              filter is active when nothing is filtered. */}
+          {filtering && (
+            <span className="rounded-full bg-gray-900 px-1.5 text-[10px] tabular-nums text-white">
+              {shown}/{entries.length}
+            </span>
+          )}
+        </button>
+      </div>
+    )
+  }
 
   return (
-    <div
-      aria-hidden={hidden}
-      className={[
-        'pointer-events-none absolute bottom-4 right-4 z-20',
-        // Tailwind v4 emits the standalone `translate` property rather than
-        // `transform`, so the transition must name `translate` or the slide snaps.
-        'transition-[opacity,translate] duration-300 ease-out',
-        hidden ? 'translate-y-2 opacity-0' : 'translate-y-0 opacity-100',
-      ].join(' ')}
-    >
-      <div
-        className={[
-          'w-56 rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur',
-          hidden ? 'pointer-events-none' : 'pointer-events-auto',
-        ].join(' ')}
-      >
-        <div className="mb-2 flex items-center justify-between gap-2">
+    <div className={shell} style={{ ...position, maxHeight }}>
+      <div className="flex min-h-0 w-56 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+        <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
           <div
             role="radiogroup"
             aria-label="Group nodes by"
@@ -118,7 +184,7 @@ export function ClusterLegend({
                   title={tab.title}
                   onClick={() => onTaxonomyChange(tab.id)}
                   className={[
-                    'rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors',
+                    'rounded-full px-2.5 py-1.5 text-[11px] font-medium transition-colors',
                     active
                       ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-500 hover:text-gray-800',
@@ -129,12 +195,35 @@ export function ClusterLegend({
               )
             })}
           </div>
-          <span className="shrink-0 text-[10px] font-medium text-gray-400">
-            {shown}/{entries.length}
-          </span>
+          <div className="flex shrink-0 items-center gap-1">
+            <span className="text-[10px] font-medium text-gray-400">
+              {shown}/{entries.length}
+            </span>
+            <button
+              type="button"
+              onClick={() => onCollapsedChange(true)}
+              aria-expanded
+              aria-label="Hide the colour key and cluster filter"
+              title="Hide the colour key and cluster filter"
+              className="-mr-1 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+            >
+              <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" aria-hidden="true">
+                <path
+                  d="M1 3.5 5 7.5l4-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <ul className="space-y-1">
+        {/* The only part that gives way when space is short: the tabs, the
+            show/hide buttons and the influence key all stay put. */}
+        <ul className="min-h-0 flex-1 space-y-1 overflow-y-auto">
           {entries.map((entry) => {
             const isHidden = hiddenGroups.has(entry.name)
             return (
@@ -145,7 +234,7 @@ export function ClusterLegend({
                   onClick={() => onToggleGroup(entry.name)}
                   title={`${entry.nodeCount} factors — click to ${isHidden ? 'show' : 'hide'}`}
                   className={[
-                    'flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[11px]',
+                    'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[11px]',
                     'border transition-colors duration-150',
                     isHidden
                       ? 'border-dashed border-gray-300 text-gray-400'
@@ -181,24 +270,24 @@ export function ClusterLegend({
           })}
         </ul>
 
-        <div className="mt-2 flex gap-1 border-t border-gray-200 pt-2">
+        <div className="mt-2 flex shrink-0 gap-1 border-t border-gray-200 pt-2">
           <button
             type="button"
             onClick={onShowAll}
-            className="flex-1 rounded border border-gray-200 px-2 py-1 text-[10px] font-medium text-gray-600 hover:bg-gray-50"
+            className="flex-1 rounded border border-gray-200 px-2 py-1.5 text-[11px] font-medium text-gray-600 hover:bg-gray-50"
           >
             Show all
           </button>
           <button
             type="button"
             onClick={onHideAll}
-            className="flex-1 rounded border border-gray-200 px-2 py-1 text-[10px] font-medium text-gray-600 hover:bg-gray-50"
+            className="flex-1 rounded border border-gray-200 px-2 py-1.5 text-[11px] font-medium text-gray-600 hover:bg-gray-50"
           >
             Hide all
           </button>
         </div>
 
-        <div className="mt-2 space-y-1 border-t border-gray-200 pt-2">
+        <div className="mt-2 shrink-0 space-y-1 border-t border-gray-200 pt-2">
           <div className="flex items-center gap-2 text-[11px] text-gray-700">
             <PositiveIcon />
             <span>Positive influence</span>

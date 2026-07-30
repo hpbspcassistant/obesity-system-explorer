@@ -66,7 +66,14 @@ export function SearchBar({
 
   const choose = useCallback(
     (node: Node) => {
-      setQuery(node.label)
+      // Emptied rather than filled with the chosen label. The field is a way to
+      // go somewhere, not a record of where you went — the map, the panel and the
+      // highlight all say which variable this is — and leaving the old query
+      // behind meant every next search began by deleting the previous one.
+      //
+      // Deliberately not `reset()`: that also calls onClear, which would drop the
+      // selection this click just made.
+      setQuery('')
       setOpen(false)
       setActiveIndex(0)
       onSelectNode(node.id)
@@ -143,7 +150,7 @@ export function SearchBar({
             aria-expanded={open && results.length > 0}
             aria-controls="node-search-results"
             aria-autocomplete="list"
-            placeholder="Search nodes…"
+            placeholder="Search variables…"
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => setOpen(query.trim().length > 0)}
@@ -179,9 +186,11 @@ export function SearchBar({
             role="listbox"
             className="absolute inset-x-0 top-full z-40 mt-1.5 max-h-80 overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl"
           >
+            {/* "variables" matches the placeholder above: the two sit in the same
+                control, so they cannot name the same thing differently. */}
             {results.length === 0 ? (
               <li className="px-3 py-2 text-sm text-gray-400">
-                No nodes match “{query.trim()}”
+                No variables match “{query.trim()}”
               </li>
             ) : (
               results.map((result, index) => {
