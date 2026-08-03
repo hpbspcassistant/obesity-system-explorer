@@ -58,21 +58,56 @@ function widthOf(text: string, fontSize: number): number {
   return context.measureText(text).width
 }
 
-/** Greedy word wrap. Over-long single words are allowed to overflow. */
+/** A place a line may break, and whether a space belongs before it. */
+interface Chunk {
+  text: string
+  /** True at a word boundary, false after a slash inside one. */
+  spaced: boolean
+}
+
+/**
+ * Splits a label into the places it may break.
+ *
+ * Spaces, and also after a slash. "Demand for Indulgence/Compensation" is three
+ * words, the last of which is 23 characters: unbreakable, it has to fit a box
+ * 75 units wide on one line, which drops that node to 6pt while the other 107
+ * sit at 10. Breaking after the slash puts it back with them.
+ *
+ * Slashes only. Hyphens look like the same case and are not: breaking them turns
+ * "NEAT Non-Volitional Activity" into "NEAT Non- / Volitional / Activity", which
+ * fits no better and reads worse. A slash already separates alternatives, so a
+ * line ending on one is not read as a word cut in half.
+ */
+function chunksOf(label: string): Chunk[] {
+  const chunks: Chunk[] = []
+  label
+    .split(/\s+/)
+    .filter(Boolean)
+    .forEach((word, wordIndex) => {
+      // Keeps the slash on the end of the piece before it, so a break there
+      // reads as deliberate rather than as a missing character.
+      word.split(/(?<=\/)/).forEach((piece, pieceIndex) => {
+        chunks.push({ text: piece, spaced: pieceIndex === 0 && wordIndex > 0 })
+      })
+    })
+  return chunks
+}
+
+/** Greedy wrap over those chunks. Over-long single chunks may still overflow. */
 function wrap(label: string, fontSize: number, maxWidth: number): string[] {
-  const words = label.split(/\s+/).filter(Boolean)
-  if (words.length === 0) return []
+  const chunks = chunksOf(label)
+  if (chunks.length === 0) return []
 
   const lines: string[] = []
-  let current = words[0]
+  let current = chunks[0].text
 
-  for (let i = 1; i < words.length; i++) {
-    const candidate = `${current} ${words[i]}`
+  for (let i = 1; i < chunks.length; i++) {
+    const candidate = `${current}${chunks[i].spaced ? ' ' : ''}${chunks[i].text}`
     if (widthOf(candidate, fontSize) <= maxWidth) {
       current = candidate
     } else {
       lines.push(current)
-      current = words[i]
+      current = chunks[i].text
     }
   }
   lines.push(current)
