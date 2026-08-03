@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { downloadProfile } from '../lib/profile'
-import type { Profile } from '../lib/profile'
+import type { ParseResult, Profile } from '../lib/profile'
 import { ImportButton } from './ProfilePersonaDialog'
 
 /**
@@ -35,7 +35,7 @@ export interface ProfileBarProps {
   onSelectProfile: (id: string | null) => void
   onNewProfile: () => void
   onEditPersona: () => void
-  onImportProfile: (profile: Profile) => void
+  onImportProfile: (result: ParseResult) => void
   onDeleteProfile: (id: string) => void
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { parseProfile } from '../lib/profile'
-import type { Profile } from '../lib/profile'
+import type { ParseResult, Profile } from '../lib/profile'
 
 /**
  * Naming a persona — for a new profile, or renaming one that exists.
@@ -15,7 +15,7 @@ export interface ProfilePersonaDialogProps {
   /** Null when creating; the profile being renamed otherwise. */
   profile: Profile | null
   onSave: (name: string, details: string) => void
-  onImport: (profile: Profile) => void
+  onImport: (result: ParseResult) => void
   /** Absent while there is no profile to fall back to, so there is no escape. */
   onCancel?: () => void
 }
@@ -136,7 +136,7 @@ export function ImportButton({
   onImport,
   className = '',
 }: {
-  onImport: (profile: Profile) => void
+  onImport: (result: ParseResult) => void
   className?: string
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -177,15 +177,12 @@ export function ImportButton({
               })
               return
             }
-            const dropped =
-              result.droppedNodeIds.length + result.droppedEdgeIds.length
-            setNote({
-              ok: true,
-              text: dropped
-                ? `Imported “${result.profile.name}”. ${dropped} mark(s) referred to factors this map does not have and were skipped.`
-                : `Imported “${result.profile.name}”.`,
-            })
-            onImport(result.profile)
+            // Reported by the caller, not here. A successful import from the
+            // first-run dialog replaces that dialog with the map, so a note set
+            // on this component is unmounted in the same tick and never read —
+            // which is how an import that fills in connections says nothing
+            // about having done so.
+            onImport(result)
           } catch {
             setNote({ ok: false, text: 'That file could not be read as JSON.' })
           }

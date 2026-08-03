@@ -56,6 +56,7 @@ import {
   saveProfiles,
   toggleEdge as toggleEdgeIn,
   toggleNode as toggleNodeIn,
+  type ParseResult,
   type Profile,
 } from './lib/profile'
 import type {
@@ -127,6 +128,8 @@ export default function App() {
   const [exportState, setExportState] = useState<'idle' | 'working' | 'failed'>(
     'idle',
   )
+  /** What the last import did, shown briefly above the profile bar. */
+  const [importNotice, setImportNotice] = useState<string | null>(null)
   /**
    * Marked counts as they stood when the current guide step opened.
    *
@@ -238,7 +241,31 @@ export default function App() {
     setActiveProfileId(profile.id)
   }, [])
 
-  const importProfile = useCallback((profile: Profile) => {
+  /**
+   * Takes the whole parse result, not just the profile, so what the import did
+   * can be said out loud.
+   *
+   * A factors-only file has its connections filled in, and a file written against
+   * an older map may lose marks. Both change what you end up with, and reporting
+   * them here rather than in the dialog is the only way anyone reads it: a
+   * successful import from the first-run dialog replaces that dialog with the
+   * map, taking any message inside it along.
+   */
+  const importProfile = useCallback((result: ParseResult) => {
+    const { profile } = result
+    const dropped =
+      result.droppedNodeIds.length + result.droppedEdgeIds.length
+    const linked = result.autoLinkedEdgeIds.length
+    const notes = [
+      linked > 0 &&
+        `It listed no connections, so the ${linked} running between its variables ${linked === 1 ? 'was' : 'were'} marked for you.`,
+      dropped > 0 &&
+        `${dropped} mark${dropped === 1 ? '' : 's'} referred to variables this map does not have and ${dropped === 1 ? 'was' : 'were'} skipped.`,
+    ].filter(Boolean)
+    setImportNotice(
+      [`Imported “${profile.name}”.`, ...notes].join(' '),
+    )
+
     setProfiles((current) => {
       // An imported id may collide with one already held; keep both. Counting
       // up rather than appending a fixed suffix, because the same file imported
@@ -283,6 +310,13 @@ export default function App() {
     observer.observe(element)
     return () => observer.disconnect()
   }, [])
+
+  // Long enough to read two sentences, short enough not to become furniture.
+  useEffect(() => {
+    if (!importNotice) return
+    const timer = window.setTimeout(() => setImportNotice(null), 9000)
+    return () => window.clearTimeout(timer)
+  }, [importNotice])
 
   // Marking is the work, so it is written back as it happens rather than on a
   // save button — closing the tab mid-profile must not lose it.
@@ -1066,6 +1100,30 @@ export default function App() {
                 onMarkAllLinks={markAllLinks}
                 onClose={() => setReviewOpen(false)}
               />
+            )}
+
+            {importNotice && (
+              <div
+                role="status"
+                className="absolute inset-x-0 bottom-12 z-30 flex items-start gap-2 border-t border-gray-200 bg-white/97 px-3 py-2 text-[12px] leading-snug text-gray-700 backdrop-blur"
+              >
+                <span className="min-w-0 flex-1">{importNotice}</span>
+                <button
+                  type="button"
+                  onClick={() => setImportNotice(null)}
+                  aria-label="Dismiss"
+                  className="-mr-1 shrink-0 rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
+                    <path
+                      d="M2.5 2.5l7 7M9.5 2.5l-7 7"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
             )}
 
             <ProfileBar

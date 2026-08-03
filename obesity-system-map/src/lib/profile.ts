@@ -97,23 +97,34 @@ export function frontierOf(profile: Profile): ReadonlySet<number> {
 }
 
 /**
+ * Every connection running between two factors in the given set.
+ *
+ * Self-loops are excluded: a connection from a factor to itself has both ends in
+ * any set containing it, and marking it says nothing about a relationship
+ * between two things.
+ */
+export function connectionsWithin(
+  nodeIds: ReadonlySet<number>,
+): string[] {
+  const found: string[] = []
+  for (const connection of connections) {
+    if (connection.sourceId === connection.targetId) continue
+    if (nodeIds.has(connection.sourceId) && nodeIds.has(connection.targetId)) {
+      found.push(connection.id)
+    }
+  }
+  return found
+}
+
+/**
  * Connections whose two ends are both marked but which are not marked
  * themselves. People mark the factors and forget the link that ties them, so
  * these are offered explicitly rather than left to be noticed.
  */
 export function missingLinks(profile: Profile): string[] {
-  const found: string[] = []
-  for (const connection of connections) {
-    if (profile.edgeIds.has(connection.id)) continue
-    if (connection.sourceId === connection.targetId) continue
-    if (
-      profile.nodeIds.has(connection.sourceId) &&
-      profile.nodeIds.has(connection.targetId)
-    ) {
-      found.push(connection.id)
-    }
-  }
-  return found
+  return connectionsWithin(profile.nodeIds).filter(
+    (id) => !profile.edgeIds.has(id),
+  )
 }
 
 /**
@@ -185,12 +196,28 @@ export interface ParseResult {
   /** Ids in the file that this map does not contain, so the user is told. */
   droppedNodeIds: number[]
   droppedEdgeIds: string[]
+  /**
+   * Connections the file did not name, filled in from its factors. Reported so
+   * an import never quietly marks more than the file asked for.
+   */
+  autoLinkedEdgeIds: string[]
 }
 
 /**
  * Rebuild a profile from untrusted JSON — a hand-edited file, or one exported
  * from a different build of the map. Unknown ids are dropped and reported
  * rather than silently kept, which would leave marks that can never be seen.
+ *
+ * A file may list factors alone. Writing out connection ids by hand means
+ * looking each one up in the data, which nobody is going to do, so when the file
+ * has no `edgeIds` at all every connection running between two of its factors is
+ * marked for it. The count comes back in the result, because an import that
+ * silently marks thirty things the file never mentioned is not an import.
+ *
+ * An explicitly empty `edgeIds` is left alone, and means what it says: this
+ * profile has no connections. That distinction matters because the app's own
+ * export always writes the field, so a profile deliberately saved with none
+ * would otherwise come back with them.
  */
 export function parseProfile(input: unknown): ParseResult | null {
   if (typeof input !== 'object' || input === null) return null
@@ -211,11 +238,20 @@ export function parseProfile(input: unknown): ParseResult | null {
 
   const edgeIds = new Set<string>()
   const droppedEdgeIds: string[] = []
+  const autoLinkedEdgeIds: string[] = []
   if (Array.isArray(raw.edgeIds)) {
     for (const value of raw.edgeIds) {
       if (typeof value !== 'string') continue
       if (connectionsById.has(value)) edgeIds.add(value)
       else droppedEdgeIds.push(value)
+    }
+  } else {
+    // No edgeIds at all: a factors-only file, so the connections between those
+    // factors are filled in. Anything else would import a set of variables with
+    // nothing joining them, which is not what the map is for.
+    for (const id of connectionsWithin(nodeIds)) {
+      edgeIds.add(id)
+      autoLinkedEdgeIds.push(id)
     }
   }
 
@@ -233,6 +269,7 @@ export function parseProfile(input: unknown): ParseResult | null {
     },
     droppedNodeIds,
     droppedEdgeIds,
+    autoLinkedEdgeIds,
   }
 }
 
