@@ -120,6 +120,44 @@ export const CONTRAST_HUBS: readonly ContrastHub[] = [
   { from: '#0096D4', to: '#075985' },
 ]
 
+/**
+ * The four key variables, which keep their own colour under high contrast.
+ *
+ * The artwork singles these out with a saturated hub fill among the pale type
+ * colours, and that is the map's way of saying "this one is a hub". Everywhere
+ * else the distinction survives high contrast, because Explore and Trace paint
+ * the artwork's own fills. Profile is where it was lost: marking repaints a
+ * factor to its *type* swatch, so under high contrast all four flattened into
+ * the pale palette and became indistinguishable from the 104 ordinary variables
+ * around them.
+ *
+ * Two keep the artwork's hub colour outright. The other two take the deepened
+ * versions from CONTRAST_HUBS, so a key variable looks the same in Profile as it
+ * does in Explore rather than changing colour when you switch modes.
+ */
+export interface KeyVariable {
+  /** Node id in obesity_system_data.json. */
+  id: number
+  /** Named for the reader of this table; nothing matches on it. */
+  label: string
+  /** Its hub colour under high contrast. */
+  fill: string
+  /** True where that fill is dark enough to need the white label back. */
+  lightInk: boolean
+}
+
+export const KEY_VARIABLES: readonly KeyVariable[] = [
+  { id: 32, label: 'Psychological Ambivalence', fill: '#FAE129', lightInk: false },
+  { id: 71, label: 'Physical Activity', fill: '#E09E5D', lightInk: false },
+  { id: 73, label: 'Force of Dietary Habits', fill: '#6B21A8', lightInk: true },
+  {
+    id: 91,
+    label: 'Degree of Primary Appetite Control',
+    fill: '#075985',
+    lightInk: true,
+  },
+]
+
 const swatchByType = new Map(CONTRAST_TYPES.map((t) => [t.name, t.swatch]))
 
 /** The legend must agree with the map, so it reads its swatches from here. */
@@ -178,5 +216,28 @@ export function contrastFillCss(): string {
       `g[data-node-id] path[fill="${hub.from}"]{fill:${hub.to}}`,
   )
 
-  return [...repaint, ...hubs, ...variables].join('\n')
+  /*
+   * Per-node overrides for the four key variables, which must beat the per-type
+   * rule above. `[data-type]` is carried only for the specificity it adds: the
+   * type rule names a value and so scores one attribute higher, and a key
+   * variable losing that tie is the whole bug this fixes.
+   */
+  const keys = KEY_VARIABLES.map(
+    (key) =>
+      `.map-svg.high-contrast g[data-node-id="${key.id}"][data-type]` +
+      `{--node-colour-hc:${key.fill};--node-ring-hc:${ringFrom(key.fill)}}`,
+  )
+
+  // Two of them are dark enough to need the artwork's white label back, against
+  // the rule in map.css that sends every marked label to the ink under high
+  // contrast. Specificity again rather than source order, so this holds wherever
+  // the generated sheet ends up relative to map.css.
+  const keyInk = KEY_VARIABLES.filter((key) => key.lightInk).map(
+    (key) =>
+      `.map-svg.has-profile.high-contrast ` +
+      `g[data-node-id="${key.id}"][data-type].is-marked .node-label` +
+      `{fill:#ffffff}`,
+  )
+
+  return [...repaint, ...hubs, ...variables, ...keys, ...keyInk].join('\n')
 }
