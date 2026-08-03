@@ -321,6 +321,17 @@
   fill: #231f20;
 }
 
+/* Unless high contrast is on, where the fill that returns is not the artwork's.
+   Marking then repaints a factor to its *type swatch*, and all ten of those are
+   light by construction — the palette was chosen so #231f20 clears 6.4:1 on
+   every one. The artwork's white is wrong against them, and not marginally:
+   white on the mint measured 1.13 where a dark-inked factor on that same fill
+   measures 14.47. So in this one combination the ink follows the fill rather
+   than the artwork. */
+.map-svg.has-profile.high-contrast g[data-node-id].is-marked .node-label {
+  fill: #231f20;
+}
+
 /* In Profile the colour IS the mark, so the corner pip is redundant noise. */
 .map-svg.has-profile g[data-node-id].is-marked .node-mark {
   display: none;
