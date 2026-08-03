@@ -84,6 +84,42 @@ export const CONTRAST_TYPES: readonly ContrastType[] = [
   ] },
 ]
 
+/**
+ * Hub markers whose label sits on them in white.
+ *
+ * The type table above leaves every hub marker alone on purpose: they are
+ * already saturated, and they are what marks a node as a key variable. That is
+ * right for four of the six. Two carry a white label, and white on them was the
+ * worst text on the map — 2.90 on the purple and 3.33 on the blue, against 6.4:1
+ * or better everywhere else and a 15.02 best. High contrast left both exactly as
+ * they were, so the one mode meant to help skipped the two nodes that needed it.
+ *
+ * Darker rather than brighter, because the label is white and cannot move: it is
+ * baked at build time from the artwork fill, so a lighter hub would need the ink
+ * recomputed per mode. Each stays inside its artwork hue, so a hub still reads as
+ * a hub and the node keeps its identity.
+ *
+ * The other four are deliberately still absent. Their labels are dark ink and
+ * already clear 7:1, and the orange one shows why brightening is not free: every
+ * lighter orange tested scored between 1.47 and 1.98 against Activity's own
+ * fill, dissolving the marker into the cluster it is supposed to stand out from.
+ */
+export interface ContrastHub {
+  /** The artwork hub fill this replaces, matched exactly in the SVG markup. */
+  from: string
+  to: string
+}
+
+export const CONTRAST_HUBS: readonly ContrastHub[] = [
+  // Force of Dietary Habits. White ink 2.90 -> 8.72, and 6.41 against the pale
+  // Food fill it sits among.
+  { from: '#AB8DB8', to: '#6B21A8' },
+  // Degree of Primary Appetite Control. White ink 3.33 -> 7.56. Also carried by
+  // two other nodes as a small marker, where it is not under the label; there it
+  // simply deepens with the rest.
+  { from: '#0096D4', to: '#075985' },
+]
+
 const swatchByType = new Map(CONTRAST_TYPES.map((t) => [t.name, t.swatch]))
 
 /** The legend must agree with the map, so it reads its swatches from here. */
@@ -99,9 +135,10 @@ export function contrastSwatch(typeName: string): string | undefined {
  * hex: Developmental's swatch is also one of Biological's fills. Matching on
  * fill alone would repaint the wrong boxes.
  *
- * Hub markers (#FAE129, #0096D4, #303636, #7ABF82, #E09E5D, #AB8DB8) and the
- * grey outline ring (#95A0A9) are deliberately absent: they are already
- * saturated, and they are what marks a node as a key variable.
+ * Most hub markers (#FAE129, #303636, #7ABF82, #E09E5D) and the grey outline
+ * ring (#95A0A9) are deliberately absent: they are already saturated, and they
+ * are what marks a node as a key variable. The two that carry a white label are
+ * handled separately — see CONTRAST_HUBS.
  *
  * Two halves, because Profile does not want a repainted map — it wants a GREY
  * one, with colour reserved to mean "marked". Repainting every box there put
@@ -131,5 +168,15 @@ export function contrastFillCss(): string {
       `{--node-colour-hc:${type.swatch};--node-ring-hc:${ringFrom(type.swatch)}}`,
   )
 
-  return [...repaint, ...variables].join('\n')
+  // Not scoped by data-type: a hub fill means the same thing wherever it appears,
+  // and unlike the type fills no two hubs share a hex. Confined to non-Profile
+  // for the same reason as the repaints — Profile flattens a marked node to its
+  // type colour, so a hub never shows there.
+  const hubs = CONTRAST_HUBS.map(
+    (hub) =>
+      `.map-svg.high-contrast:not(.has-profile) ` +
+      `g[data-node-id] path[fill="${hub.from}"]{fill:${hub.to}}`,
+  )
+
+  return [...repaint, ...hubs, ...variables].join('\n')
 }
