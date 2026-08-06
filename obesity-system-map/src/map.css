@@ -504,16 +504,21 @@
  */
 
 .map-svg.has-coverage {
-  --coverage-grey-fill: #f4f3f1;
-  --coverage-grey-line: #cfcbc4;
+  --coverage-empty-line: #d8d5cf;
   --coverage-ring: #1f2937;
-  --coverage-accent: #bfdbfe;
+  --coverage-accent: #93c5fd;
 }
 
-/* Everything starts quiet, exactly as Profile does. */
+/* Everything starts EMPTY, not quiet.
+   Profile's pale grey fill is right there, where marked is the minority and the
+   rest is context you still read. Here the proportions are reversed — 80 of 108
+   nodes are untouched — and a pale fill on all of them made the map read as
+   solidly full, with reached nodes differing by a hairline ring nobody could
+   see. An untouched node is an absence, so it is drawn as one: an outline with
+   nothing in it. */
 .map-svg.has-coverage g[data-node-id] > path {
-  fill: var(--coverage-grey-fill);
-  stroke: var(--coverage-grey-line);
+  fill: #ffffff;
+  stroke: var(--coverage-empty-line);
   stroke-width: 0.9;
   vector-effect: non-scaling-stroke;
 }
@@ -541,14 +546,14 @@
 }
 
 .map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path {
-  fill: #ffffff;
+  fill: #f1f5f9;
   stroke: none;
 }
 
 .map-svg.has-coverage.variant-a g[data-node-id].is-covered > path:last-of-type,
 .map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path:last-of-type {
   stroke: var(--coverage-ring);
-  stroke-width: 2.2;
+  stroke-width: 2.8;
   vector-effect: non-scaling-stroke;
 }
 
@@ -561,14 +566,14 @@
 }
 
 .map-svg.has-coverage.variant-b g[data-node-id].is-gap > path {
-  fill: #ffffff;
+  fill: #f1f5f9;
   stroke: none;
 }
 
 .map-svg.has-coverage.variant-b g[data-node-id].is-covered > path:last-of-type,
 .map-svg.has-coverage.variant-b g[data-node-id].is-gap > path:last-of-type {
   stroke: var(--coverage-ring);
-  stroke-width: 2.2;
+  stroke-width: 2.8;
   vector-effect: non-scaling-stroke;
 }
 
@@ -583,14 +588,14 @@
 }
 
 .map-svg.has-coverage.variant-c g[data-node-id].is-gap > path {
-  fill: #ffffff;
+  fill: #f1f5f9;
   stroke: none;
 }
 
 .map-svg.has-coverage.variant-c g[data-node-id].is-covered > path:last-of-type,
 .map-svg.has-coverage.variant-c g[data-node-id].is-gap > path:last-of-type {
   stroke: var(--coverage-ring);
-  stroke-width: 2.2;
+  stroke-width: 2.8;
   vector-effect: non-scaling-stroke;
 }
 
