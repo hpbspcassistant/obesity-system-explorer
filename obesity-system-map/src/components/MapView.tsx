@@ -35,7 +35,12 @@ import {
   groupNodePaths,
 } from '../lib/annotateSvg'
 import { contrastFillCss } from '../data/contrast'
-import { REACH_BANDS, REACH_INK } from '../data/coverageStyle'
+import {
+  REACH_DOT_BACKING_PX,
+  REACH_DOT_PX,
+  REACH_INK,
+  type ReachDotPlacement,
+} from '../data/coverageStyle'
 import { extractSvgInner, readSvgViewBox } from '../lib/inlineSvg'
 import { svgToPngBlob } from '../lib/exportImage'
 import '../map.css'
@@ -276,19 +281,23 @@ const NodeHalos = memo(function NodeHalos({
 })
 
 /**
- * The reach mark, in the two treatments that are not a border.
+ * The reach mark: a dot straddling the edge of the box.
  *
- * Both are zero-length or straight paths with a round-capped, non-scaling
- * stroke, so their size is set in screen pixels and holds at any zoom — the same
- * trick the accept-this-link target uses, and the only way a mark stays visible
- * on a box that is 23px wide at fit zoom.
+ * Two zero-length round-capped paths per node — a white disc, then a blue one on
+ * top. Their size comes from stroke-width under `non-scaling-stroke`, so it is
+ * fixed in screen pixels and survives fit zoom, where a box is 23px across and a
+ * mark sized in map units would be a smudge.
+ *
+ * Centred ON the boundary rather than inside it. Half the dot hanging outside
+ * breaks the box's silhouette, which is what makes it read as a mark placed on
+ * the node instead of as part of its outline, and it keeps the label clear.
  */
 const CoverageMarks = memo(function CoverageMarks({
   nodeIds,
-  shape,
+  placement,
 }: {
   nodeIds: readonly number[]
-  shape: 'dot' | 'bar'
+  placement: ReachDotPlacement
 }) {
   if (!nodeIds.length) return null
   return (
@@ -296,21 +305,32 @@ const CoverageMarks = memo(function CoverageMarks({
       {nodeIds.map((id) => {
         const box = nodeBoxesById.get(id)
         if (!box) return null
-        // A dot sits on the top-right corner; a bar underlines the whole box.
-        const d =
-          shape === 'dot'
-            ? `M${box.x + box.w - 3} ${box.y + 3}h0`
-            : `M${box.x + 3} ${box.y + box.h} H${box.x + box.w - 3}`
+        const point =
+          placement === 'corner'
+            ? [box.x + box.w, box.y]
+            : placement === 'left'
+              ? [box.x, box.y + box.h / 2]
+              : [box.x + box.w / 2, box.y]
+        const d = `M${point[0]} ${point[1]}h0`
         return (
-          <path
-            key={id}
-            d={d}
-            fill="none"
-            stroke={REACH_INK}
-            strokeWidth={shape === 'dot' ? 9 : 5}
-            strokeLinecap="round"
-            vectorEffect="non-scaling-stroke"
-          />
+          <g key={id}>
+            <path
+              d={d}
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth={REACH_DOT_BACKING_PX}
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            <path
+              d={d}
+              fill="none"
+              stroke={REACH_INK}
+              strokeWidth={REACH_DOT_PX}
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
         )
       })}
     </g>
@@ -1268,12 +1288,6 @@ export function MapView({
               bands={TRACE_START_BANDS}
             />
             <NodeHalos
-              layer="coverage-reach"
-              nodeIds={coverageVariant === 'c' ? reachedNodeIds : []}
-              colour={REACH_INK}
-              bands={REACH_BANDS}
-            />
-            <NodeHalos
               layer="profile-focus-node"
               nodeIds={focusNodeIds}
               colour="#111827"
@@ -1282,12 +1296,16 @@ export function MapView({
             <NodeLayer />
             {/* Above the boxes, unlike the halo: a mark on a node has to sit on
                 top of it, not behind it. */}
-            {coverageVariant !== 'c' && (
-              <CoverageMarks
-                nodeIds={reachedNodeIds}
-                shape={coverageVariant === 'a' ? 'dot' : 'bar'}
-              />
-            )}
+            <CoverageMarks
+              nodeIds={reachedNodeIds}
+              placement={
+                coverageVariant === 'a'
+                  ? 'corner'
+                  : coverageVariant === 'b'
+                    ? 'left'
+                    : 'above'
+              }
+            />
             {/* Above the boxes: these are controls, not artwork, and one can sit
                 on a node it does not belong to. */}
             <g ref={linkBadgeRef} data-layer="profile-link-badges" />

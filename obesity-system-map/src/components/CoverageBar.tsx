@@ -16,9 +16,9 @@ export type CoverageVariant = 'a' | 'b' | 'c'
  * in how programme reach is marked. The structure is settled; this is the mark.
  */
 const VARIANTS: { id: CoverageVariant; label: string; hint: string }[] = [
-  { id: 'a', label: 'Dot', hint: 'Reach = a dot on the corner of the box' },
-  { id: 'b', label: 'Bar', hint: 'Reach = a bar underlining the box' },
-  { id: 'c', label: 'Glow', hint: 'Reach = a glow around the box' },
+  { id: 'a', label: 'Corner', hint: 'Reach = a dot straddling the top-right corner' },
+  { id: 'b', label: 'Left', hint: 'Reach = a dot on the left edge, halfway down' },
+  { id: 'c', label: 'Above', hint: 'Reach = a dot centred on the top edge' },
 ]
 
 export interface CoverageBarProps {

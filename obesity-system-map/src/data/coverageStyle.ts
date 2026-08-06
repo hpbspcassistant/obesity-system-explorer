@@ -1,25 +1,26 @@
 /**
  * How "a programme reaches this" is drawn, shared by the map and the key.
  *
- * A thin outline was the first attempt and was not enough: measured against an
- * empty box it came out 18 apart, all of it in a 2.8px line that disappears at
- * fit zoom. Fill is already spoken for — it carries whether a variable matters
- * for the persona — so reach needs a channel of its own that does not touch the
- * inside of the box. A halo does that, and being drawn in screen pixels it holds
- * the same weight zoomed out to the whole map as it does at 1:1.
+ * Three attempts got here. A thin outline measured 18 from an empty box and
+ * vanished at fit zoom; a halo was the same idea louder, and read as the same
+ * thing; a dot inside the corner was the right kind of mark but too quiet and in
+ * the wrong place — sitting within the fill, it competed with the label and
+ * still read as part of the box's edge.
  *
- * Blue on purpose. Teal belongs to Trace, the cluster pastels belong to the
- * types, and near-black already means "the thing you have open" in Profile.
+ * So the dot now straddles the boundary. Half of it hangs outside, which breaks
+ * the box's silhouette rather than decorating its inside, and it clears the
+ * label entirely. It carries a white backing disc because 296 connection lines
+ * cross this map and a bare dot sitting on one would disappear — the same
+ * two-disc construction the accept-this-link target uses.
  */
 
 /** Strong enough to read against ten pale cluster fills and white. */
 export const REACH_INK = '#2563eb'
 
-/**
- * Outer band first. Widths are screen px: half of each sits outside the box and
- * the node paints over the inner half, so what is left is a clean outer glow.
- */
-export const REACH_BANDS = [
-  { width: 18, opacity: 0.2 },
-  { width: 8, opacity: 0.5 },
-] as const
+/** Screen px, so the mark holds its size at any zoom. */
+export const REACH_DOT_PX = 10
+/** The white disc behind it, giving separation from whatever it lands on. */
+export const REACH_DOT_BACKING_PX = 15
+
+/** Where the dot sits relative to the box; each straddles the boundary. */
+export type ReachDotPlacement = 'corner' | 'left' | 'above'

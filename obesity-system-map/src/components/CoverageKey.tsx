@@ -1,4 +1,4 @@
-import { REACH_BANDS, REACH_INK } from '../data/coverageStyle'
+import { REACH_INK } from '../data/coverageStyle'
 import type { CoverageVariant } from './CoverageBar'
 
 /**
@@ -31,36 +31,36 @@ function Swatch({
       className={`map-svg has-coverage variant-${variant} h-6 w-[46px] shrink-0 overflow-visible`}
       aria-hidden="true"
     >
-      {reached &&
-        variant === 'c' &&
-        REACH_BANDS.map((band) => (
-          <rect
-            key={band.width}
-            x="1.6"
-            y="1.6"
-            width="30.8"
-            height="16.8"
-            rx="2"
-            fill="none"
-            stroke={REACH_INK}
-            strokeWidth={band.width / 3}
-            strokeOpacity={band.opacity}
-          />
-        ))}
       <g data-node-id="0" data-type="sample" className={standing}>
         <path
           d="M1.6 1.6h30.8v16.8H1.6z"
           style={{ ['--node-colour' as string]: SAMPLE_CLUSTER }}
         />
       </g>
-      {reached && variant !== 'c' && (
-        <path
-          d={variant === 'a' ? 'M29.4 4.6h0' : 'M4.6 18.4H29.4'}
-          fill="none"
-          stroke={REACH_INK}
-          strokeWidth={variant === 'a' ? 6 : 3.4}
-          strokeLinecap="round"
-        />
+      {reached && (
+        // Same construction as the map: a white disc, then a blue one, centred
+        // on the boundary so half of it hangs outside the box.
+        <g>
+          {[
+            { w: 9, colour: '#ffffff' },
+            { w: 6, colour: REACH_INK },
+          ].map((disc) => (
+            <path
+              key={disc.w}
+              d={
+                variant === 'a'
+                  ? 'M32.4 1.6h0'
+                  : variant === 'b'
+                    ? 'M1.6 10h0'
+                    : 'M17 1.6h0'
+              }
+              fill="none"
+              stroke={disc.colour}
+              strokeWidth={disc.w}
+              strokeLinecap="round"
+            />
+          ))}
+        </g>
       )}
     </svg>
   )
