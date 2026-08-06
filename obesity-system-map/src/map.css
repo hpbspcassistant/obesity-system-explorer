@@ -550,12 +550,9 @@
   stroke: none;
 }
 
-.map-svg.has-coverage.variant-a g[data-node-id].is-covered > path:last-of-type,
-.map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path:last-of-type {
-  stroke: var(--coverage-ring);
-  stroke-width: 2.8;
-  vector-effect: non-scaling-stroke;
-}
+/* No ring in A. Reach is drawn as a halo outside the box (see NodeHalos and
+   data/coverageStyle.ts) — an outline here measured 18 from an empty box and
+   read as nothing at fit zoom. */
 
 /* -- B: fill = programme reach in cluster colour, ring = the persona's map -- */
 

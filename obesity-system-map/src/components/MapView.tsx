@@ -35,6 +35,7 @@ import {
   groupNodePaths,
 } from '../lib/annotateSvg'
 import { contrastFillCss } from '../data/contrast'
+import { REACH_BANDS, REACH_INK } from '../data/coverageStyle'
 import { extractSvgInner, readSvgViewBox } from '../lib/inlineSvg'
 import { svgToPngBlob } from '../lib/exportImage'
 import '../map.css'
@@ -409,6 +410,20 @@ export function MapView({
     () => (tracePaths ? [tracePaths.startId] : []),
     [tracePaths],
   )
+
+  /**
+   * Variables a programme reaches, haloed. Only in the encoding that spends its
+   * fill on the persona's map — the other two put reach in the fill and would be
+   * saying the same thing twice.
+   */
+  const reachedNodeIds = useMemo(() => {
+    if (!coverage || coverageVariant !== 'a') return []
+    const ids: number[] = []
+    for (const [id, standing] of coverage) {
+      if (standing === 'covered' || standing === 'beyond') ids.push(id)
+    }
+    return ids
+  }, [coverage, coverageVariant])
 
   /**
    * The factor the card is open on, ringed. Drawn as a halo outside the box
@@ -1209,6 +1224,12 @@ export function MapView({
               nodeIds={traceStartIds}
               colour="#0f766e"
               bands={TRACE_START_BANDS}
+            />
+            <NodeHalos
+              layer="coverage-reach"
+              nodeIds={reachedNodeIds}
+              colour={REACH_INK}
+              bands={REACH_BANDS}
             />
             <NodeHalos
               layer="profile-focus-node"

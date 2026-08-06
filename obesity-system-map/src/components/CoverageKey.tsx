@@ -1,3 +1,4 @@
+import { REACH_BANDS, REACH_INK } from '../data/coverageStyle'
 import type { CoverageVariant } from './CoverageBar'
 
 /**
@@ -19,12 +20,33 @@ function Swatch({
   variant: CoverageVariant
   standing: 'is-covered' | 'is-gap' | 'is-beyond' | 'is-untouched'
 }) {
+  // The halo is an SVG layer on the map rather than a CSS rule, so it cannot be
+  // inherited the way the fills are. Redrawn here from the same constants, which
+  // is the closest this can get to being unable to drift.
+  const haloed =
+    variant === 'a' && (standing === 'is-covered' || standing === 'is-beyond')
+
   return (
     <svg
-      viewBox="0 0 34 20"
-      className={`map-svg has-coverage variant-${variant} h-5 w-[34px] shrink-0`}
+      viewBox="-6 -6 46 32"
+      className={`map-svg has-coverage variant-${variant} h-6 w-[46px] shrink-0 overflow-visible`}
       aria-hidden="true"
     >
+      {haloed &&
+        REACH_BANDS.map((band) => (
+          <rect
+            key={band.width}
+            x="1.6"
+            y="1.6"
+            width="30.8"
+            height="16.8"
+            rx="2"
+            fill="none"
+            stroke={REACH_INK}
+            strokeWidth={band.width / 3}
+            strokeOpacity={band.opacity}
+          />
+        ))}
       <g data-node-id="0" data-type="sample" className={standing}>
         <path
           d="M1.6 1.6h30.8v16.8H1.6z"
