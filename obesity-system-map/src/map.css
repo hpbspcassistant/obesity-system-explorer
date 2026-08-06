@@ -537,70 +537,17 @@
 /* Behaviours own nodes, not connections, so nothing here recolours an edge —
    doing so would assert a claim the data does not make. */
 
-/* -- A: fill = the persona's map, ring = programme reach ------------------- */
-
-.map-svg.has-coverage.variant-a g[data-node-id].is-covered > path,
-.map-svg.has-coverage.variant-a g[data-node-id].is-gap > path {
+/* The fill rule, now the same in every variant: it says one thing, and the
+   variants differ only in how "a programme reaches this" is marked. */
+.map-svg.has-coverage g[data-node-id].is-covered > path,
+.map-svg.has-coverage g[data-node-id].is-gap > path {
   fill: var(--node-colour-hc, var(--node-colour, #eceadc));
   stroke: none;
 }
 
-/* Nothing. A variable outside the persona's map does not get a fill, because in
-   this encoding fill means exactly one thing — it matters for this person — and
-   a tint here made a reached-but-irrelevant variable read as one of theirs. The
-   tint was hedging against it vanishing beside an untouched box; the halo
-   removed that risk, so the hedge goes and the rule stays clean:
-
-     fill = in the persona's map
-     halo = a programme reaches it
-
-   and the four states are just the four combinations. */
-
-/* No ring in A. Reach is drawn as a halo outside the box (see NodeHalos and
-   data/coverageStyle.ts) — an outline here measured 18 from an empty box and
-   read as nothing at fit zoom. */
-
-/* -- B: fill = programme reach in cluster colour, ring = the persona's map -- */
-
-.map-svg.has-coverage.variant-b g[data-node-id].is-covered > path,
-.map-svg.has-coverage.variant-b g[data-node-id].is-beyond > path {
-  fill: var(--node-colour-hc, var(--node-colour, #eceadc));
-  stroke: none;
-}
-
-.map-svg.has-coverage.variant-b g[data-node-id].is-gap > path {
-  fill: #f1f5f9;
-  stroke: none;
-}
-
-.map-svg.has-coverage.variant-b g[data-node-id].is-covered > path:last-of-type,
-.map-svg.has-coverage.variant-b g[data-node-id].is-gap > path:last-of-type {
-  stroke: var(--coverage-ring);
-  stroke-width: 2.8;
-  vector-effect: non-scaling-stroke;
-}
-
-/* -- C: fill = programme reach in one accent, ring = the persona's map ------
-   Drops the cluster hue deliberately, to see whether "is it reached" reads
-   faster as a plain binary than as ten colours. */
-
-.map-svg.has-coverage.variant-c g[data-node-id].is-covered > path,
-.map-svg.has-coverage.variant-c g[data-node-id].is-beyond > path {
-  fill: var(--coverage-accent);
-  stroke: none;
-}
-
-.map-svg.has-coverage.variant-c g[data-node-id].is-gap > path {
-  fill: #f1f5f9;
-  stroke: none;
-}
-
-.map-svg.has-coverage.variant-c g[data-node-id].is-covered > path:last-of-type,
-.map-svg.has-coverage.variant-c g[data-node-id].is-gap > path:last-of-type {
-  stroke: var(--coverage-ring);
-  stroke-width: 2.8;
-  vector-effect: non-scaling-stroke;
-}
+/* is-beyond and is-untouched keep the empty base above: neither is in the
+   persona's map, so neither gets a fill. What separates them is the reach mark,
+   drawn as its own layer in MapView — a dot, a bar, or a halo. */
 
 /* Gaps are the actionable state and the rarest, so they can be asked for on
    their own — the same idea as Profile's "Marked only". */

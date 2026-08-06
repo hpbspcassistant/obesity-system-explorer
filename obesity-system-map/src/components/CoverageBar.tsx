@@ -11,10 +11,14 @@ import type { Applicability, CoveragePersona, ReachSummary } from '../lib/reach'
 
 export type CoverageVariant = 'a' | 'b' | 'c'
 
+/**
+ * All three now share one encoding — fill is the persona's map — and differ only
+ * in how programme reach is marked. The structure is settled; this is the mark.
+ */
 const VARIANTS: { id: CoverageVariant; label: string; hint: string }[] = [
-  { id: 'a', label: 'A', hint: 'Fill = persona’s map · Ring = programme reach' },
-  { id: 'b', label: 'B', hint: 'Fill = programme reach (cluster colour) · Ring = persona’s map' },
-  { id: 'c', label: 'C', hint: 'Fill = programme reach (one colour) · Ring = persona’s map' },
+  { id: 'a', label: 'Dot', hint: 'Reach = a dot on the corner of the box' },
+  { id: 'b', label: 'Bar', hint: 'Reach = a bar underlining the box' },
+  { id: 'c', label: 'Glow', hint: 'Reach = a glow around the box' },
 ]
 
 export interface CoverageBarProps {

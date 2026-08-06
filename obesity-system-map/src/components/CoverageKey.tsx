@@ -23,8 +23,7 @@ function Swatch({
   // The halo is an SVG layer on the map rather than a CSS rule, so it cannot be
   // inherited the way the fills are. Redrawn here from the same constants, which
   // is the closest this can get to being unable to drift.
-  const haloed =
-    variant === 'a' && (standing === 'is-covered' || standing === 'is-beyond')
+  const reached = standing === 'is-covered' || standing === 'is-beyond'
 
   return (
     <svg
@@ -32,7 +31,8 @@ function Swatch({
       className={`map-svg has-coverage variant-${variant} h-6 w-[46px] shrink-0 overflow-visible`}
       aria-hidden="true"
     >
-      {haloed &&
+      {reached &&
+        variant === 'c' &&
         REACH_BANDS.map((band) => (
           <rect
             key={band.width}
@@ -53,6 +53,15 @@ function Swatch({
           style={{ ['--node-colour' as string]: SAMPLE_CLUSTER }}
         />
       </g>
+      {reached && variant !== 'c' && (
+        <path
+          d={variant === 'a' ? 'M29.4 4.6h0' : 'M4.6 18.4H29.4'}
+          fill="none"
+          stroke={REACH_INK}
+          strokeWidth={variant === 'a' ? 6 : 3.4}
+          strokeLinecap="round"
+        />
+      )}
     </svg>
   )
 }

@@ -275,6 +275,48 @@ const NodeHalos = memo(function NodeHalos({
   )
 })
 
+/**
+ * The reach mark, in the two treatments that are not a border.
+ *
+ * Both are zero-length or straight paths with a round-capped, non-scaling
+ * stroke, so their size is set in screen pixels and holds at any zoom — the same
+ * trick the accept-this-link target uses, and the only way a mark stays visible
+ * on a box that is 23px wide at fit zoom.
+ */
+const CoverageMarks = memo(function CoverageMarks({
+  nodeIds,
+  shape,
+}: {
+  nodeIds: readonly number[]
+  shape: 'dot' | 'bar'
+}) {
+  if (!nodeIds.length) return null
+  return (
+    <g data-layer="coverage-marks" className="pointer-events-none">
+      {nodeIds.map((id) => {
+        const box = nodeBoxesById.get(id)
+        if (!box) return null
+        // A dot sits on the top-right corner; a bar underlines the whole box.
+        const d =
+          shape === 'dot'
+            ? `M${box.x + box.w - 3} ${box.y + 3}h0`
+            : `M${box.x + 3} ${box.y + box.h} H${box.x + box.w - 3}`
+        return (
+          <path
+            key={id}
+            d={d}
+            fill="none"
+            stroke={REACH_INK}
+            strokeWidth={shape === 'dot' ? 9 : 5}
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        )
+      })}
+    </g>
+  )
+})
+
 const TRACE_START_BANDS = [
   { width: 14, opacity: 0.18 },
   { width: 6, opacity: 0.3 },
@@ -417,13 +459,13 @@ export function MapView({
    * saying the same thing twice.
    */
   const reachedNodeIds = useMemo(() => {
-    if (!coverage || coverageVariant !== 'a') return []
+    if (!coverage) return []
     const ids: number[] = []
     for (const [id, standing] of coverage) {
       if (standing === 'covered' || standing === 'beyond') ids.push(id)
     }
     return ids
-  }, [coverage, coverageVariant])
+  }, [coverage])
 
   /**
    * The factor the card is open on, ringed. Drawn as a halo outside the box
@@ -1227,7 +1269,7 @@ export function MapView({
             />
             <NodeHalos
               layer="coverage-reach"
-              nodeIds={reachedNodeIds}
+              nodeIds={coverageVariant === 'c' ? reachedNodeIds : []}
               colour={REACH_INK}
               bands={REACH_BANDS}
             />
@@ -1238,6 +1280,14 @@ export function MapView({
               bands={FOCUS_BANDS}
             />
             <NodeLayer />
+            {/* Above the boxes, unlike the halo: a mark on a node has to sit on
+                top of it, not behind it. */}
+            {coverageVariant !== 'c' && (
+              <CoverageMarks
+                nodeIds={reachedNodeIds}
+                shape={coverageVariant === 'a' ? 'dot' : 'bar'}
+              />
+            )}
             {/* Above the boxes: these are controls, not artwork, and one can sit
                 on a node it does not belong to. */}
             <g ref={linkBadgeRef} data-layer="profile-link-badges" />
