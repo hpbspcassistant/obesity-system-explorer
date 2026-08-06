@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
+import { CoverageBar, type CoverageVariant } from './components/CoverageBar'
 import { GuideCard, GuideContents } from './components/GuideCard'
 import { MapHeader } from './components/MapHeader'
 import {
@@ -24,6 +25,13 @@ import {
   type GuideSectionId,
 } from './data/guide'
 import { downloadBlob } from './lib/exportImage'
+import {
+  allNodeIds,
+  behaviourIndex,
+  personas as coveragePersonas,
+  programmes as coverageProgrammes,
+} from './data/coverage'
+import { reachOf, summariseForPersona, type NodeStanding } from './lib/reach'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -130,6 +138,11 @@ export default function App() {
   )
   /** What the last import did, shown briefly above the profile bar. */
   const [importNotice, setImportNotice] = useState<string | null>(null)
+  // PROTOTYPE. Which placeholder persona the coverage overlay is drawn for, and
+  // which candidate encoding is on. Null persona is the whitespace view.
+  const [coveragePersonaId, setCoveragePersonaId] = useState<string | null>(null)
+  const [coverageVariant, setCoverageVariant] = useState<CoverageVariant>('a')
+  const [gapsOnly, setGapsOnly] = useState(false)
   /**
    * Marked counts as they stood when the current guide step opened.
    *
@@ -718,6 +731,55 @@ export default function App() {
     }
   }, [selectedNode, selectedEdge, hiddenGroups, taxonomy])
 
+  /**
+   * PROTOTYPE. The whole coverage picture for whichever persona is chosen.
+   *
+   * With no persona the summary is still computed, against an empty
+   * applicability map — so every reached node lands in `beyond` and everything
+   * else in `untouched`, which is exactly the whitespace view. One code path,
+   * no special case.
+   */
+  const coveragePersona =
+    coveragePersonas.find((p) => p.id === coveragePersonaId) ?? null
+
+  const coverageSummary = useMemo(() => {
+    if (coveragePersona) {
+      return summariseForPersona(
+        coveragePersona,
+        coverageProgrammes,
+        behaviourIndex,
+        allNodeIds,
+      )
+    }
+    // Whitespace ignores gates outright. Running it through an empty persona
+    // instead looked equivalent and is not: with no characteristics every gated
+    // programme comes back undetermined rather than applying, so the view
+    // counted only the three ungated programmes and reported 19 reached where
+    // the answer is 28.
+    const reached = reachOf(coverageProgrammes, behaviourIndex)
+    return {
+      reached,
+      covered: [],
+      gaps: [],
+      beyond: allNodeIds.filter((id) => reached.has(id)),
+      untouched: allNodeIds.filter((id) => !reached.has(id)),
+      applicability: {
+        applies: [...coverageProgrammes],
+        excluded: [],
+        undetermined: [],
+      },
+    }
+  }, [coveragePersona])
+
+  const coverageStanding = useMemo(() => {
+    const byNode = new Map<number, NodeStanding>()
+    for (const id of coverageSummary.covered) byNode.set(id, 'covered')
+    for (const id of coverageSummary.gaps) byNode.set(id, 'gap')
+    for (const id of coverageSummary.beyond) byNode.set(id, 'beyond')
+    for (const id of coverageSummary.untouched) byNode.set(id, 'untouched')
+    return byNode
+  }, [coverageSummary])
+
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
 
@@ -1065,7 +1127,12 @@ export default function App() {
           tracePaths={tracePaths}
           traceFocus={traceFocus}
           markedOnly={markedOnly}
-          bottomInset={profiling ? PROFILE_BAR_PX : 0}
+          coverage={mode === 'coverage' ? coverageStanding : undefined}
+          coverageVariant={coverageVariant}
+          gapsOnly={gapsOnly}
+          bottomInset={
+            profiling || mode === 'coverage' ? PROFILE_BAR_PX : 0
+          }
           highContrast={highContrast}
         />
 
@@ -1210,6 +1277,25 @@ export default function App() {
           onSelectNode={selectNode}
           onSelectConnection={selectConnection}
         />
+        )}
+
+        {mode === 'coverage' && (
+          <CoverageBar
+            personas={coveragePersonas}
+            personaId={coveragePersonaId}
+            onPersonaChange={(id) => {
+              setCoveragePersonaId(id)
+              if (!id) setGapsOnly(false)
+            }}
+            variant={coverageVariant}
+            onVariantChange={setCoverageVariant}
+            gapsOnly={gapsOnly}
+            onGapsOnlyChange={setGapsOnly}
+            summary={coverageSummary}
+            applicability={
+              coveragePersona ? coverageSummary.applicability : null
+            }
+          />
         )}
 
         {/* Last, so it sits above every panel it might be describing. */}

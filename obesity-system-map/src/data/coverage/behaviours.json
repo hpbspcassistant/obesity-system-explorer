@@ -1,0 +1,11 @@
+[
+  { "id": "physical-activity",  "label": "Physical activity",        "nodes": [71, 49, 79, 68, 40, 83] },
+  { "id": "sedentary",          "label": "Sedentary lifestyle",      "nodes": [50, 1, 80, 84] },
+  { "id": "diet-quality",       "label": "Poor diet quality",        "nodes": [81, 86, 76, 85, 73] },
+  { "id": "sugar-ssb",          "label": "High sugar / SSB intake",  "nodes": [81, 75, 73] },
+  { "id": "alcohol",            "label": "Harmful alcohol use",      "nodes": [67] },
+  { "id": "health-literacy",    "label": "Low health/food literacy", "nodes": [11, 46, 32] },
+  { "id": "mental-wellbeing",   "label": "Stress / poor wellbeing",  "nodes": [22, 32, 34] },
+  { "id": "social-isolation",   "label": "Social isolation",         "nodes": [19, 36, 27] },
+  { "id": "time-scarcity",      "label": "Time scarcity",            "nodes": [16, 51, 55] }
+]

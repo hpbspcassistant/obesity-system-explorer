@@ -322,6 +322,12 @@ export interface MapViewProps {
   highContrast?: boolean
   /** Drops everything unmarked out of the picture; Profile only. */
   markedOnly?: boolean
+  /** PROTOTYPE. node id -> how it stands against HPB programme reach. */
+  coverage?: ReadonlyMap<number, string>
+  /** Which of the three candidate encodings to draw. */
+  coverageVariant?: 'a' | 'b' | 'c'
+  /** Fades everything that is not a gap for the current persona. */
+  gapsOnly?: boolean
   /** Whether to draw the navigator thumbnail. */
   showMiniMap?: boolean
   /**
@@ -380,6 +386,9 @@ export function MapView({
   onAnchorChange,
   highContrast = false,
   markedOnly = false,
+  coverage,
+  coverageVariant = 'a',
+  gapsOnly = false,
   showMiniMap = true,
   bottomInset = 0,
   ref,
@@ -796,6 +805,19 @@ export function MapView({
     }
   }, [markedNodeIds, candidateNodeIds])
 
+  /** PROTOTYPE. One class per standing, so the CSS variants can differ freely. */
+  useEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+    for (const group of svg.querySelectorAll<SVGGElement>('g[data-node-id]')) {
+      const standing = coverage?.get(Number(group.dataset.nodeId))
+      group.classList.toggle('is-covered', standing === 'covered')
+      group.classList.toggle('is-gap', standing === 'gap')
+      group.classList.toggle('is-beyond', standing === 'beyond')
+      group.classList.toggle('is-untouched', standing === 'untouched')
+    }
+  }, [coverage])
+
   /**
    * The 108 node boxes are bare <g> elements straight out of the artwork, which
    * left the map reachable by mouse only. In Profile the map *is* the primary
@@ -1152,6 +1174,8 @@ export function MapView({
                 : '',
               mode === 'profile' ? 'has-profile' : '',
               mode === 'profile' && markedOnly ? 'marked-only' : '',
+              mode === 'coverage' ? `has-coverage variant-${coverageVariant}` : '',
+              mode === 'coverage' && gapsOnly ? 'gaps-only' : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',
               traceFocus?.nodeIds.length ? 'has-trace-focus' : '',

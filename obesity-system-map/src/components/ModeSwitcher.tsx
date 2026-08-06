@@ -34,6 +34,12 @@ function ModeIcon({ mode }: { mode: MapMode }) {
         </>
       )}
       {mode === 'profile' && <path d="M2.5 8.5 6 12l7.5-8" {...stroke} />}
+      {mode === 'coverage' && (
+        <>
+          <circle cx="6" cy="6" r="3.6" {...stroke} />
+          <circle cx="10.5" cy="10" r="3.2" {...stroke} strokeDasharray="1.6 1.4" />
+        </>
+      )}
     </svg>
   )
 }

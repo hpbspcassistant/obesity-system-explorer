@@ -484,6 +484,123 @@
   pointer-events: none;
 }
 
+/* ---------------------------------------------------------------- coverage */
+
+/*
+ * PROTOTYPE. Three encodings of the same two facts, so one can be chosen by
+ * looking rather than by arguing.
+ *
+ * The two facts are independent, so each gets its own channel and the four
+ * states compose instead of being four colours to memorise:
+ *
+ *   is-covered    in the persona's map, and reached by a programme
+ *   is-gap        in the persona's map, reached by nothing that applies
+ *   is-beyond     reached, but outside the persona's map
+ *   is-untouched  neither  (with no persona, everything is beyond or untouched)
+ *
+ * With the placeholder inventory only 28 of 108 nodes are reached, so reach is
+ * the minority state and the variants differ mainly in whether it gets the
+ * strong channel.
+ */
+
+.map-svg.has-coverage {
+  --coverage-grey-fill: #f4f3f1;
+  --coverage-grey-line: #cfcbc4;
+  --coverage-ring: #1f2937;
+  --coverage-accent: #bfdbfe;
+}
+
+/* Everything starts quiet, exactly as Profile does. */
+.map-svg.has-coverage g[data-node-id] > path {
+  fill: var(--coverage-grey-fill);
+  stroke: var(--coverage-grey-line);
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Every coverage fill is light by construction, so the ink is dark everywhere.
+   Stated once rather than per state: the two hub labels are white in the
+   artwork, and inheriting that here would repeat a bug already fixed twice. */
+.map-svg.has-coverage .node-label {
+  fill: #231f20;
+}
+
+.map-svg.has-coverage [data-layer='edges'] {
+  opacity: 0.22;
+}
+
+/* Behaviours own nodes, not connections, so nothing here recolours an edge —
+   doing so would assert a claim the data does not make. */
+
+/* -- A: fill = the persona's map, ring = programme reach ------------------- */
+
+.map-svg.has-coverage.variant-a g[data-node-id].is-covered > path,
+.map-svg.has-coverage.variant-a g[data-node-id].is-gap > path {
+  fill: var(--node-colour-hc, var(--node-colour, #eceadc));
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path {
+  fill: #ffffff;
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-a g[data-node-id].is-covered > path:last-of-type,
+.map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path:last-of-type {
+  stroke: var(--coverage-ring);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* -- B: fill = programme reach in cluster colour, ring = the persona's map -- */
+
+.map-svg.has-coverage.variant-b g[data-node-id].is-covered > path,
+.map-svg.has-coverage.variant-b g[data-node-id].is-beyond > path {
+  fill: var(--node-colour-hc, var(--node-colour, #eceadc));
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-b g[data-node-id].is-gap > path {
+  fill: #ffffff;
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-b g[data-node-id].is-covered > path:last-of-type,
+.map-svg.has-coverage.variant-b g[data-node-id].is-gap > path:last-of-type {
+  stroke: var(--coverage-ring);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* -- C: fill = programme reach in one accent, ring = the persona's map ------
+   Drops the cluster hue deliberately, to see whether "is it reached" reads
+   faster as a plain binary than as ten colours. */
+
+.map-svg.has-coverage.variant-c g[data-node-id].is-covered > path,
+.map-svg.has-coverage.variant-c g[data-node-id].is-beyond > path {
+  fill: var(--coverage-accent);
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-c g[data-node-id].is-gap > path {
+  fill: #ffffff;
+  stroke: none;
+}
+
+.map-svg.has-coverage.variant-c g[data-node-id].is-covered > path:last-of-type,
+.map-svg.has-coverage.variant-c g[data-node-id].is-gap > path:last-of-type {
+  stroke: var(--coverage-ring);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Gaps are the actionable state and the rarest, so they can be asked for on
+   their own — the same idea as Profile's "Marked only". */
+.map-svg.has-coverage.gaps-only g[data-node-id]:not(.is-gap) {
+  opacity: 0.12;
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------- trace */
 
 /* Three levels, no more. The map underneath goes quiet; every path within the

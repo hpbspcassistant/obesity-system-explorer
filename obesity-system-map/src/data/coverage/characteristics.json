@@ -1,0 +1,7 @@
+{
+  "age_band": ["child", "teen", "young-adult", "adult", "young-senior", "senior"],
+  "life_stage": ["student", "working", "parent", "retired"],
+  "ses_band": ["low", "mid", "high"],
+  "parent": [true, false],
+  "smoker": [true, false]
+}

@@ -13,6 +13,8 @@ export const MODES: readonly ModeMeta[] = [
   { id: 'explore', label: 'Explore' },
   { id: 'trace', label: 'Trace' },
   { id: 'profile', label: 'Profile' },
+  // Prototype: HPB programme reach and whitespace. Placeholder inventory.
+  { id: 'coverage', label: 'Coverage' },
 ]
 
 export const DEFAULT_MODE: MapMode = 'explore'
