@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
 import { CoverageBar, type CoverageVariant } from './components/CoverageBar'
+import { CoverageKey } from './components/CoverageKey'
 import { GuideCard, GuideContents } from './components/GuideCard'
 import { MapHeader } from './components/MapHeader'
 import {
@@ -88,6 +89,8 @@ const TRACE_PANEL_PX = 368
 const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
+/** The navigator plus its gap, so the coverage key can stack above it. */
+const MINIMAP_STACK_PX = 145
 /**
  * Output pixels per map unit for an exported PNG. At 1 the image is 3370px wide,
  * which is already beyond what A4 needs at 300dpi; 2 quadruples the file for a
@@ -1277,6 +1280,14 @@ export default function App() {
           onSelectNode={selectNode}
           onSelectConnection={selectConnection}
         />
+        )}
+
+        {mode === 'coverage' && (
+          <CoverageKey
+            variant={coverageVariant}
+            personaName={coveragePersona?.name ?? null}
+            bottomInset={PROFILE_BAR_PX + MINIMAP_STACK_PX}
+          />
         )}
 
         {mode === 'coverage' && (

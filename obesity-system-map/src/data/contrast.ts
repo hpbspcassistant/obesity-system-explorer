@@ -190,7 +190,7 @@ export function contrastFillCss(): string {
   const repaint = CONTRAST_TYPES.flatMap((type) =>
     type.fills.map(
       (fill) =>
-        `.map-svg.high-contrast:not(.has-profile) ` +
+        `.map-svg.high-contrast:not(.has-profile):not(.has-coverage) ` +
         `g[data-node-id][data-type="${type.name}"] ` +
         `path[fill="${fill.from}"]{fill:${fill.to}}`,
     ),
@@ -212,7 +212,7 @@ export function contrastFillCss(): string {
   // type colour, so a hub never shows there.
   const hubs = CONTRAST_HUBS.map(
     (hub) =>
-      `.map-svg.high-contrast:not(.has-profile) ` +
+      `.map-svg.high-contrast:not(.has-profile):not(.has-coverage) ` +
       `g[data-node-id] path[fill="${hub.from}"]{fill:${hub.to}}`,
   )
 
@@ -221,10 +221,17 @@ export function contrastFillCss(): string {
    * rule above. `[data-type]` is carried only for the specificity it adds: the
    * type rule names a value and so scores one attribute higher, and a key
    * variable losing that tie is the whole bug this fixes.
+   *
+   * Not in Coverage. Two of these colours are dark, and Coverage forces every
+   * label to the ink on the stated grounds that all of its fills are light —
+   * letting a #6B21A8 box through there would put dark text on dark purple, the
+   * same failure already fixed twice elsewhere. Coverage is about reach, not
+   * about which variables are hubs, so they fall back to the type swatch.
    */
   const keys = KEY_VARIABLES.map(
     (key) =>
-      `.map-svg.high-contrast g[data-node-id="${key.id}"][data-type]` +
+      `.map-svg.high-contrast:not(.has-coverage) ` +
+      `g[data-node-id="${key.id}"][data-type]` +
       `{--node-colour-hc:${key.fill};--node-ring-hc:${ringFrom(key.fill)}}`,
   )
 
