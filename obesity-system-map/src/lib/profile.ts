@@ -6,6 +6,7 @@ import {
   nodesById,
   outgoingByNode,
 } from '../data/systemMap'
+import type { PersonaCharacteristics } from './reach'
 import type { Connection } from '../types'
 
 /**
@@ -29,6 +30,15 @@ export interface Profile {
   name: string
   /** Freeform persona notes. Descriptive only — nothing reads or acts on them. */
   details: string
+  /**
+   * What Coverage's gates test against. Separate from `nodeIds` because the two
+   * answer different questions: these decide which programmes apply to this
+   * person, the marks decide what matters to them. Neither affects the other.
+   *
+   * Absent on profiles saved before Coverage existed, and on any hand-written
+   * file, so every reader must tolerate an empty object.
+   */
+  characteristics: PersonaCharacteristics
   nodeIds: ReadonlySet<number>
   edgeIds: ReadonlySet<string>
 }
@@ -44,9 +54,24 @@ export function createProfile(name: string, details = ''): Profile {
     id: `p${Date.now().toString(36)}-${idCounter}`,
     name,
     details,
+    characteristics: {},
     nodeIds: new Set(),
     edgeIds: new Set(),
   }
+}
+
+/** Sets one characteristic. `null` means "does not apply to this person". */
+export function setCharacteristic(
+  profile: Profile,
+  key: string,
+  value: PersonaCharacteristics[string] | undefined,
+): Profile {
+  const characteristics = { ...profile.characteristics }
+  // Deleting rather than storing undefined: absent is a meaningful state — not
+  // yet decided — and it has to survive JSON, which drops undefined anyway.
+  if (value === undefined) delete characteristics[key]
+  else characteristics[key] = value
+  return { ...profile, characteristics }
 }
 
 /** Binary toggles. Returns a new profile; callers treat profiles as immutable. */
@@ -177,6 +202,7 @@ interface StoredProfile {
   id: string
   name: string
   details: string
+  characteristics: PersonaCharacteristics
   nodeIds: number[]
   edgeIds: string[]
 }
@@ -186,6 +212,7 @@ function toStored(profile: Profile): StoredProfile {
     id: profile.id,
     name: profile.name,
     details: profile.details,
+    characteristics: profile.characteristics,
     nodeIds: [...profile.nodeIds],
     edgeIds: [...profile.edgeIds],
   }
@@ -264,6 +291,14 @@ export function parseProfile(input: unknown): ParseResult | null {
           : `p${Date.now().toString(36)}-${idCounter}`,
       name,
       details: typeof raw.details === 'string' ? raw.details : '',
+      // Anything that is not a plain object is discarded rather than trusted:
+      // this comes from a hand-edited file as often as from an export.
+      characteristics:
+        typeof raw.characteristics === 'object' &&
+        raw.characteristics !== null &&
+        !Array.isArray(raw.characteristics)
+          ? (raw.characteristics as PersonaCharacteristics)
+          : {},
       nodeIds,
       edgeIds,
     },

@@ -1,30 +1,105 @@
 [
-  { "id": "steps-challenge", "name": "National Steps Challenge", "source": "hpb-web",
-    "gate": "everyone", "addresses": ["physical-activity", "sedentary", "health-literacy"] },
-
-  { "id": "nutri-grade", "name": "Nutri-Grade", "source": "cos-speech",
-    "gate": "everyone", "addresses": ["sugar-ssb"] },
-
-  { "id": "healthier-dining", "name": "Healthier Dining Programme", "source": "hpb-web",
-    "gate": "everyone", "addresses": ["diet-quality", "sugar-ssb"] },
-
-  { "id": "age-strong", "name": "Age Strong", "source": "cos-speech",
-    "gate": { "age_band": ["young-senior", "senior"] },
-    "addresses": ["physical-activity", "social-isolation"] },
-
-  { "id": "iquit", "name": "iQuit", "source": "hpb-web",
-    "gate": { "smoker": true },
-    "addresses": ["mental-wellbeing"], "extraNodes": [] },
-
-  { "id": "parent-club", "name": "Parent Club", "source": "hpb-web",
-    "gate": { "parent": true },
-    "addresses": ["diet-quality", "physical-activity", "health-literacy"] },
-
-  { "id": "ywm", "name": "Youth Weight Management", "source": "hpb-web",
-    "gate": { "age_band": ["child", "teen"] },
-    "addresses": ["diet-quality", "physical-activity", "sedentary"] },
-
-  { "id": "workplace-health", "name": "Workplace Health Programme", "source": "news",
-    "gate": { "life_stage": ["working"] },
-    "addresses": ["time-scarcity", "mental-wellbeing"], "extraNodes": [92] }
+  {
+    "id": "steps-challenge",
+    "name": "National Steps Challenge",
+    "source": "hpb-web",
+    "gate": "everyone",
+    "addresses": [
+      "physical-activity",
+      "sedentary",
+      "health-literacy"
+    ]
+  },
+  {
+    "id": "nutri-grade",
+    "name": "Nutri-Grade",
+    "source": "cos-speech",
+    "gate": "everyone",
+    "addresses": [
+      "sugar-ssb"
+    ]
+  },
+  {
+    "id": "healthier-dining",
+    "name": "Healthier Dining Programme",
+    "source": "hpb-web",
+    "gate": "everyone",
+    "addresses": [
+      "diet-quality",
+      "sugar-ssb"
+    ]
+  },
+  {
+    "id": "age-strong",
+    "name": "Age Strong",
+    "source": "cos-speech",
+    "gate": {
+      "age_band": [
+        "50-59",
+        "60-plus"
+      ]
+    },
+    "addresses": [
+      "physical-activity",
+      "social-isolation"
+    ]
+  },
+  {
+    "id": "iquit",
+    "name": "iQuit",
+    "source": "hpb-web",
+    "gate": {
+      "smoker_or_vaper": true
+    },
+    "addresses": [
+      "mental-wellbeing"
+    ],
+    "extraNodes": []
+  },
+  {
+    "id": "parent-club",
+    "name": "Parent Club",
+    "source": "hpb-web",
+    "gate": {
+      "is_parent": true
+    },
+    "addresses": [
+      "diet-quality",
+      "physical-activity",
+      "health-literacy"
+    ]
+  },
+  {
+    "id": "ywm",
+    "name": "Youth Weight Management",
+    "source": "hpb-web",
+    "gate": {
+      "age_band": [
+        "under-7",
+        "7-14"
+      ]
+    },
+    "addresses": [
+      "diet-quality",
+      "physical-activity",
+      "sedentary"
+    ]
+  },
+  {
+    "id": "workplace-health",
+    "name": "Workplace Health Programme",
+    "source": "news",
+    "gate": {
+      "life_stage": [
+        "working-adult"
+      ]
+    },
+    "addresses": [
+      "time-scarcity",
+      "mental-wellbeing"
+    ],
+    "extraNodes": [
+      92
+    ]
+  }
 ]

@@ -29,10 +29,14 @@ import { downloadBlob } from './lib/exportImage'
 import {
   allNodeIds,
   behaviourIndex,
-  personas as coveragePersonas,
   programmes as coverageProgrammes,
 } from './data/coverage'
-import { reachOf, summariseForPersona, type NodeStanding } from './lib/reach'
+import {
+  reachOf,
+  summariseForPersona,
+  type NodeStanding,
+  type PersonaCharacteristics,
+} from './lib/reach'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -143,7 +147,11 @@ export default function App() {
   const [importNotice, setImportNotice] = useState<string | null>(null)
   // PROTOTYPE. Which placeholder persona the coverage overlay is drawn for, and
   // which candidate encoding is on. Null persona is the whitespace view.
-  const [coveragePersonaId, setCoveragePersonaId] = useState<string | null>(null)
+  // Coverage does not keep its own idea of who we are talking about: it reads
+  // the active profile, the same one Profile mode edits. All this holds is
+  // whether the persona is being applied at all — the whitespace view asks what
+  // HPB touches in general, which is nobody's question in particular.
+  const [coverageWhitespace, setCoverageWhitespace] = useState(true)
   const [coverageVariant, setCoverageVariant] = useState<CoverageVariant>('a')
   const [gapsOnly, setGapsOnly] = useState(false)
   /**
@@ -246,16 +254,19 @@ export default function App() {
   )
 
   const renameActive = useCallback(
-    (name: string, details: string) =>
-      editActive((p) => ({ ...p, name, details })),
+    (name: string, details: string, characteristics: PersonaCharacteristics) =>
+      editActive((p) => ({ ...p, name, details, characteristics })),
     [editActive],
   )
 
-  const addProfile = useCallback((name: string, details: string) => {
-    const profile = createProfile(name, details)
-    setProfiles((current) => [...current, profile])
-    setActiveProfileId(profile.id)
-  }, [])
+  const addProfile = useCallback(
+    (name: string, details: string, characteristics: PersonaCharacteristics) => {
+      const profile = { ...createProfile(name, details), characteristics }
+      setProfiles((current) => [...current, profile])
+      setActiveProfileId(profile.id)
+    },
+    [],
+  )
 
   /**
    * Takes the whole parse result, not just the profile, so what the import did
@@ -306,9 +317,14 @@ export default function App() {
 
   /** One form serves both "name a new persona" and "rename this one". */
   const savePersona = useCallback(
-    (name: string, details: string) => {
-      if (personaForm === 'edit' && activeProfile) renameActive(name, details)
-      else addProfile(name, details)
+    (
+      name: string,
+      details: string,
+      characteristics: PersonaCharacteristics,
+    ) => {
+      if (personaForm === 'edit' && activeProfile)
+        renameActive(name, details, characteristics)
+      else addProfile(name, details, characteristics)
       setPersonaForm(null)
     },
     [personaForm, activeProfile, renameActive, addProfile],
@@ -742,8 +758,21 @@ export default function App() {
    * else in `untouched`, which is exactly the whitespace view. One code path,
    * no special case.
    */
-  const coveragePersona =
-    coveragePersonas.find((p) => p.id === coveragePersonaId) ?? null
+  /**
+   * The active profile seen as a persona. Its marks answer what matters to this
+   * person; its characteristics decide which programmes reach them. Two inputs
+   * to two different questions, which is why neither is derived from the other.
+   */
+  const coveragePersona = useMemo(
+    () =>
+      coverageWhitespace || !activeProfile
+        ? null
+        : {
+            characteristics: activeProfile.characteristics,
+            applicabilityNodes: [...activeProfile.nodeIds],
+          },
+    [coverageWhitespace, activeProfile],
+  )
 
   const coverageSummary = useMemo(() => {
     if (coveragePersona) {
@@ -757,8 +786,8 @@ export default function App() {
     // Whitespace ignores gates outright. Running it through an empty persona
     // instead looked equivalent and is not: with no characteristics every gated
     // programme comes back undetermined rather than applying, so the view
-    // counted only the three ungated programmes and reported 19 reached where
-    // the answer is 28.
+    // counted only the ungated programmes and reported 19 reached where the
+    // answer is 28.
     const reached = reachOf(coverageProgrammes, behaviourIndex)
     return {
       reached,
@@ -1285,18 +1314,25 @@ export default function App() {
         {mode === 'coverage' && (
           <CoverageKey
             variant={coverageVariant}
-            personaName={coveragePersona?.name ?? null}
+            personaName={coveragePersona ? (activeProfile?.name ?? null) : null}
             bottomInset={PROFILE_BAR_PX + MINIMAP_STACK_PX}
           />
         )}
 
         {mode === 'coverage' && (
           <CoverageBar
-            personas={coveragePersonas}
-            personaId={coveragePersonaId}
+            profiles={profiles}
+            personaId={coverageWhitespace ? null : activeProfileId}
             onPersonaChange={(id) => {
-              setCoveragePersonaId(id)
-              if (!id) setGapsOnly(false)
+              // Selecting a persona here selects it everywhere: one answer to
+              // "who are we talking about" for the whole app.
+              if (id) {
+                setActiveProfileId(id)
+                setCoverageWhitespace(false)
+              } else {
+                setCoverageWhitespace(true)
+                setGapsOnly(false)
+              }
             }}
             variant={coverageVariant}
             onVariantChange={setCoverageVariant}

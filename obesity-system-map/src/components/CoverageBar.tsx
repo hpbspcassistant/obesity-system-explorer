@@ -1,4 +1,5 @@
-import type { Applicability, CoveragePersona, ReachSummary } from '../lib/reach'
+import type { Applicability, ReachSummary } from '../lib/reach'
+import type { Profile } from '../lib/profile'
 
 /**
  * PROTOTYPE chrome for Coverage mode.
@@ -29,7 +30,8 @@ const VARIANTS: { id: CoverageVariant; label: string; hint: string }[] = [
 ]
 
 export interface CoverageBarProps {
-  personas: readonly CoveragePersona[]
+  /** The user's own profiles: Coverage has no persona list of its own. */
+  profiles: readonly Profile[]
   /** null means the persona-independent whitespace view. */
   personaId: string | null
   onPersonaChange: (id: string | null) => void
@@ -51,7 +53,7 @@ function Count({ n, label }: { n: number; label: string }) {
 }
 
 export function CoverageBar({
-  personas,
+  profiles,
   personaId,
   onPersonaChange,
   variant,
@@ -75,11 +77,16 @@ export function CoverageBar({
         className="shrink-0 rounded-md border border-gray-300 px-2 py-1 text-[12px] text-gray-800"
       >
         <option value="">Whitespace — no persona</option>
-        {personas.map((p) => (
+        {profiles.map((p) => (
           <option key={p.id} value={p.id}>
             {p.name}
           </option>
         ))}
+        {profiles.length === 0 && (
+          <option value="" disabled>
+            No profiles yet — make one in Profile
+          </option>
+        )}
       </select>
 
       <div

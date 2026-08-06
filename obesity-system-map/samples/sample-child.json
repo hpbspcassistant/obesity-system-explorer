@@ -1,0 +1,27 @@
+{
+  "id": "sample-child",
+  "name": "Sample \u2014 School child",
+  "details": "Shows a characteristic marked as not applicable",
+  "characteristics": {
+    "life_stage": "school-child",
+    "age_band": "7-14",
+    "sex": "male",
+    "ses": "middle",
+    "is_parent": false,
+    "smoker_or_vaper": null,
+    "conditions": [
+      "myopic"
+    ]
+  },
+  "nodeIds": [
+    71,
+    50,
+    1,
+    80,
+    81,
+    85,
+    11,
+    46
+  ],
+  "edgeIds": []
+}

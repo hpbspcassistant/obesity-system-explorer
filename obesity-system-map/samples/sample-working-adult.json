@@ -1,0 +1,29 @@
+{
+  "id": "sample-working-adult",
+  "name": "Sample \u2014 Working adult",
+  "details": "Placeholder persona for trying Coverage",
+  "characteristics": {
+    "life_stage": "working-adult",
+    "age_band": "25-49",
+    "sex": "male",
+    "ses": "middle",
+    "is_parent": false,
+    "smoker_or_vaper": false,
+    "conditions": []
+  },
+  "nodeIds": [
+    81,
+    75,
+    73,
+    85,
+    68,
+    50,
+    16,
+    51,
+    55,
+    46,
+    11,
+    82
+  ],
+  "edgeIds": []
+}

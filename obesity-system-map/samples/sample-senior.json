@@ -1,0 +1,32 @@
+{
+  "id": "sample-senior",
+  "name": "Sample \u2014 Senior",
+  "details": "Placeholder persona for trying Coverage",
+  "characteristics": {
+    "life_stage": "senior",
+    "age_band": "60-plus",
+    "sex": "female",
+    "ses": "middle",
+    "is_parent": true,
+    "smoker_or_vaper": false,
+    "conditions": [
+      "frailty-or-falls-risk",
+      "not-yet-screened"
+    ]
+  },
+  "nodeIds": [
+    71,
+    49,
+    68,
+    83,
+    81,
+    86,
+    19,
+    36,
+    27,
+    46,
+    82,
+    95
+  ],
+  "edgeIds": []
+}

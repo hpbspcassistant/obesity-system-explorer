@@ -1,0 +1,31 @@
+{
+  "id": "sample-parent",
+  "name": "Sample \u2014 Parent, lower income",
+  "details": "Placeholder persona for trying Coverage",
+  "characteristics": {
+    "life_stage": "working-adult",
+    "age_band": "25-49",
+    "sex": "female",
+    "ses": "lower-income",
+    "is_parent": true,
+    "smoker_or_vaper": true,
+    "conditions": [
+      "overweight-high-risk"
+    ]
+  },
+  "nodeIds": [
+    81,
+    86,
+    76,
+    85,
+    73,
+    71,
+    50,
+    16,
+    22,
+    11,
+    82,
+    95
+  ],
+  "edgeIds": []
+}

@@ -1,7 +1,44 @@
 {
-  "age_band": ["child", "teen", "young-adult", "adult", "young-senior", "senior"],
-  "life_stage": ["student", "working", "parent", "retired"],
-  "ses_band": ["low", "mid", "high"],
-  "parent": [true, false],
-  "smoker": [true, false]
+  "_note": "Persona characteristics. A gate tests these fields; a persona passes a gate if it matches every field the gate names. Core fields are what all 12 personas carry. Conditions are optional flags most personas won't have.",
+  "core": {
+    "life_stage": [
+      "young-child",
+      "school-child",
+      "youth",
+      "working-adult",
+      "senior"
+    ],
+    "age_band": [
+      "under-7",
+      "7-14",
+      "15-24",
+      "25-49",
+      "50-59",
+      "60-plus"
+    ],
+    "sex": [
+      "female",
+      "male"
+    ],
+    "ses": [
+      "lower-income",
+      "middle",
+      "higher"
+    ],
+    "is_parent": [
+      true,
+      false
+    ],
+    "smoker_or_vaper": [
+      true,
+      false
+    ]
+  },
+  "conditions": [
+    "frailty-or-falls-risk",
+    "overweight-high-risk",
+    "not-yet-screened",
+    "myopic",
+    "haj-pilgrim"
+  ]
 }

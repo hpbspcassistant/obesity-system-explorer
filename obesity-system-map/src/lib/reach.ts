@@ -20,18 +20,35 @@
  * this module knows a single behaviour id, programme name or node number.
  */
 
-export type CharacteristicValue = string | boolean
+/**
+ * What a persona holds for one characteristic.
+ *
+ * Three states, not two, and the third is the reason this is not just a string:
+ *
+ *   a value      the persona is this
+ *   null         the characteristic does not apply to this person
+ *   absent       nobody has decided yet
+ *
+ * `conditions` is the one multi-valued field — a persona carries the flags it
+ * has — so its value is an array and a gate matches on any overlap.
+ */
+export type CharacteristicValue = string | boolean | null | readonly string[]
+
+export type PersonaCharacteristics = Readonly<
+  Record<string, CharacteristicValue>
+>
 
 /**
  * Either "everyone", or characteristic -> the value(s) that satisfy it.
  *
- * A persona passes when every key in the gate is satisfied, so the keys are
- * an AND and the values within a key are an OR. Enough for the inventory as it
- * stands; ranges and nesting can be added when a real programme needs them.
+ * A persona passes when every key is satisfied, so keys are an AND and the
+ * values within a key are an OR. Gates never name null: "does not apply" is
+ * something a persona says about itself, not something a programme asks for.
  */
+export type GateValue = string | boolean
 export type Gate =
   | 'everyone'
-  | Readonly<Record<string, CharacteristicValue | readonly CharacteristicValue[]>>
+  | Readonly<Record<string, GateValue | readonly GateValue[]>>
 
 export interface Behaviour {
   id: string
@@ -57,7 +74,7 @@ export interface Programme {
 export interface CoveragePersona {
   id: string
   name: string
-  characteristics: Readonly<Record<string, CharacteristicValue>>
+  characteristics: PersonaCharacteristics
   applicabilityNodes: readonly number[]
 }
 
@@ -73,25 +90,47 @@ export interface CoveragePersona {
 export type GateVerdict = 'applies' | 'excluded' | 'undetermined'
 
 const asList = (
-  value: CharacteristicValue | readonly CharacteristicValue[],
-): readonly CharacteristicValue[] => (Array.isArray(value) ? value : [value as CharacteristicValue])
+  value: GateValue | readonly GateValue[],
+): readonly GateValue[] => (Array.isArray(value) ? value : [value as GateValue])
+
+/**
+ * Whether one characteristic satisfies one clause of a gate.
+ *
+ * `null` — the characteristic does not apply to this person — excludes rather
+ * than passes. It is tempting to read "not applicable" as "do not judge me on
+ * this", but that makes a young child whose smoker status is marked N/A match a
+ * smoking-cessation programme, which is the opposite of what marking it N/A
+ * meant. A deliberate N/A is a definite negative for that trait; only an
+ * undecided one is a question.
+ */
+function clauseVerdict(
+  held: CharacteristicValue | undefined,
+  allowed: GateValue | readonly GateValue[],
+): GateVerdict {
+  if (held === undefined) return 'undetermined'
+  if (held === null) return 'excluded'
+  const wanted = asList(allowed)
+  // The multi-valued field: the persona carries a set, so any overlap matches.
+  if (Array.isArray(held)) {
+    return held.some((flag) => wanted.includes(flag)) ? 'applies' : 'excluded'
+  }
+  return wanted.includes(held as GateValue) ? 'applies' : 'excluded'
+}
 
 export function testGate(
   gate: Gate,
-  characteristics: Readonly<Record<string, CharacteristicValue>>,
+  characteristics: PersonaCharacteristics,
 ): GateVerdict {
   if (gate === 'everyone') return 'applies'
 
   let undetermined = false
   for (const [characteristic, allowed] of Object.entries(gate)) {
-    const held = characteristics[characteristic]
-    if (held === undefined) {
-      // Keep testing: a later key may rule the programme out outright, which is
-      // a firmer answer than "cannot say" and should win.
-      undetermined = true
-      continue
-    }
-    if (!asList(allowed).includes(held)) return 'excluded'
+    const verdict = clauseVerdict(characteristics[characteristic], allowed)
+    // Keep testing rather than returning on the first unknown: a later clause
+    // may rule the programme out outright, which is a firmer answer than
+    // "cannot say" and should win.
+    if (verdict === 'excluded') return 'excluded'
+    if (verdict === 'undetermined') undetermined = true
   }
   return undetermined ? 'undetermined' : 'applies'
 }

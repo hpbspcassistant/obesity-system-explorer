@@ -8,22 +8,31 @@
  */
 
 import { behavioursById } from '../lib/reach'
-import type { Behaviour, CoveragePersona, Programme } from '../lib/reach'
+import type { Behaviour, Programme } from '../lib/reach'
 import { nodes } from './systemMap'
 
 import behavioursRaw from './coverage/behaviours.json'
 import characteristicsRaw from './coverage/characteristics.json'
-import personasRaw from './coverage/personas.json'
 import programmesRaw from './coverage/programmes.json'
 
 export const behaviours = behavioursRaw as readonly Behaviour[]
 export const programmes = programmesRaw as unknown as readonly Programme[]
-export const personas = personasRaw as unknown as readonly CoveragePersona[]
 
-/** characteristic -> the values a gate may test for. */
-export const characteristics = characteristicsRaw as Readonly<
+/**
+ * The controlled vocabulary, split as the source file splits it.
+ *
+ * `core` is single-valued per persona — one life stage, one age band — and every
+ * persona is expected to carry all of them. `conditions` is a set of optional
+ * flags most personas will not have, so it is the one multi-valued field.
+ */
+export const coreCharacteristics = characteristicsRaw.core as Readonly<
   Record<string, readonly (string | boolean)[]>
 >
+
+export const conditionValues: readonly string[] = characteristicsRaw.conditions
+
+/** The key the multi-valued flags live under, on gates and on personas alike. */
+export const CONDITIONS_KEY = 'conditions'
 
 export const behaviourIndex = behavioursById([...behaviours])
 

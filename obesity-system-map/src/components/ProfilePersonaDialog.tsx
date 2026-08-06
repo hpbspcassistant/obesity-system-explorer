@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { PersonaCharacteristicsForm } from './PersonaCharacteristics'
+import type { PersonaCharacteristics } from '../lib/reach'
 import { parseProfile } from '../lib/profile'
 import type { ParseResult, Profile } from '../lib/profile'
 
@@ -14,7 +16,11 @@ import type { ParseResult, Profile } from '../lib/profile'
 export interface ProfilePersonaDialogProps {
   /** Null when creating; the profile being renamed otherwise. */
   profile: Profile | null
-  onSave: (name: string, details: string) => void
+  onSave: (
+    name: string,
+    details: string,
+    characteristics: PersonaCharacteristics,
+  ) => void
   onImport: (result: ParseResult) => void
   /** Absent while there is no profile to fall back to, so there is no escape. */
   onCancel?: () => void
@@ -28,6 +34,9 @@ export function ProfilePersonaDialog({
 }: ProfilePersonaDialogProps) {
   const [name, setName] = useState(profile?.name ?? '')
   const [details, setDetails] = useState(profile?.details ?? '')
+  const [characteristics, setCharacteristics] = useState<PersonaCharacteristics>(
+    profile?.characteristics ?? {},
+  )
   const nameRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -42,7 +51,7 @@ export function ProfilePersonaDialog({
         role="dialog"
         aria-modal="true"
         aria-label={editing ? 'Rename persona' : 'New profile'}
-        className="w-[22rem] max-w-[90vw] rounded-xl border border-gray-200 bg-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]"
+        className="max-h-[88vh] w-[26rem] max-w-[92vw] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]"
       >
         <h2 className="text-[14px] font-semibold text-gray-900">
           {editing ? 'Edit persona' : 'New profile'}
@@ -59,7 +68,8 @@ export function ProfilePersonaDialog({
           className="mt-3"
           onSubmit={(event) => {
             event.preventDefault()
-            if (name.trim()) onSave(name.trim(), details.trim())
+            if (name.trim())
+              onSave(name.trim(), details.trim(), characteristics)
           }}
         >
           <label
@@ -90,6 +100,18 @@ export function ProfilePersonaDialog({
             placeholder="50, taxi driver, 12-hour shifts"
             className="mb-3 w-full resize-none rounded border border-gray-300 px-2 py-1.5 text-sm focus:border-gray-800 focus:outline-none"
           />
+
+          {/* Optional, and the dialog says so: a profile is usable for marking
+              with none of these set. They only decide which programmes Coverage
+              considers, and leaving one unset is reported there rather than
+              guessed at here. */}
+          <div className="mb-3 rounded border border-gray-200 bg-gray-50 p-2">
+            <PersonaCharacteristicsForm
+              value={characteristics}
+              onChange={setCharacteristics}
+            />
+          </div>
+
           <div className="flex gap-2">
             <button
               type="submit"
