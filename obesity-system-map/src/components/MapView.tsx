@@ -388,7 +388,7 @@ export interface MapViewProps {
   /** PROTOTYPE. node id -> how it stands against HPB programme reach. */
   coverage?: ReadonlyMap<number, string>
   /** Which of the three candidate encodings to draw. */
-  coverageVariant?: 'a' | 'b' | 'c'
+  coverageVariant?: 'a' | 'b' | 'c' | 'd'
   /** Fades everything that is not a gap for the current persona. */
   gapsOnly?: boolean
   /** Whether to draw the navigator thumbnail. */
@@ -1296,16 +1296,19 @@ export function MapView({
             <NodeLayer />
             {/* Above the boxes, unlike the halo: a mark on a node has to sit on
                 top of it, not behind it. */}
-            <CoverageMarks
-              nodeIds={reachedNodeIds}
-              placement={
-                coverageVariant === 'a'
-                  ? 'corner'
-                  : coverageVariant === 'b'
-                    ? 'left'
-                    : 'above'
-              }
-            />
+            {/* Status carries everything in the fill, so it wants no dot. */}
+            {coverageVariant !== 'd' && (
+              <CoverageMarks
+                nodeIds={reachedNodeIds}
+                placement={
+                  coverageVariant === 'a'
+                    ? 'corner'
+                    : coverageVariant === 'b'
+                      ? 'left'
+                      : 'above'
+                }
+              />
+            )}
             {/* Above the boxes: these are controls, not artwork, and one can sit
                 on a node it does not belong to. */}
             <g ref={linkBadgeRef} data-layer="profile-link-badges" />

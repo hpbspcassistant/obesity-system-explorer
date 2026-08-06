@@ -37,7 +37,7 @@ function Swatch({
           style={{ ['--node-colour' as string]: SAMPLE_CLUSTER }}
         />
       </g>
-      {reached && (
+      {reached && variant !== 'd' && (
         // Same construction as the map: a white disc, then a blue one, centred
         // on the boundary so half of it hangs outside the box.
         <g>
@@ -119,9 +119,15 @@ export function CoverageKey({
           <Row variant={variant} standing="is-gap">
             Matters for {personaName} —{' '}
             <strong className="font-semibold">nothing reaches it</strong>
+            {variant === 'd' && (
+              <span className="block text-gray-500">the gap — act here</span>
+            )}
           </Row>
           <Row variant={variant} standing="is-beyond">
             A programme reaches it, but it is outside their map
+            {variant === 'd' && (
+              <span className="block text-gray-500">worth reviewing</span>
+            )}
           </Row>
           <Row variant={variant} standing="is-untouched">
             Neither

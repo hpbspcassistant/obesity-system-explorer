@@ -9,16 +9,23 @@ import type { Applicability, CoveragePersona, ReachSummary } from '../lib/reach'
  * best on the real map at real density. The panel comes after that is settled.
  */
 
-export type CoverageVariant = 'a' | 'b' | 'c'
+export type CoverageVariant = 'a' | 'b' | 'c' | 'd'
 
 /**
- * All three now share one encoding — fill is the persona's map — and differ only
- * in how programme reach is marked. The structure is settled; this is the mark.
+ * The first three share one encoding — fill is the persona's map, a dot is
+ * programme reach — and differ only in where the dot sits. Status is a different
+ * proposition: it names the four combinations in colour and drops the two-channel
+ * idea, and cluster colour with it.
  */
 const VARIANTS: { id: CoverageVariant; label: string; hint: string }[] = [
   { id: 'a', label: 'Corner', hint: 'Reach = a dot straddling the top-right corner' },
   { id: 'b', label: 'Left', hint: 'Reach = a dot on the left edge, halfway down' },
   { id: 'c', label: 'Above', hint: 'Reach = a dot centred on the top edge' },
+  {
+    id: 'd',
+    label: 'Status',
+    hint: 'Green running · red gap · amber worth reviewing · grey neither',
+  },
 ]
 
 export interface CoverageBarProps {

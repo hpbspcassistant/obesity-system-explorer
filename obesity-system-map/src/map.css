@@ -549,6 +549,53 @@
    persona's map, so neither gets a fill. What separates them is the reach mark,
    drawn as its own layer in MapView — a dot, a bar, or a halo. */
 
+/* -- Status: one colour per combination ------------------------------------
+ *
+ * A different proposition from the three above, not a variation on them. Those
+ * keep two independent channels — fill says whether it matters for the persona,
+ * a dot says whether a programme reaches it — and leave the reader to combine
+ * them. This one names the four combinations outright and attaches a judgement
+ * to each: act here, worth reviewing, running, nothing.
+ *
+ * The trade is cluster colour, which this cannot show at all. It also spends a
+ * fourth colour language on a map that already has ten type colours, Trace's
+ * teal and Profile's greys — worth it only if the traffic-light reading is what
+ * the mode is for.
+ *
+ * Light fills with a saturated border rather than the solid colour of the
+ * mockup, which was on a dark ground. Labels here are dark ink and have to stay
+ * readable on top: a solid green at that saturation drops them under 4.5:1,
+ * while the border carries the same signal at a glance.
+ */
+.map-svg.has-coverage.variant-d g[data-node-id] > path {
+  stroke-width: 2.2;
+}
+
+/* Relevant, programme running. */
+.map-svg.has-coverage.variant-d g[data-node-id].is-covered > path {
+  fill: #bbf7d0;
+  stroke: #16a34a;
+}
+
+/* Relevant, no programme — the gap. The one to act on, so it is the loudest. */
+.map-svg.has-coverage.variant-d g[data-node-id].is-gap > path {
+  fill: #fecaca;
+  stroke: #dc2626;
+}
+
+/* Programme, not relevant to this persona — worth reviewing. */
+.map-svg.has-coverage.variant-d g[data-node-id].is-beyond > path {
+  fill: #fed7aa;
+  stroke: #ea580c;
+}
+
+/* Neither. Left as the empty box the other variants use. */
+.map-svg.has-coverage.variant-d g[data-node-id].is-untouched > path {
+  fill: #ffffff;
+  stroke: var(--coverage-empty-line);
+  stroke-width: 0.9;
+}
+
 /* Gaps are the actionable state and the rarest, so they can be asked for on
    their own — the same idea as Profile's "Marked only". */
 .map-svg.has-coverage.gaps-only g[data-node-id]:not(.is-gap) {
