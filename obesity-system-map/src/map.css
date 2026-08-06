@@ -545,10 +545,16 @@
   stroke: none;
 }
 
-.map-svg.has-coverage.variant-a g[data-node-id].is-beyond > path {
-  fill: #f1f5f9;
-  stroke: none;
-}
+/* Nothing. A variable outside the persona's map does not get a fill, because in
+   this encoding fill means exactly one thing — it matters for this person — and
+   a tint here made a reached-but-irrelevant variable read as one of theirs. The
+   tint was hedging against it vanishing beside an untouched box; the halo
+   removed that risk, so the hedge goes and the rule stays clean:
+
+     fill = in the persona's map
+     halo = a programme reaches it
+
+   and the four states are just the four combinations. */
 
 /* No ring in A. Reach is drawn as a halo outside the box (see NodeHalos and
    data/coverageStyle.ts) — an outline here measured 18 from an empty box and
