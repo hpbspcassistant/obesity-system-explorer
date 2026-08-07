@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
-import { CoverageBar, type CoverageVariant } from './components/CoverageBar'
-import { CoverageKey } from './components/CoverageKey'
+import { InterventionBar } from './components/InterventionBar'
+import { InterventionKey } from './components/InterventionKey'
 import { GuideCard, GuideContents } from './components/GuideCard'
 import { MapHeader } from './components/MapHeader'
 import {
@@ -29,8 +29,8 @@ import { downloadBlob } from './lib/exportImage'
 import {
   allNodeIds,
   behaviourIndex,
-  programmes as coverageProgrammes,
-} from './data/coverage'
+  programmes,
+} from './data/intervention'
 import {
   reachOf,
   summariseForPersona,
@@ -93,7 +93,7 @@ const TRACE_PANEL_PX = 368
 const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
-/** The navigator plus its gap, so the coverage key can stack above it. */
+/** The navigator plus its gap, so the intervention key can stack above it. */
 const MINIMAP_STACK_PX = 145
 /**
  * Output pixels per map unit for an exported PNG. At 1 the image is 3370px wide,
@@ -145,14 +145,11 @@ export default function App() {
   )
   /** What the last import did, shown briefly above the profile bar. */
   const [importNotice, setImportNotice] = useState<string | null>(null)
-  // PROTOTYPE. Which placeholder persona the coverage overlay is drawn for, and
-  // which candidate encoding is on. Null persona is the whitespace view.
-  // Coverage does not keep its own idea of who we are talking about: it reads
-  // the active profile, the same one Profile mode edits. All this holds is
+  // Intervention does not keep its own idea of who we are talking about: it
+  // reads the active profile, the same one Profile mode edits. All this holds is
   // whether the persona is being applied at all — the whitespace view asks what
   // HPB touches in general, which is nobody's question in particular.
-  const [coverageWhitespace, setCoverageWhitespace] = useState(true)
-  const [coverageVariant, setCoverageVariant] = useState<CoverageVariant>('a')
+  const [interventionWhitespace, setInterventionWhitespace] = useState(true)
   const [gapsOnly, setGapsOnly] = useState(false)
   /**
    * Marked counts as they stood when the current guide step opened.
@@ -751,7 +748,7 @@ export default function App() {
   }, [selectedNode, selectedEdge, hiddenGroups, taxonomy])
 
   /**
-   * PROTOTYPE. The whole coverage picture for whichever persona is chosen.
+   * The whole intervention picture for whichever persona is chosen.
    *
    * With no persona the summary is still computed, against an empty
    * applicability map — so every reached node lands in `beyond` and everything
@@ -763,22 +760,22 @@ export default function App() {
    * person; its characteristics decide which programmes reach them. Two inputs
    * to two different questions, which is why neither is derived from the other.
    */
-  const coveragePersona = useMemo(
+  const interventionPersona = useMemo(
     () =>
-      coverageWhitespace || !activeProfile
+      interventionWhitespace || !activeProfile
         ? null
         : {
             characteristics: activeProfile.characteristics,
             applicabilityNodes: [...activeProfile.nodeIds],
           },
-    [coverageWhitespace, activeProfile],
+    [interventionWhitespace, activeProfile],
   )
 
-  const coverageSummary = useMemo(() => {
-    if (coveragePersona) {
+  const interventionSummary = useMemo(() => {
+    if (interventionPersona) {
       return summariseForPersona(
-        coveragePersona,
-        coverageProgrammes,
+        interventionPersona,
+        programmes,
         behaviourIndex,
         allNodeIds,
       )
@@ -788,7 +785,7 @@ export default function App() {
     // programme comes back undetermined rather than applying, so the view
     // counted only the ungated programmes and reported 19 reached where the
     // answer is 28.
-    const reached = reachOf(coverageProgrammes, behaviourIndex)
+    const reached = reachOf(programmes, behaviourIndex)
     return {
       reached,
       covered: [],
@@ -796,21 +793,21 @@ export default function App() {
       beyond: allNodeIds.filter((id) => reached.has(id)),
       untouched: allNodeIds.filter((id) => !reached.has(id)),
       applicability: {
-        applies: [...coverageProgrammes],
+        applies: [...programmes],
         excluded: [],
         undetermined: [],
       },
     }
-  }, [coveragePersona])
+  }, [interventionPersona])
 
-  const coverageStanding = useMemo(() => {
+  const interventionStanding = useMemo(() => {
     const byNode = new Map<number, NodeStanding>()
-    for (const id of coverageSummary.covered) byNode.set(id, 'covered')
-    for (const id of coverageSummary.gaps) byNode.set(id, 'gap')
-    for (const id of coverageSummary.beyond) byNode.set(id, 'beyond')
-    for (const id of coverageSummary.untouched) byNode.set(id, 'untouched')
+    for (const id of interventionSummary.covered) byNode.set(id, 'covered')
+    for (const id of interventionSummary.gaps) byNode.set(id, 'gap')
+    for (const id of interventionSummary.beyond) byNode.set(id, 'beyond')
+    for (const id of interventionSummary.untouched) byNode.set(id, 'untouched')
     return byNode
-  }, [coverageSummary])
+  }, [interventionSummary])
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
@@ -1159,11 +1156,12 @@ export default function App() {
           tracePaths={tracePaths}
           traceFocus={traceFocus}
           markedOnly={markedOnly}
-          coverage={mode === 'coverage' ? coverageStanding : undefined}
-          coverageVariant={coverageVariant}
+          intervention={
+            mode === 'intervention' ? interventionStanding : undefined
+          }
           gapsOnly={gapsOnly}
           bottomInset={
-            profiling || mode === 'coverage' ? PROFILE_BAR_PX : 0
+            profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
           }
           highContrast={highContrast}
         />
@@ -1311,36 +1309,33 @@ export default function App() {
         />
         )}
 
-        {mode === 'coverage' && (
-          <CoverageKey
-            variant={coverageVariant}
-            personaName={coveragePersona ? (activeProfile?.name ?? null) : null}
+        {mode === 'intervention' && (
+          <InterventionKey
+            personaName={interventionPersona ? (activeProfile?.name ?? null) : null}
             bottomInset={PROFILE_BAR_PX + MINIMAP_STACK_PX}
           />
         )}
 
-        {mode === 'coverage' && (
-          <CoverageBar
+        {mode === 'intervention' && (
+          <InterventionBar
             profiles={profiles}
-            personaId={coverageWhitespace ? null : activeProfileId}
+            personaId={interventionWhitespace ? null : activeProfileId}
             onPersonaChange={(id) => {
               // Selecting a persona here selects it everywhere: one answer to
               // "who are we talking about" for the whole app.
               if (id) {
                 setActiveProfileId(id)
-                setCoverageWhitespace(false)
+                setInterventionWhitespace(false)
               } else {
-                setCoverageWhitespace(true)
+                setInterventionWhitespace(true)
                 setGapsOnly(false)
               }
             }}
-            variant={coverageVariant}
-            onVariantChange={setCoverageVariant}
             gapsOnly={gapsOnly}
             onGapsOnlyChange={setGapsOnly}
-            summary={coverageSummary}
+            summary={interventionSummary}
             applicability={
-              coveragePersona ? coverageSummary.applicability : null
+              interventionPersona ? interventionSummary.applicability : null
             }
           />
         )}

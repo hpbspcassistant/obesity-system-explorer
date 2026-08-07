@@ -16,7 +16,7 @@
  * happened to be tagged.
  *
  * Everything here takes its data as arguments. The four JSON files behind
- * data/coverage are placeholders that will be replaced wholesale, so nothing in
+ * data/intervention are placeholders that will be replaced wholesale, so nothing in
  * this module knows a single behaviour id, programme name or node number.
  */
 
@@ -71,7 +71,7 @@ export interface Programme {
   extraNodes?: readonly number[]
 }
 
-export interface CoveragePersona {
+export interface InterventionPersona {
   id: string
   name: string
   characteristics: PersonaCharacteristics
@@ -142,7 +142,7 @@ export interface Applicability {
 }
 
 export function classifyProgrammes(
-  persona: Pick<CoveragePersona, 'characteristics'>,
+  persona: Pick<InterventionPersona, 'characteristics'>,
   programmes: readonly Programme[],
 ): Applicability {
   const out: Applicability = { applies: [], excluded: [], undetermined: [] }
@@ -244,7 +244,7 @@ export interface ReachSummary {
  * the life the persona currently describes.
  */
 export function summariseForPersona(
-  persona: Pick<CoveragePersona, 'characteristics' | 'applicabilityNodes'>,
+  persona: Pick<InterventionPersona, 'characteristics' | 'applicabilityNodes'>,
   programmes: readonly Programme[],
   behaviours: Map<string, Behaviour>,
   allNodeIds: readonly number[],

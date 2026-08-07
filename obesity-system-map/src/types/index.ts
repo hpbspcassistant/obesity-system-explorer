@@ -40,7 +40,7 @@ export interface Connection {
  * around. Trace and Profile change what a click does, which is why the active
  * mode is indicated loudly rather than subtly.
  */
-export type MapMode = 'explore' | 'trace' | 'profile' | 'coverage';
+export type MapMode = 'explore' | 'trace' | 'profile' | 'intervention';
 
 /**
  * Which way a trace walks the arrows.

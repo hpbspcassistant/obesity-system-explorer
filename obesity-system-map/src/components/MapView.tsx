@@ -35,12 +35,6 @@ import {
   groupNodePaths,
 } from '../lib/annotateSvg'
 import { contrastFillCss } from '../data/contrast'
-import {
-  REACH_DOT_BACKING_PX,
-  REACH_DOT_PX,
-  REACH_INK,
-  type ReachDotPlacement,
-} from '../data/coverageStyle'
 import { extractSvgInner, readSvgViewBox } from '../lib/inlineSvg'
 import { svgToPngBlob } from '../lib/exportImage'
 import '../map.css'
@@ -280,63 +274,6 @@ const NodeHalos = memo(function NodeHalos({
   )
 })
 
-/**
- * The reach mark: a dot straddling the edge of the box.
- *
- * Two zero-length round-capped paths per node — a white disc, then a blue one on
- * top. Their size comes from stroke-width under `non-scaling-stroke`, so it is
- * fixed in screen pixels and survives fit zoom, where a box is 23px across and a
- * mark sized in map units would be a smudge.
- *
- * Centred ON the boundary rather than inside it. Half the dot hanging outside
- * breaks the box's silhouette, which is what makes it read as a mark placed on
- * the node instead of as part of its outline, and it keeps the label clear.
- */
-const CoverageMarks = memo(function CoverageMarks({
-  nodeIds,
-  placement,
-}: {
-  nodeIds: readonly number[]
-  placement: ReachDotPlacement
-}) {
-  if (!nodeIds.length) return null
-  return (
-    <g data-layer="coverage-marks" className="pointer-events-none">
-      {nodeIds.map((id) => {
-        const box = nodeBoxesById.get(id)
-        if (!box) return null
-        const point =
-          placement === 'corner'
-            ? [box.x + box.w, box.y]
-            : placement === 'left'
-              ? [box.x, box.y + box.h / 2]
-              : [box.x + box.w / 2, box.y]
-        const d = `M${point[0]} ${point[1]}h0`
-        return (
-          <g key={id}>
-            <path
-              d={d}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth={REACH_DOT_BACKING_PX}
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-            <path
-              d={d}
-              fill="none"
-              stroke={REACH_INK}
-              strokeWidth={REACH_DOT_PX}
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-          </g>
-        )
-      })}
-    </g>
-  )
-})
-
 const TRACE_START_BANDS = [
   { width: 14, opacity: 0.18 },
   { width: 6, opacity: 0.3 },
@@ -385,10 +322,8 @@ export interface MapViewProps {
   highContrast?: boolean
   /** Drops everything unmarked out of the picture; Profile only. */
   markedOnly?: boolean
-  /** PROTOTYPE. node id -> how it stands against HPB programme reach. */
-  coverage?: ReadonlyMap<number, string>
-  /** Which of the three candidate encodings to draw. */
-  coverageVariant?: 'a' | 'b' | 'c' | 'd'
+  /** node id -> how it stands against HPB programme reach; Intervention only. */
+  intervention?: ReadonlyMap<number, string>
   /** Fades everything that is not a gap for the current persona. */
   gapsOnly?: boolean
   /** Whether to draw the navigator thumbnail. */
@@ -449,8 +384,7 @@ export function MapView({
   onAnchorChange,
   highContrast = false,
   markedOnly = false,
-  coverage,
-  coverageVariant = 'a',
+  intervention,
   gapsOnly = false,
   showMiniMap = true,
   bottomInset = 0,
@@ -474,27 +408,12 @@ export function MapView({
   )
 
   /**
-   * Variables a programme reaches, haloed. Only in the encoding that spends its
-   * fill on the persona's map — the other two put reach in the fill and would be
-   * saying the same thing twice.
-   */
-  const reachedNodeIds = useMemo(() => {
-    if (!coverage) return []
-    const ids: number[] = []
-    for (const [id, standing] of coverage) {
-      if (standing === 'covered' || standing === 'beyond') ids.push(id)
-    }
-    return ids
-  }, [coverage])
-
-  /**
    * The factor the card is open on, ringed. Drawn as a halo outside the box
    * rather than as a heavier outline, because in Profile the box's own edge is
-   * already carrying a state (grey hairline, coloured ring, or none of it).
+   * already carrying a state.
    */
   const focusNodeIds = useMemo(
-    () =>
-      mode === 'profile' && anchorNodeId !== null ? [anchorNodeId] : [],
+    () => (mode === 'profile' && anchorNodeId !== null ? [anchorNodeId] : []),
     [mode, anchorNodeId],
   )
 
@@ -882,18 +801,18 @@ export function MapView({
     }
   }, [markedNodeIds, candidateNodeIds])
 
-  /** PROTOTYPE. One class per standing, so the CSS variants can differ freely. */
+  /** One class per standing; map.css turns them into the four status colours. */
   useEffect(() => {
     const svg = svgRef.current
     if (!svg) return
     for (const group of svg.querySelectorAll<SVGGElement>('g[data-node-id]')) {
-      const standing = coverage?.get(Number(group.dataset.nodeId))
+      const standing = intervention?.get(Number(group.dataset.nodeId))
       group.classList.toggle('is-covered', standing === 'covered')
       group.classList.toggle('is-gap', standing === 'gap')
       group.classList.toggle('is-beyond', standing === 'beyond')
       group.classList.toggle('is-untouched', standing === 'untouched')
     }
-  }, [coverage])
+  }, [intervention])
 
   /**
    * The 108 node boxes are bare <g> elements straight out of the artwork, which
@@ -1251,8 +1170,8 @@ export function MapView({
                 : '',
               mode === 'profile' ? 'has-profile' : '',
               mode === 'profile' && markedOnly ? 'marked-only' : '',
-              mode === 'coverage' ? `has-coverage variant-${coverageVariant}` : '',
-              mode === 'coverage' && gapsOnly ? 'gaps-only' : '',
+              mode === 'intervention' ? 'has-intervention' : '',
+              mode === 'intervention' && gapsOnly ? 'gaps-only' : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',
               traceFocus?.nodeIds.length ? 'has-trace-focus' : '',
@@ -1296,19 +1215,6 @@ export function MapView({
             <NodeLayer />
             {/* Above the boxes, unlike the halo: a mark on a node has to sit on
                 top of it, not behind it. */}
-            {/* Status carries everything in the fill, so it wants no dot. */}
-            {coverageVariant !== 'd' && (
-              <CoverageMarks
-                nodeIds={reachedNodeIds}
-                placement={
-                  coverageVariant === 'a'
-                    ? 'corner'
-                    : coverageVariant === 'b'
-                      ? 'left'
-                      : 'above'
-                }
-              />
-            )}
             {/* Above the boxes: these are controls, not artwork, and one can sit
                 on a node it does not belong to. */}
             <g ref={linkBadgeRef} data-layer="profile-link-badges" />

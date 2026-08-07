@@ -102,7 +102,7 @@ export function ProfilePersonaDialog({
           />
 
           {/* Optional, and the dialog says so: a profile is usable for marking
-              with none of these set. They only decide which programmes Coverage
+              with none of these set. They only decide which programmes Intervention
               considers, and leaving one unset is reported there rather than
               guessed at here. */}
           <div className="mb-3 rounded border border-gray-200 bg-gray-50 p-2">

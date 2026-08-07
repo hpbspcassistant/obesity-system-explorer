@@ -2,41 +2,18 @@ import type { Applicability, ReachSummary } from '../lib/reach'
 import type { Profile } from '../lib/profile'
 
 /**
- * PROTOTYPE chrome for Coverage mode.
+ * Intervention's chrome: which persona, and what it adds up to.
  *
- * Deliberately not the panel we discussed — no programme list, no behaviour
- * list, no click-through. Just enough to switch persona and encoding, because
- * the only question it exists to answer is which of the three encodings reads
- * best on the real map at real density. The panel comes after that is settled.
+ * Not yet the panel — no programme list, no behaviour list, no click-through.
+ * Those come next; this is what the mode needs to be usable in the meantime.
  */
 
-export type CoverageVariant = 'a' | 'b' | 'c' | 'd'
-
-/**
- * The first three share one encoding — fill is the persona's map, a dot is
- * programme reach — and differ only in where the dot sits. Status is a different
- * proposition: it names the four combinations in colour and drops the two-channel
- * idea, and cluster colour with it.
- */
-const VARIANTS: { id: CoverageVariant; label: string; hint: string }[] = [
-  { id: 'a', label: 'Corner', hint: 'Reach = a dot straddling the top-right corner' },
-  { id: 'b', label: 'Left', hint: 'Reach = a dot on the left edge, halfway down' },
-  { id: 'c', label: 'Above', hint: 'Reach = a dot centred on the top edge' },
-  {
-    id: 'd',
-    label: 'Status',
-    hint: 'Green running · red gap · amber worth reviewing · grey neither',
-  },
-]
-
-export interface CoverageBarProps {
-  /** The user's own profiles: Coverage has no persona list of its own. */
+export interface InterventionBarProps {
+  /** The user's own profiles: this mode keeps no persona list of its own. */
   profiles: readonly Profile[]
   /** null means the persona-independent whitespace view. */
   personaId: string | null
   onPersonaChange: (id: string | null) => void
-  variant: CoverageVariant
-  onVariantChange: (variant: CoverageVariant) => void
   gapsOnly: boolean
   onGapsOnlyChange: (on: boolean) => void
   summary: ReachSummary
@@ -52,25 +29,19 @@ function Count({ n, label }: { n: number; label: string }) {
   )
 }
 
-export function CoverageBar({
+export function InterventionBar({
   profiles,
   personaId,
   onPersonaChange,
-  variant,
-  onVariantChange,
   gapsOnly,
   onGapsOnlyChange,
   summary,
   applicability,
-}: CoverageBarProps) {
+}: InterventionBarProps) {
   const withPersona = personaId !== null
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3 backdrop-blur">
-      <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
-        Prototype
-      </span>
-
       <select
         value={personaId ?? ''}
         onChange={(e) => onPersonaChange(e.target.value || null)}
@@ -89,35 +60,7 @@ export function CoverageBar({
         )}
       </select>
 
-      <div
-        role="radiogroup"
-        aria-label="Encoding"
-        className="inline-flex shrink-0 rounded-full bg-gray-100 p-0.5"
-      >
-        {VARIANTS.map((v) => (
-          <button
-            key={v.id}
-            type="button"
-            role="radio"
-            aria-checked={v.id === variant}
-            data-variant={v.id}
-            title={v.hint}
-            onClick={() => onVariantChange(v.id)}
-            className={[
-              'rounded-full px-3 py-1 text-[12px] font-medium transition-colors',
-              v.id === variant
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-800',
-            ].join(' ')}
-          >
-            {v.label}
-          </button>
-        ))}
-      </div>
-
-      <p className="min-w-0 flex-1 truncate text-[11.5px] text-gray-500">
-        {VARIANTS.find((v) => v.id === variant)?.hint}
-      </p>
+      <span className="min-w-0 flex-1" />
 
       <p className="flex shrink-0 items-center gap-2 text-[12px] text-gray-600">
         {withPersona ? (

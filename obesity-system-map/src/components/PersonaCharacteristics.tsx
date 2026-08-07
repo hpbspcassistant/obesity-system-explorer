@@ -2,11 +2,11 @@ import {
   CONDITIONS_KEY,
   conditionValues,
   coreCharacteristics,
-} from '../data/coverage'
+} from '../data/intervention'
 import type { PersonaCharacteristics as Characteristics } from '../lib/reach'
 
 /**
- * The persona's characteristics: what Coverage's gates are tested against.
+ * The persona's characteristics: what Intervention's gates are tested against.
  *
  * Separate from the marks on the map, and deliberately so. These decide which
  * programmes apply to this person; the marks decide what matters to them. A
@@ -17,7 +17,7 @@ import type { PersonaCharacteristics as Characteristics } from '../lib/reach'
  * select rather than a checkbox:
  *
  *   Not set yet     nobody has decided. Any gate testing it comes back
- *                   undecided, and Coverage says so rather than quietly
+ *                   undecided, and Intervention says so rather than quietly
  *                   dropping the programme.
  *   a value         the persona is this.
  *   Does not apply  the field is meaningless for this person. Gates testing it

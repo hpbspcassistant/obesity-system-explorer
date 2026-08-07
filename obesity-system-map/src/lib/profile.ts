@@ -31,11 +31,11 @@ export interface Profile {
   /** Freeform persona notes. Descriptive only — nothing reads or acts on them. */
   details: string
   /**
-   * What Coverage's gates test against. Separate from `nodeIds` because the two
+   * What Intervention's gates test against. Separate from `nodeIds` because the two
    * answer different questions: these decide which programmes apply to this
    * person, the marks decide what matters to them. Neither affects the other.
    *
-   * Absent on profiles saved before Coverage existed, and on any hand-written
+   * Absent on profiles saved before Intervention existed, and on any hand-written
    * file, so every reader must tolerate an empty object.
    */
   characteristics: PersonaCharacteristics

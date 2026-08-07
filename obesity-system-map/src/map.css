@@ -484,122 +484,93 @@
   pointer-events: none;
 }
 
-/* ---------------------------------------------------------------- coverage */
+/* ------------------------------------------------------------ intervention */
 
 /*
- * PROTOTYPE. Three encodings of the same two facts, so one can be chosen by
- * looking rather than by arguing.
+ * What HPB's programmes reach, and where they do not.
  *
- * The two facts are independent, so each gets its own channel and the four
- * states compose instead of being four colours to memorise:
+ * One colour per combination, rather than two independent channels the reader
+ * has to combine. Four encodings were prototyped — a ring, a halo, and a dot in
+ * three positions, all of which kept fill for "matters to this persona" and
+ * marked reach separately — and this is the one that survived. It names each
+ * combination and attaches a judgement to it, which turns the gap from an
+ * absence you have to notice into a colour that says act here.
  *
- *   is-covered    in the persona's map, and reached by a programme
- *   is-gap        in the persona's map, reached by nothing that applies
- *   is-beyond     reached, but outside the persona's map
- *   is-untouched  neither  (with no persona, everything is beyond or untouched)
+ * What it gives up is cluster colour: the fill is spent on status, so this mode
+ * cannot show which kind of variable anything is. That is the trade, made
+ * knowingly.
  *
- * With the placeholder inventory only 28 of 108 nodes are reached, so reach is
- * the minority state and the variants differ mainly in whether it gets the
- * strong channel.
+ * With no persona only two of the four can occur — nothing is in a persona's map
+ * — so the same rules produce the whitespace view with no special casing.
  */
 
-.map-svg.has-coverage {
-  --coverage-empty-line: #d8d5cf;
-  --coverage-ring: #1f2937;
-  --coverage-accent: #93c5fd;
+.map-svg.has-intervention {
+  --intervention-empty-line: #d8d5cf;
 }
 
-/* Everything starts EMPTY, not quiet.
-   Profile's pale grey fill is right there, where marked is the minority and the
-   rest is context you still read. Here the proportions are reversed — 80 of 108
-   nodes are untouched — and a pale fill on all of them made the map read as
-   solidly full, with reached nodes differing by a hairline ring nobody could
-   see. An untouched node is an absence, so it is drawn as one: an outline with
-   nothing in it. */
-.map-svg.has-coverage g[data-node-id] > path {
+/* Everything starts EMPTY, not quiet. Profile's pale grey for the unmarked
+   majority is right there, where the unmarked web is what you read to decide
+   what to mark next. Here the proportions are reversed — most of the map is
+   untouched — and filling all of it said the map was full when the finding is
+   that it is mostly empty. An untouched variable is an absence, drawn as one. */
+.map-svg.has-intervention g[data-node-id] > path {
   fill: #ffffff;
-  stroke: var(--coverage-empty-line);
+  stroke: var(--intervention-empty-line);
   stroke-width: 0.9;
   vector-effect: non-scaling-stroke;
 }
 
-/* Every coverage fill is light by construction, so the ink is dark everywhere.
-   Stated once rather than per state: the two hub labels are white in the
-   artwork, and inheriting that here would repeat a bug already fixed twice. */
-.map-svg.has-coverage .node-label {
+/* Every fill here is light by construction, so the ink is dark throughout.
+   Stated once rather than per state: two hub labels are white in the artwork,
+   and inheriting that would repeat a bug already fixed twice. */
+.map-svg.has-intervention .node-label {
   fill: #231f20;
 }
 
-.map-svg.has-coverage [data-layer='edges'] {
+.map-svg.has-intervention [data-layer='edges'] {
   opacity: 0.22;
 }
 
-/* Behaviours own nodes, not connections, so nothing here recolours an edge —
+/* Behaviours own variables, not connections, so nothing here recolours an edge —
    doing so would assert a claim the data does not make. */
 
-/* The fill rule, now the same in every variant: it says one thing, and the
-   variants differ only in how "a programme reaches this" is marked. */
-.map-svg.has-coverage g[data-node-id].is-covered > path,
-.map-svg.has-coverage g[data-node-id].is-gap > path {
-  fill: var(--node-colour-hc, var(--node-colour, #eceadc));
-  stroke: none;
-}
-
-/* is-beyond and is-untouched keep the empty base above: neither is in the
-   persona's map, so neither gets a fill. What separates them is the reach mark,
-   drawn as its own layer in MapView — a dot, a bar, or a halo. */
-
-/* -- Status: one colour per combination ------------------------------------
- *
- * A different proposition from the three above, not a variation on them. Those
- * keep two independent channels — fill says whether it matters for the persona,
- * a dot says whether a programme reaches it — and leave the reader to combine
- * them. This one names the four combinations outright and attaches a judgement
- * to each: act here, worth reviewing, running, nothing.
- *
- * The trade is cluster colour, which this cannot show at all. It also spends a
- * fourth colour language on a map that already has ten type colours, Trace's
- * teal and Profile's greys — worth it only if the traffic-light reading is what
- * the mode is for.
- *
- * Light fills with a saturated border rather than the solid colour of the
- * mockup, which was on a dark ground. Labels here are dark ink and have to stay
- * readable on top: a solid green at that saturation drops them under 4.5:1,
- * while the border carries the same signal at a glance.
- */
-.map-svg.has-coverage.variant-d g[data-node-id] > path {
+/* Light fills with a saturated border rather than solid colour. Labels sit on
+   top of these and have to stay readable: a solid green at that saturation puts
+   them under 4.5:1, while the border carries the signal at a glance. */
+.map-svg.has-intervention g[data-node-id].is-covered > path,
+.map-svg.has-intervention g[data-node-id].is-gap > path,
+.map-svg.has-intervention g[data-node-id].is-beyond > path {
   stroke-width: 2.2;
 }
 
-/* Relevant, programme running. */
-.map-svg.has-coverage.variant-d g[data-node-id].is-covered > path {
+/* Relevant, and a programme is running. */
+.map-svg.has-intervention g[data-node-id].is-covered > path {
   fill: #bbf7d0;
   stroke: #16a34a;
 }
 
-/* Relevant, no programme — the gap. The one to act on, so it is the loudest. */
-.map-svg.has-coverage.variant-d g[data-node-id].is-gap > path {
+/* Relevant, and nothing reaches it. The one to act on, so it is the loudest. */
+.map-svg.has-intervention g[data-node-id].is-gap > path {
   fill: #fecaca;
   stroke: #dc2626;
 }
 
-/* Programme, not relevant to this persona — worth reviewing. */
-.map-svg.has-coverage.variant-d g[data-node-id].is-beyond > path {
+/* A programme reaches it, but it is outside this persona's map. */
+.map-svg.has-intervention g[data-node-id].is-beyond > path {
   fill: #fed7aa;
   stroke: #ea580c;
 }
 
-/* Neither. Left as the empty box the other variants use. */
-.map-svg.has-coverage.variant-d g[data-node-id].is-untouched > path {
-  fill: #ffffff;
-  stroke: var(--coverage-empty-line);
-  stroke-width: 0.9;
-}
-
 /* Gaps are the actionable state and the rarest, so they can be asked for on
    their own — the same idea as Profile's "Marked only". */
-.map-svg.has-coverage.gaps-only g[data-node-id]:not(.is-gap) {
+.map-svg.has-intervention.gaps-only g[data-node-id]:not(.is-gap) {
   opacity: 0.12;
+  pointer-events: none;
+}
+
+/* The invisible edge targets trace every connection in one layer, so leaving
+   them live would let a click land on a line this mode does not draw. */
+.map-svg.has-intervention [data-layer='edge-hit'] path {
   pointer-events: none;
 }
 

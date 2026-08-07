@@ -1,7 +1,7 @@
 /**
- * Typed access to the coverage inputs.
+ * Typed access to the intervention inputs.
  *
- * The four files under `data/coverage/` are placeholders with real node ids and
+ * The three files under `data/intervention/` are placeholders with real node ids and
  * invented content. They will be replaced wholesale, so nothing outside this
  * module names a behaviour, a programme or a node from them — this file is the
  * only place that knows they exist at all.
@@ -11,9 +11,9 @@ import { behavioursById } from '../lib/reach'
 import type { Behaviour, Programme } from '../lib/reach'
 import { nodes } from './systemMap'
 
-import behavioursRaw from './coverage/behaviours.json'
-import characteristicsRaw from './coverage/characteristics.json'
-import programmesRaw from './coverage/programmes.json'
+import behavioursRaw from './intervention/behaviours.json'
+import characteristicsRaw from './intervention/characteristics.json'
+import programmesRaw from './intervention/programmes.json'
 
 export const behaviours = behavioursRaw as readonly Behaviour[]
 export const programmes = programmesRaw as unknown as readonly Programme[]
