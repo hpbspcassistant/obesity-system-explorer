@@ -219,6 +219,19 @@
   display: inline;
 }
 
+/* Except where the box already says it. Profile gives a marked factor its
+   colour back, and Intervention paints "in this persona's map" as covered or
+   gap — so in both the pip restates what the fill has just said, in a violet
+   belonging to neither palette.
+
+   Intervention's whitespace view hides it too, and there the pip is not
+   redundant but wrong: that view is deliberately persona-independent, and a dot
+   marking one profile's choices is the only thing on screen claiming otherwise. */
+.map-svg.has-profile g[data-node-id].is-marked .node-mark,
+.map-svg.has-intervention g[data-node-id].is-marked .node-mark {
+  display: none;
+}
+
 /* Marked factors stay legible even while another node's neighbourhood is
    showing — losing your profile behind a dim would defeat the point. */
 .map-svg.has-selection
@@ -330,11 +343,6 @@
    than the artwork. */
 .map-svg.has-profile.high-contrast g[data-node-id].is-marked .node-label {
   fill: #231f20;
-}
-
-/* In Profile the colour IS the mark, so the corner pip is redundant noise. */
-.map-svg.has-profile g[data-node-id].is-marked .node-mark {
-  display: none;
 }
 
 /* Suggested: the colour it would take, but on the outline rather than in the
