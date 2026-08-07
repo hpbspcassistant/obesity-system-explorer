@@ -147,7 +147,6 @@
     ],
     "gateSource": "working adults (participating workplaces)",
     "addresses": [
-      "healthy-environment",
       "physical-activity",
       "healthy-eating"
     ],
@@ -159,10 +158,6 @@
       "healthy-eating": [
         81,
         86
-      ],
-      "healthy-environment": [
-        55,
-        40
       ]
     }
   },
@@ -208,7 +203,6 @@
     "addresses": [
       "healthy-eating",
       "sugar-reduction",
-      "healthy-environment",
       "health-literacy"
     ],
     "trim": {
@@ -218,9 +212,6 @@
       ],
       "health-literacy": [
         11
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -251,8 +242,7 @@
     "gateSource": "everyone",
     "addresses": [
       "healthy-eating",
-      "health-literacy",
-      "healthy-environment"
+      "health-literacy"
     ],
     "trim": {
       "healthy-eating": [
@@ -261,9 +251,6 @@
       ],
       "health-literacy": [
         11
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -275,16 +262,12 @@
     "gate": "everyone",
     "gateSource": "everyone",
     "addresses": [
-      "healthy-eating",
-      "healthy-environment"
+      "healthy-eating"
     ],
     "trim": {
       "healthy-eating": [
         81,
         86
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -297,17 +280,13 @@
     "gateSource": "everyone",
     "addresses": [
       "healthy-eating",
-      "sodium-reduction",
-      "healthy-environment"
+      "sodium-reduction"
     ],
     "trim": {
       "healthy-eating": [
         81,
         86,
         76
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -319,14 +298,8 @@
     "gate": "everyone",
     "gateSource": "everyone",
     "addresses": [
-      "sugar-reduction",
-      "healthy-environment"
-    ],
-    "trim": {
-      "healthy-environment": [
-        55
-      ]
-    }
+      "sugar-reduction"
+    ]
   },
   {
     "id": "less-salt-more-taste-movement",
@@ -336,14 +309,8 @@
     "gate": "everyone",
     "gateSource": "everyone",
     "addresses": [
-      "sodium-reduction",
-      "healthy-environment"
-    ],
-    "trim": {
-      "healthy-environment": [
-        55
-      ]
-    }
+      "sodium-reduction"
+    ]
   },
   {
     "id": "healthier-ingredient-promotion-programme",
@@ -353,14 +320,8 @@
     "gate": "everyone",
     "gateSource": "everyone",
     "addresses": [
-      "sodium-reduction",
-      "healthy-environment"
-    ],
-    "trim": {
-      "healthy-environment": [
-        55
-      ]
-    }
+      "sodium-reduction"
+    ]
   },
   {
     "id": "i-quit-programme",
@@ -424,8 +385,7 @@
         46
       ],
       "social-connection": [
-        6,
-        19
+        6
       ]
     }
   },
@@ -507,17 +467,13 @@
     "addresses": [
       "healthy-eating",
       "sugar-reduction",
-      "sodium-reduction",
-      "healthy-environment"
+      "sodium-reduction"
     ],
     "trim": {
       "healthy-eating": [
         81,
         86,
         73
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -533,16 +489,12 @@
     ],
     "gateSource": "preschool children",
     "addresses": [
-      "healthy-eating",
-      "healthy-environment"
+      "healthy-eating"
     ],
     "trim": {
       "healthy-eating": [
         81,
         86
-      ],
-      "healthy-environment": [
-        55
       ]
     }
   },
@@ -804,8 +756,7 @@
     "trim": {
       "health-literacy": [],
       "social-connection": [
-        6,
-        19
+        6
       ]
     }
   },
@@ -1133,7 +1084,6 @@
     "gate": "everyone",
     "gateSource": "everyone (mall-goers)",
     "addresses": [
-      "healthy-environment",
       "healthy-eating",
       "physical-activity"
     ],
@@ -1146,10 +1096,6 @@
       "healthy-eating": [
         81,
         86
-      ],
-      "healthy-environment": [
-        55,
-        40
       ]
     }
   }

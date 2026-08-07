@@ -179,7 +179,17 @@ def main():
                 continue
             if tag not in TAG_TO_BEHAVIOUR:
                 raise SystemExit(f"{name}: unknown behaviour tag {tag!r}")
-            addresses.append(TAG_TO_BEHAVIOUR[tag])
+            behaviour = TAG_TO_BEHAVIOUR[tag]
+            # The two files are edited separately and drift. A behaviour that
+            # has been deleted or renamed out of behaviours.json would otherwise
+            # sail through here and contribute no nodes at runtime, which looks
+            # exactly like a programme that reaches nothing.
+            if behaviour not in behaviour_nodes:
+                raise SystemExit(
+                    f"{name}: tag {tag!r} maps to {behaviour!r}, "
+                    f"which behaviours.json does not define"
+                )
+            addresses.append(behaviour)
 
         identifier = slug(name)
         if identifier in seen:
