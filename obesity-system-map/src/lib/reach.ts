@@ -381,6 +381,12 @@ export interface NodeProvenance {
  * Why a node is lit. `behaviour` is null where the programme pinned the node
  * directly, so the escape hatch stays visible rather than masquerading as a
  * behaviour mapping.
+ *
+ * Reads the trim, exactly as `nodesOfProgramme` does. Testing the behaviour's
+ * own node set instead is the obvious shortcut and it is wrong: it named every
+ * programme addressing the behaviour, including ones whose trim drops this very
+ * node. The map and the counts were right and the card contradicted them —
+ * Healthy 365 was listed under Functional Fitness while trimming it away.
  */
 export function provenanceOf(
   nodeId: number,
@@ -391,7 +397,9 @@ export function provenanceOf(
   for (const programme of programmes) {
     for (const id of programme.addresses) {
       const behaviour = behaviours.get(id)
-      if (behaviour?.nodes.includes(nodeId)) via.push({ programme, behaviour })
+      if (!behaviour) continue
+      const reached = programme.trim?.[id] ?? behaviour.nodes
+      if (reached.includes(nodeId)) via.push({ programme, behaviour })
     }
     if (programme.extraNodes?.includes(nodeId)) via.push({ programme, behaviour: null })
   }
