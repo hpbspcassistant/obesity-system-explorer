@@ -1076,6 +1076,49 @@ export default function App() {
         setReviewOpen(true)
         return
       }
+      if (id === 'showWhitespace') {
+        // The reader may arrive with a persona already chosen from a previous
+        // visit, and the step's whole subject is the view without one.
+        setInterventionWhitespace(true)
+        setGapsOnly(false)
+        setSelection(null)
+        return
+      }
+      if (id === 'showGuidePersona') {
+        // Whichever profile is active, or the first one there is. Does nothing
+        // at all when the reader has none, which the step's copy allows for —
+        // this mode cannot create a profile, and inventing one here would put
+        // work in their store that they did not ask for.
+        const profile = activeProfile ?? profiles[0]
+        if (!profile) return
+        setActiveProfileId(profile.id)
+        setInterventionWhitespace(false)
+        return
+      }
+      if (id === 'openReachedVariable' || id === 'openUnreachedVariable') {
+        // Chosen from the data every time rather than named here. The inventory
+        // is regenerated from a spreadsheet that is still being corrected, and a
+        // hardcoded variable would eventually demonstrate the opposite of what
+        // its step claims.
+        const wanted =
+          id === 'openReachedVariable'
+            ? // The most-reached variable, so the card has a substantial list
+              // to show rather than a lone programme.
+              [...interventionSummary.reached].sort(
+                (a, b) =>
+                  provenanceOf(b, programmes, behaviourIndex).via.length -
+                  provenanceOf(a, programmes, behaviourIndex).via.length,
+              )[0]
+            : // Prefer one in the persona's own map, where the card can draw the
+              // distinction the step is about; otherwise any unreached variable.
+              (interventionSummary.gaps[0] ??
+              interventionSummary.outside[0] ??
+              interventionSummary.untouched[0])
+        if (wanted === undefined) return
+        setSelection({ kind: 'node', nodeId: wanted })
+        frameNodes([wanted])
+        return
+      }
       if (id === 'playDemoRoute') {
         // Routes are sorted shortest first, and the shortest here is two hops —
         // barely a walk. Prefer the first route long enough to watch advance,
@@ -1103,7 +1146,16 @@ export default function App() {
         setGuideHidGroup(biggest.name)
       }
     },
-    [taxonomy, setGroupHidden, tracePaths, search, frameNodes, activeProfile],
+    [
+      taxonomy,
+      setGroupHidden,
+      tracePaths,
+      search,
+      frameNodes,
+      activeProfile,
+      profiles,
+      interventionSummary,
+    ],
   )
 
   /**

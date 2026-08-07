@@ -17,11 +17,16 @@ import type { MapMode } from '../types'
 /**
  * Sections run separately rather than as one queue.
  *
- * Covering the basics and all three modes properly takes about nineteen steps,
- * and nobody finishes a nineteen-step tour. Split up, the longest run is six, and
+ * Covering the basics and all four modes properly takes twenty-four steps, and
+ * nobody finishes a twenty-four-step tour. Split up, the longest run is six, and
  * somebody stuck on Profile in three months can open just that.
  */
-export type GuideSectionId = 'basics' | 'explore' | 'trace' | 'profile'
+export type GuideSectionId =
+  | 'basics'
+  | 'explore'
+  | 'trace'
+  | 'profile'
+  | 'intervention'
 
 /**
  * A demonstration a step can offer. Performed by App, which owns the map handle
@@ -40,6 +45,10 @@ export type GuideActionId =
   | 'playDemoRoute'
   | 'frameMarkedNeighbourhood'
   | 'openReview'
+  | 'showWhitespace'
+  | 'showGuidePersona'
+  | 'openReachedVariable'
+  | 'openUnreachedVariable'
 
 /**
  * Something the reader has to do before a step is satisfied.
@@ -141,9 +150,10 @@ const BASICS: GuideSection = {
       action: { label: 'Hide a group', id: 'hideLargestGroup' },
     },
     {
-      title: 'Three ways to work',
+      title: 'Four ways to work',
       body: [
         'Explore is for reading: click anything to find out what it is. Trace follows cause and effect from one variable. Profile marks up the variables that matter for one person.',
+        'Intervention is the only one that brings in something outside the map: it shows which variables HPB’s programmes reach, and which nothing reaches at all.',
         'Switch between them with the buttons at the top. You can reopen this guide whenever you like with the question mark button.',
       ],
     },
@@ -316,11 +326,74 @@ const PROFILE: GuideSection = {
   ],
 }
 
+/**
+ * Intervention's walkthrough.
+ *
+ * This mode needs more explaining than the other three, because it is the only
+ * one showing something that is not in the map: an inventory of programmes, and
+ * a claim about which variables each one touches. A reader who does not know
+ * that chain exists reads the colours as facts about obesity rather than facts
+ * about HPB, so the first step spends its whole length on where the colour comes
+ * from.
+ *
+ * It ends on gates rather than opening with them. Eligibility is the part people
+ * already have a mental model for, and it is meaningless until you have seen a
+ * programme list to be eligible for.
+ */
+const INTERVENTION: GuideSection = {
+  id: 'intervention',
+  label: 'Intervention',
+  blurb: 'Where HPB’s programmes reach, and where they do not.',
+  mode: 'intervention',
+  steps: [
+    {
+      title: 'What this mode is showing',
+      body: [
+        'Every HPB programme is tagged with the behaviours it addresses, and each behaviour covers a handful of variables on the map. Colour here means a programme reaches that variable — it says nothing about how well, or how much.',
+        'With nobody chosen, the map answers one question: what does HPB touch at all? Everything left white is whitespace.',
+      ],
+      action: { label: 'Show me the whitespace', id: 'showWhitespace' },
+    },
+    {
+      title: 'One person at a time',
+      body: [
+        'Pick a persona from the box at the bottom and the map splits four ways: what matters to them and is reached, what matters and is not, what is reached but is outside their map, and everything else.',
+        'The list is the same profiles you make in Profile mode — this mode keeps no personas of its own.',
+      ],
+      action: { label: 'Use a persona', id: 'showGuidePersona' },
+    },
+    {
+      title: 'Which programmes reach a variable',
+      body: [
+        'Click any box. The card names every programme that reaches it, grouped under the behaviour each one came through.',
+        'That behaviour line is the working. A programme "reaching" a variable is a claim someone made when tagging the inventory, and the behaviour is how you check it.',
+      ],
+      action: { label: 'Open a reached one', id: 'openReachedVariable' },
+    },
+    {
+      title: 'When nothing reaches it',
+      body: [
+        'An empty box is two different situations. Either no programme that applies to this person reaches it — a gap, and somewhere to act — or no programme reaches it for anyone, so there is nothing to point at it without adding a behaviour first.',
+        'Most of the map is the second kind, and much of that is correct: nothing acts directly on resting metabolic rate. The card tells you which you are looking at.',
+      ],
+      action: { label: 'Open one nothing reaches', id: 'openUnreachedVariable' },
+    },
+    {
+      title: 'Who a programme is for',
+      body: [
+        'Each programme carries a rule about who it is for — an age band, a life stage, being a parent or a smoker. The persona’s characteristics decide which ones count, and the bar says how many of the inventory applied.',
+        'Leave a characteristic unset and any programme testing it is reported as undetermined rather than dropped, so an unfinished persona never quietly shrinks the map. Fill them in under Edit persona in Profile mode.',
+      ],
+    },
+  ],
+}
+
 export const GUIDE_SECTIONS: Record<GuideSectionId, GuideSection> = {
   basics: BASICS,
   explore: EXPLORE,
   trace: TRACE,
   profile: PROFILE,
+  intervention: INTERVENTION,
 }
 
 /** Contents order. The mode you are in is floated to the top by the card. */
@@ -329,4 +402,5 @@ export const GUIDE_ORDER: readonly GuideSectionId[] = [
   'explore',
   'trace',
   'profile',
+  'intervention',
 ]
