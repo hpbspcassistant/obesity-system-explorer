@@ -1,105 +1,1156 @@
 [
   {
-    "id": "steps-challenge",
-    "name": "National Steps Challenge",
-    "source": "hpb-web",
+    "id": "healthy-365-app",
+    "name": "Healthy 365 app",
+    "source": "HealthHub",
+    "status": "current",
     "gate": "everyone",
+    "gateSource": "everyone",
     "addresses": [
       "physical-activity",
-      "sedentary",
+      "healthy-eating",
+      "sleep",
       "health-literacy"
-    ]
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        79
+      ],
+      "healthy-eating": [
+        81,
+        86,
+        85,
+        73
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
   },
   {
-    "id": "nutri-grade",
-    "name": "Nutri-Grade",
-    "source": "cos-speech",
+    "id": "national-steps-challenge",
+    "name": "National Steps Challenge",
+    "source": "HealthHub",
+    "status": "current",
     "gate": "everyone",
+    "gateSource": "everyone",
     "addresses": [
-      "sugar-ssb"
-    ]
-  },
-  {
-    "id": "healthier-dining",
-    "name": "Healthier Dining Programme",
-    "source": "hpb-web",
-    "gate": "everyone",
-    "addresses": [
-      "diet-quality",
-      "sugar-ssb"
-    ]
+      "physical-activity",
+      "sedentary-screen"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        79
+      ]
+    }
   },
   {
     "id": "age-strong",
     "name": "Age Strong",
-    "source": "cos-speech",
-    "gate": {
-      "age_band": [
-        "50-59",
-        "60-plus"
-      ]
-    },
+    "source": "HealthHub",
+    "status": "current",
+    "gate": [
+      {
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ]
+      }
+    ],
+    "gateSource": "seniors 50+",
     "addresses": [
       "physical-activity",
-      "social-isolation"
+      "healthy-eating",
+      "sleep",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        83
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "move-it",
+    "name": "MOVE IT (free exercise classes)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "physical-activity"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        40,
+        83
+      ]
+    }
+  },
+  {
+    "id": "live-well-age-well",
+    "name": "Live Well, Age Well",
+    "source": "HealthHub",
+    "status": "current",
+    "gate": [
+      {
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ]
+      }
+    ],
+    "gateSource": "seniors 50+",
+    "addresses": [
+      "physical-activity",
+      "mental-wellbeing",
+      "social-connection"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        83
+      ],
+      "social-connection": [
+        6,
+        27
+      ]
+    }
+  },
+  {
+    "id": "healthy-workplace-ecosystem",
+    "name": "Healthy Workplace Ecosystem (HWE)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "working-adult"
+      }
+    ],
+    "gateSource": "working adults (participating workplaces)",
+    "addresses": [
+      "healthy-environment",
+      "physical-activity",
+      "healthy-eating"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        40
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "healthy-environment": [
+        55,
+        40
+      ]
+    }
+  },
+  {
+    "id": "workplace-outreach-wellness-programme",
+    "name": "Workplace Outreach Wellness (WOW) Programme",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": "working-adult"
+      }
+    ],
+    "gateSource": "working adults / companies",
+    "addresses": [
+      "physical-activity",
+      "healthy-eating",
+      "mental-wellbeing",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "eat-drink-shop-healthy-challenge",
+    "name": "Eat, Drink, Shop Healthy Challenge",
+    "source": "HealthHub",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "healthy-eating",
+      "sugar-reduction",
+      "healthy-environment",
+      "health-literacy"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "nutri-grade",
+    "name": "Nutri-Grade",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "sugar-reduction",
+      "healthy-eating"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86
+      ]
+    }
+  },
+  {
+    "id": "healthier-choice-symbol",
+    "name": "Healthier Choice Symbol (HCS)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "healthy-eating",
+      "health-literacy",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "healthier-dining-programme",
+    "name": "Healthier Dining Programme (HDP)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "healthy-eating",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "healthier-ingredient-development-scheme",
+    "name": "Healthier Ingredient Development Scheme (HIDS)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "healthy-eating",
+      "sodium-reduction",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86,
+        76
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "siu-dai-by-default-movement",
+    "name": "\"Siu Dai by Default\" movement",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "sugar-reduction",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "less-salt-more-taste-movement",
+    "name": "\"Less Salt, More Taste\" movement",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "sodium-reduction",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "healthier-ingredient-promotion-programme",
+    "name": "Healthier Ingredient Promotion Programme (HIPP)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
+    "addresses": [
+      "sodium-reduction",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "i-quit-programme",
+    "name": "I Quit Programme (incl. QuitLine, 28-Day Countdown)",
+    "source": "HealthHub",
+    "status": "current",
+    "gate": [
+      {
+        "smoker_or_vaper": true
+      }
+    ],
+    "gateSource": "smokers / vapers",
+    "addresses": [
+      "smoking-vaping"
     ]
   },
   {
-    "id": "iquit",
-    "name": "iQuit",
-    "source": "hpb-web",
-    "gate": {
-      "smoker_or_vaper": true
-    },
+    "id": "mindsg",
+    "name": "mindSG (MindSG)",
+    "source": "HealthHub",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone",
     "addresses": [
-      "mental-wellbeing"
+      "mental-wellbeing",
+      "health-literacy"
     ],
-    "extraNodes": []
+    "trim": {
+      "health-literacy": []
+    }
   },
   {
-    "id": "parent-club",
-    "name": "Parent Club",
-    "source": "hpb-web",
-    "gate": {
-      "is_parent": true
-    },
+    "id": "mindline-at-work",
+    "name": "mindline at work",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": "working-adult"
+      }
+    ],
+    "gateSource": "working adults",
     "addresses": [
-      "diet-quality",
+      "mental-wellbeing"
+    ]
+  },
+  {
+    "id": "community-health-advocate-programme",
+    "name": "Community Health Advocate Programme",
+    "source": "News",
+    "status": "verify",
+    "gate": "everyone",
+    "gateSource": "everyone (community)",
+    "addresses": [
+      "health-literacy",
+      "social-connection"
+    ],
+    "trim": {
+      "health-literacy": [
+        11,
+        46
+      ],
+      "social-connection": [
+        6,
+        19
+      ]
+    }
+  },
+  {
+    "id": "jom-check",
+    "name": "Jom Check!",
+    "source": "CoS speech",
+    "status": "verify",
+    "gate": [
+      {
+        "conditions": [
+          "not-yet-screened"
+        ]
+      }
+    ],
+    "gateSource": "adults not yet screened / enrolled",
+    "addresses": [
+      "health-screening",
+      "health-literacy"
+    ],
+    "trim": {
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "healthy-preschool-accreditation-framework",
+    "name": "Healthy Preschool Accreditation Framework",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "young-child"
+      },
+      {
+        "life_stage": "working-adult"
+      },
+      {
+        "is_parent": true
+      }
+    ],
+    "gateSource": "preschool children (+ parents/staff)",
+    "addresses": [
+      "healthy-eating",
       "physical-activity",
       "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "healthy-meals-in-schools-programme",
+    "name": "Healthy Meals in Schools Programme (HMSP)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ]
+      }
+    ],
+    "gateSource": "students",
+    "addresses": [
+      "healthy-eating",
+      "sugar-reduction",
+      "sodium-reduction",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86,
+        73
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "healthy-meals-in-pre-schools-programme",
+    "name": "Healthy Meals in Pre-schools Programme (HMPP)",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": "young-child"
+      }
+    ],
+    "gateSource": "preschool children",
+    "addresses": [
+      "healthy-eating",
+      "healthy-environment"
+    ],
+    "trim": {
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "healthy-environment": [
+        55
+      ]
+    }
+  },
+  {
+    "id": "youth-preventive-health-and-dental-services",
+    "name": "Youth Preventive Health and Dental Services",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ]
+      }
+    ],
+    "gateSource": "students (P1-S5)",
+    "addresses": [
+      "health-screening",
+      "immunisation",
+      "sensory-oral-health"
     ]
   },
   {
-    "id": "ywm",
-    "name": "Youth Weight Management",
-    "source": "hpb-web",
-    "gate": {
-      "age_band": [
-        "under-7",
-        "7-14"
-      ]
-    },
+    "id": "student-health-advisor-programme",
+    "name": "Student Health Advisor (Lifestyle Coach) Programme",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ],
+        "conditions": [
+          "overweight-high-risk"
+        ]
+      }
+    ],
+    "gateSource": "students (identified high-risk)",
     "addresses": [
-      "diet-quality",
+      "healthy-eating",
       "physical-activity",
-      "sedentary"
+      "smoking-vaping",
+      "health-literacy",
+      "health-screening"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86,
+        73
+      ],
+      "health-literacy": [
+        11,
+        46,
+        20
+      ]
+    }
+  },
+  {
+    "id": "health-promoting-schools-framework",
+    "name": "Health Promoting Schools Framework",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ]
+      },
+      {
+        "life_stage": "working-adult"
+      },
+      {
+        "is_parent": true
+      }
+    ],
+    "gateSource": "students, staff & parents (all levels)",
+    "addresses": [
+      "physical-activity",
+      "healthy-eating",
+      "mental-wellbeing",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "project-silver-screen",
+    "name": "Project Silver Screen",
+    "source": "HealthHub",
+    "status": "verify",
+    "gate": [
+      {
+        "age_band": [
+          "60-plus"
+        ]
+      }
+    ],
+    "gateSource": "seniors 60+",
+    "addresses": [
+      "sensory-oral-health",
+      "health-screening"
     ]
   },
   {
-    "id": "workplace-health",
-    "name": "Workplace Health Programme",
-    "source": "news",
-    "gate": {
-      "life_stage": [
-        "working-adult"
-      ]
-    },
+    "id": "steady-lah",
+    "name": "Steady Lah (Falls Prevention Programme)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "senior",
+        "conditions": [
+          "frailty-or-falls-risk"
+        ]
+      }
+    ],
+    "gateSource": "seniors (frailty / falls risk)",
     "addresses": [
-      "time-scarcity",
+      "physical-activity"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        83
+      ]
+    }
+  },
+  {
+    "id": "happy",
+    "name": "HAPPY (Healthy Ageing Promotion Programme for You)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "senior",
+        "conditions": [
+          "frailty-or-falls-risk"
+        ]
+      }
+    ],
+    "gateSource": "seniors (frailty risk)",
+    "addresses": [
+      "physical-activity",
+      "social-connection",
       "mental-wellbeing"
     ],
-    "extraNodes": [
-      92
+    "trim": {
+      "physical-activity": [
+        71,
+        83
+      ],
+      "social-connection": [
+        6,
+        27,
+        36
+      ]
+    }
+  },
+  {
+    "id": "move-it-feel-strong",
+    "name": "Move It Feel Strong",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "senior"
+      }
+    ],
+    "gateSource": "seniors",
+    "addresses": [
+      "physical-activity",
+      "social-connection"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        83
+      ],
+      "social-connection": [
+        6,
+        27
+      ]
+    }
+  },
+  {
+    "id": "rise-programme",
+    "name": "Rise Programme (Rise & Move / Rise & Shine)",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": [
+          "young-child",
+          "school-child",
+          "youth",
+          "senior"
+        ]
+      }
+    ],
+    "gateSource": "children, seniors & youth (intergenerational)",
+    "addresses": [
+      "physical-activity",
+      "healthy-eating",
+      "social-connection",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ],
+      "social-connection": [
+        6,
+        27
+      ]
+    }
+  },
+  {
+    "id": "peer-support-programme",
+    "name": "Peer Support Programme (Level 1 & Level 2)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": "everyone",
+    "gateSource": "everyone (youth 15-24 outreach)",
+    "addresses": [
+      "mental-wellbeing",
+      "social-connection",
+      "health-literacy"
+    ],
+    "trim": {
+      "health-literacy": [],
+      "social-connection": [
+        6,
+        19
+      ]
+    }
+  },
+  {
+    "id": "quitvape-programme",
+    "name": "QuitVape programme",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "smoker_or_vaper": true
+      }
+    ],
+    "gateSource": "vapers (youth-focused)",
+    "addresses": [
+      "smoking-vaping"
     ]
+  },
+  {
+    "id": "get-fit",
+    "name": "Get Fit! (workplace lifestyle programme)",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": "working-adult"
+      }
+    ],
+    "gateSource": "working adults (employees)",
+    "addresses": [
+      "physical-activity",
+      "healthy-eating",
+      "health-literacy",
+      "health-screening"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        83
+      ],
+      "healthy-eating": [
+        81,
+        86,
+        73
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "total-workplace-safety-and-health-programme",
+    "name": "Total Workplace Safety and Health (Total WSH) programme",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": "working-adult"
+      }
+    ],
+    "gateSource": "working adults (higher-risk industries)",
+    "addresses": [
+      "physical-activity",
+      "healthy-eating",
+      "mental-wellbeing",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "docmobile-school-health-service",
+    "name": "DocMobile@School Health Service",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ]
+      }
+    ],
+    "gateSource": "students",
+    "addresses": [
+      "sensory-oral-health",
+      "health-screening"
+    ]
+  },
+  {
+    "id": "roving-optical-shop",
+    "name": "Roving Optical Shop",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "life_stage": [
+          "school-child",
+          "youth"
+        ],
+        "conditions": [
+          "myopic"
+        ],
+        "ses": "lower-income"
+      }
+    ],
+    "gateSource": "students (myopic, lower-income)",
+    "addresses": [
+      "sensory-oral-health"
+    ]
+  },
+  {
+    "id": "screen-use-buddy",
+    "name": "Screen Use Buddy",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "is_parent": true
+      }
+    ],
+    "gateSource": "parents (of children)",
+    "addresses": [
+      "sedentary-screen",
+      "health-literacy"
+    ],
+    "trim": {
+      "health-literacy": []
+    }
+  },
+  {
+    "id": "parent-hub",
+    "name": "Parent Hub",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "is_parent": true
+      }
+    ],
+    "gateSource": "parents",
+    "addresses": [
+      "health-literacy"
+    ],
+    "trim": {
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "get-fit-for-haj",
+    "name": "Get Fit for Haj",
+    "source": "HPB web",
+    "status": "current",
+    "gate": [
+      {
+        "conditions": [
+          "haj-pilgrim"
+        ]
+      }
+    ],
+    "gateSource": "Haj pilgrims",
+    "addresses": [
+      "physical-activity",
+      "health-screening",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        83
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "lifestyle-improvement-for-families-transformation",
+    "name": "Lifestyle Improvement for Families Transformation (LIFT)",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "ses": "lower-income"
+      }
+    ],
+    "gateSource": "lower-income families",
+    "addresses": [
+      "healthy-eating",
+      "physical-activity",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86,
+        73
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "digital-healthy-living",
+    "name": "Digital Healthy Living (DHL)",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "ses": "lower-income",
+        "life_stage": [
+          "young-child",
+          "school-child"
+        ]
+      }
+    ],
+    "gateSource": "lower-income families (children <=12)",
+    "addresses": [
+      "healthy-eating",
+      "physical-activity",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "health-literacy": [
+        11,
+        46
+      ]
+    }
+  },
+  {
+    "id": "h-u-n-c-l-e",
+    "name": "H.U.N.C.L.E (Healthy Uncles who Network, drink Coffee, Learn and Exercise)",
+    "source": "HPB web",
+    "status": "verify",
+    "gate": [
+      {
+        "life_stage": "senior",
+        "sex": "male"
+      }
+    ],
+    "gateSource": "senior men",
+    "addresses": [
+      "physical-activity",
+      "social-connection",
+      "health-literacy"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        83
+      ],
+      "health-literacy": [
+        11,
+        46
+      ],
+      "social-connection": [
+        6,
+        27
+      ]
+    }
+  },
+  {
+    "id": "lumihealth",
+    "name": "LumiHealth",
+    "source": "HPB web",
+    "status": "ended",
+    "gate": "everyone",
+    "gateSource": "everyone (Apple users) [ENDED]",
+    "addresses": [
+      "physical-activity",
+      "sleep",
+      "healthy-eating",
+      "mental-wellbeing"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        49,
+        79
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ]
+    }
+  },
+  {
+    "id": "health-promoting-mall-the-wellness-collective",
+    "name": "Health Promoting Mall / The Wellness Collective",
+    "source": "HPB web / Annual Report",
+    "status": "verify",
+    "gate": "everyone",
+    "gateSource": "everyone (mall-goers)",
+    "addresses": [
+      "healthy-environment",
+      "healthy-eating",
+      "physical-activity"
+    ],
+    "trim": {
+      "physical-activity": [
+        71,
+        40,
+        49
+      ],
+      "healthy-eating": [
+        81,
+        86
+      ],
+      "healthy-environment": [
+        55,
+        40
+      ]
+    }
   }
 ]

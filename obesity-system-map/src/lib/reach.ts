@@ -15,9 +15,10 @@
  * whitespace view trustworthy rather than an artefact of how each programme
  * happened to be tagged.
  *
- * Everything here takes its data as arguments. The four JSON files behind
- * data/intervention are placeholders that will be replaced wholesale, so nothing in
- * this module knows a single behaviour id, programme name or node number.
+ * Everything here takes its data as arguments, and nothing in this module knows
+ * a single behaviour id, programme name or node number. The inventory is
+ * generated from a spreadsheet that is still being corrected, so it has to be
+ * replaceable without touching a line of this file.
  */
 
 /**
@@ -39,16 +40,25 @@ export type PersonaCharacteristics = Readonly<
 >
 
 /**
- * Either "everyone", or characteristic -> the value(s) that satisfy it.
+ * Either "everyone", one clause, or a list of clauses any one of which lets a
+ * persona in.
  *
- * A persona passes when every key is satisfied, so keys are an AND and the
- * values within a key are an OR. Gates never name null: "does not apply" is
- * something a persona says about itself, not something a programme asks for.
+ * Within a clause, keys are an AND and the values within a key are an OR. Gates
+ * never name null: "does not apply" is something a persona says about itself,
+ * not something a programme asks for.
+ *
+ * The list exists because the real inventory has audiences a single clause
+ * cannot describe. "Students, staff and parents" is three unrelated groups, and
+ * a clause can only AND them — which would mean a parent who is also a teacher
+ * and a child, matching nobody. Narrowing to the first-named group instead was
+ * the other option, and it silently states as fact that the programme does not
+ * reach the other two.
  */
 export type GateValue = string | boolean
-export type Gate =
-  | 'everyone'
-  | Readonly<Record<string, GateValue | readonly GateValue[]>>
+export type GateClause = Readonly<
+  Record<string, GateValue | readonly GateValue[]>
+>
+export type Gate = 'everyone' | GateClause | readonly GateClause[]
 
 export interface Behaviour {
   id: string
@@ -69,6 +79,31 @@ export interface Programme {
    * reasoned about and which were pinned by hand.
    */
   extraNodes?: readonly number[]
+  /**
+   * Per-behaviour node overrides — behaviour id -> the nodes THIS programme
+   * reaches through it. A behaviour absent from here contributes its whole set;
+   * an empty array contributes nothing.
+   *
+   * Needed because a behaviour is defined once for every programme that
+   * addresses it, which is the property that makes the overlay comparable — and
+   * also means the broad behaviours over-light. "Health literacy" owns five
+   * nodes about understanding food, and mindSG's health literacy is about
+   * mental health, so without a way to say "none of them" it would claim four
+   * dietary nodes it has nothing to do with.
+   *
+   * A trim only ever narrows. Reaching a node outside the behaviour's set is
+   * what `extraNodes` is for, and keeping the two apart is what stops a trim
+   * from quietly becoming a second, unreviewed mapping.
+   */
+  trim?: Readonly<Record<string, readonly number[]>>
+  /**
+   * Where the eligibility rule came from, in the words of the inventory. Carried
+   * so the machine gate beside it can be checked rather than trusted: every one
+   * was translated by hand out of a sentence like "adults aged 50 and over".
+   */
+  gateSource?: string
+  /** 'ended' programmes are kept for the record and reach nothing. */
+  status?: 'current' | 'verify' | 'ended'
 }
 
 export interface InterventionPersona {
@@ -117,22 +152,44 @@ function clauseVerdict(
   return wanted.includes(held as GateValue) ? 'applies' : 'excluded'
 }
 
-export function testGate(
-  gate: Gate,
+/** One clause: every key must be satisfied, so a single failure ends it. */
+function testClause(
+  clause: GateClause,
   characteristics: PersonaCharacteristics,
 ): GateVerdict {
-  if (gate === 'everyone') return 'applies'
-
   let undetermined = false
-  for (const [characteristic, allowed] of Object.entries(gate)) {
+  for (const [characteristic, allowed] of Object.entries(clause)) {
     const verdict = clauseVerdict(characteristics[characteristic], allowed)
-    // Keep testing rather than returning on the first unknown: a later clause
+    // Keep testing rather than returning on the first unknown: a later key
     // may rule the programme out outright, which is a firmer answer than
     // "cannot say" and should win.
     if (verdict === 'excluded') return 'excluded'
     if (verdict === 'undetermined') undetermined = true
   }
   return undetermined ? 'undetermined' : 'applies'
+}
+
+/**
+ * Clauses are an OR, so the certainties invert: one clause that lets the persona
+ * in settles it, and "cannot say" only survives when no clause admits them and
+ * at least one could not be judged.
+ */
+export function testGate(
+  gate: Gate,
+  characteristics: PersonaCharacteristics,
+): GateVerdict {
+  if (gate === 'everyone') return 'applies'
+  const clauses: readonly GateClause[] = Array.isArray(gate)
+    ? (gate as readonly GateClause[])
+    : [gate as GateClause]
+
+  let undetermined = false
+  for (const clause of clauses) {
+    const verdict = testClause(clause, characteristics)
+    if (verdict === 'applies') return 'applies'
+    if (verdict === 'undetermined') undetermined = true
+  }
+  return undetermined ? 'undetermined' : 'excluded'
 }
 
 export interface Applicability {
@@ -173,7 +230,11 @@ export function nodesOfProgramme(
 ): number[] {
   const nodes = new Set<number>()
   for (const id of programme.addresses) {
-    for (const node of behaviours.get(id)?.nodes ?? []) nodes.add(node)
+    // `??` and not `||`: an empty trim means "this behaviour contributes
+    // nothing here", which is the whole point of trimming mindSG's literacy to
+    // none. `||` would read it as absent and hand back the full bundle.
+    const from = programme.trim?.[id] ?? behaviours.get(id)?.nodes ?? []
+    for (const node of from) nodes.add(node)
   }
   for (const node of programme.extraNodes ?? []) nodes.add(node)
   return [...nodes]

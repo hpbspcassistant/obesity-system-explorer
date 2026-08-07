@@ -1,10 +1,12 @@
 /**
  * Typed access to the intervention inputs.
  *
- * The three files under `data/intervention/` are placeholders with real node ids and
- * invented content. They will be replaced wholesale, so nothing outside this
- * module names a behaviour, a programme or a node from them — this file is the
- * only place that knows they exist at all.
+ * `programmes.json` is generated — see tools/import_inventory.py, which reads the
+ * tagged HPB inventory spreadsheet. Edit the spreadsheet and re-run it; anything
+ * typed into the JSON by hand is lost on the next export.
+ *
+ * Nothing outside this module names a behaviour, a programme or a node from
+ * these files. This is the only place that knows they exist at all.
  */
 
 import { behavioursById } from '../lib/reach'
@@ -16,7 +18,21 @@ import characteristicsRaw from './intervention/characteristics.json'
 import programmesRaw from './intervention/programmes.json'
 
 export const behaviours = behavioursRaw as readonly Behaviour[]
-export const programmes = programmesRaw as unknown as readonly Programme[]
+
+/** Every programme in the inventory, including the ones that have ended. */
+export const allProgrammes = programmesRaw as unknown as readonly Programme[]
+
+/**
+ * What the overlay reasons about.
+ *
+ * Ended programmes are kept in the file and dropped here: a map of what HPB
+ * reaches should not count something nobody can join. 'verify' stays in — that
+ * flags a detail nobody has confirmed yet, not a programme that is not running,
+ * and excluding those would understate reach on a technicality.
+ */
+export const programmes: readonly Programme[] = allProgrammes.filter(
+  (programme) => programme.status !== 'ended',
+)
 
 /**
  * The controlled vocabulary, split as the source file splits it.

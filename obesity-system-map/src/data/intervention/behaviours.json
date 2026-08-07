@@ -1,11 +1,117 @@
 [
-  { "id": "physical-activity",  "label": "Physical activity",        "nodes": [71, 49, 79, 68, 40, 83] },
-  { "id": "sedentary",          "label": "Sedentary lifestyle",      "nodes": [50, 1, 80, 84] },
-  { "id": "diet-quality",       "label": "Poor diet quality",        "nodes": [81, 86, 76, 85, 73] },
-  { "id": "sugar-ssb",          "label": "High sugar / SSB intake",  "nodes": [81, 75, 73] },
-  { "id": "alcohol",            "label": "Harmful alcohol use",      "nodes": [67] },
-  { "id": "health-literacy",    "label": "Low health/food literacy", "nodes": [11, 46, 32] },
-  { "id": "mental-wellbeing",   "label": "Stress / poor wellbeing",  "nodes": [22, 32, 34] },
-  { "id": "social-isolation",   "label": "Social isolation",         "nodes": [19, 36, 27] },
-  { "id": "time-scarcity",      "label": "Time scarcity",            "nodes": [16, 51, 55] }
+  {
+    "id": "physical-activity",
+    "label": "Physical activity (incl. strength, balance & falls prevention)",
+    "nodes": [
+      71,
+      49,
+      79,
+      40,
+      83
+    ]
+  },
+  {
+    "id": "healthy-eating",
+    "label": "Healthy eating / diet quality",
+    "nodes": [
+      81,
+      86,
+      76,
+      85,
+      73
+    ]
+  },
+  {
+    "id": "sugar-reduction",
+    "label": "Sugar reduction",
+    "nodes": [
+      81,
+      75,
+      73
+    ]
+  },
+  {
+    "id": "sodium-reduction",
+    "label": "Sodium reduction",
+    "nodes": [
+      86
+    ]
+  },
+  {
+    "id": "healthy-environment",
+    "label": "Access to healthier options / healthy environment",
+    "nodes": [
+      55,
+      40,
+      78,
+      84
+    ]
+  },
+  {
+    "id": "sedentary-screen",
+    "label": "Reducing sedentary / screen time",
+    "nodes": [
+      1,
+      50,
+      80
+    ]
+  },
+  {
+    "id": "social-connection",
+    "label": "Social connection",
+    "nodes": [
+      6,
+      19,
+      36,
+      27
+    ]
+  },
+  {
+    "id": "mental-wellbeing",
+    "label": "Mental wellbeing",
+    "nodes": [
+      22,
+      34,
+      2
+    ]
+  },
+  {
+    "id": "health-literacy",
+    "label": "Health literacy / self-management",
+    "nodes": [
+      11,
+      46,
+      20,
+      47,
+      30
+    ]
+  },
+  {
+    "id": "smoking-vaping",
+    "label": "Smoking / vaping cessation",
+    "nodes": [
+      23,
+      28
+    ]
+  },
+  {
+    "id": "sleep",
+    "label": "Sleep",
+    "nodes": []
+  },
+  {
+    "id": "health-screening",
+    "label": "Health screening / early detection",
+    "nodes": []
+  },
+  {
+    "id": "sensory-oral-health",
+    "label": "Vision / hearing / oral health",
+    "nodes": []
+  },
+  {
+    "id": "immunisation",
+    "label": "Immunisation",
+    "nodes": []
+  }
 ]

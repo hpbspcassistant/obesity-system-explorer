@@ -4,8 +4,8 @@ import type { Profile } from '../lib/profile'
 /**
  * Intervention's chrome: which persona, and what it adds up to.
  *
- * Not yet the panel — no programme list, no behaviour list, no click-through.
- * Those come next; this is what the mode needs to be usable in the meantime.
+ * Totals only. Which programmes reach a given variable is the card's job, and
+ * naming them twice would leave two places to disagree.
  */
 
 export interface InterventionBarProps {
