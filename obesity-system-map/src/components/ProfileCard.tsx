@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { NO_DEFINITION, definitionOf } from '../data/systemMap'
 import type { EdgeSelection } from '../data/systemMap'
 import type { AnchorRect } from './MapView'
+import { cornerPlacement, placeCard } from '../lib/cardPlacement'
 import { ConnectionRow, InfluenceTag } from './ProfileControls'
 import type { Connection, Node } from '../types'
 
@@ -24,44 +25,6 @@ import type { Connection, Node } from '../types'
 
 const CARD_W = 288
 const MAX_H = 380
-/** Gap between the node box and the card, and from the viewport edge. */
-const GAP = 14
-const EDGE_PAD = 10
-
-interface Placement {
-  left: number
-  top: number
-}
-
-/**
- * Prefers the right of the box, flips left when that would overflow, and
- * finally clamps into view. Vertically it centres on the box and clamps, so a
- * factor near the top or bottom of the map still gets a whole card.
- */
-function place(
-  anchor: AnchorRect,
-  container: { width: number; height: number },
-  height: number,
-): Placement {
-  const roomRight = container.width - (anchor.x + anchor.w) - GAP
-  const left =
-    roomRight >= CARD_W + EDGE_PAD
-      ? anchor.x + anchor.w + GAP
-      : anchor.x - GAP - CARD_W
-
-  const top = anchor.y + anchor.h / 2 - height / 2
-
-  return {
-    left: Math.min(
-      Math.max(left, EDGE_PAD),
-      Math.max(EDGE_PAD, container.width - CARD_W - EDGE_PAD),
-    ),
-    top: Math.min(
-      Math.max(top, EDGE_PAD),
-      Math.max(EDGE_PAD, container.height - height - EDGE_PAD),
-    ),
-  }
-}
 
 export interface ProfileCardProps {
   anchor: AnchorRect | null
@@ -108,8 +71,8 @@ export function ProfileCard({
   const rows = outgoing.length + incoming.length
   const height = edge ? 200 : Math.min(MAX_H, 186 + rows * 22)
   const { left, top } = anchor
-    ? place(anchor, container, height)
-    : { left: container.width - CARD_W - EDGE_PAD, top: EDGE_PAD }
+    ? placeCard(anchor, container, CARD_W, height)
+    : cornerPlacement(container, CARD_W)
 
   return (
     <div

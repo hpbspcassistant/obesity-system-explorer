@@ -32,11 +32,13 @@ import {
   programmes,
 } from './data/intervention'
 import {
+  provenanceOf,
   reachOf,
   summariseForPersona,
   type NodeStanding,
   type PersonaCharacteristics,
 } from './lib/reach'
+import { InterventionCard } from './components/InterventionCard'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -792,6 +794,9 @@ export default function App() {
       gaps: [],
       beyond: allNodeIds.filter((id) => reached.has(id)),
       untouched: allNodeIds.filter((id) => !reached.has(id)),
+      // Nothing to be outside of: `outside` means "in this persona's map and
+      // unreachable", and there is no persona here.
+      outside: [],
       applicability: {
         applies: [...programmes],
         excluded: [],
@@ -806,8 +811,40 @@ export default function App() {
     for (const id of interventionSummary.gaps) byNode.set(id, 'gap')
     for (const id of interventionSummary.beyond) byNode.set(id, 'beyond')
     for (const id of interventionSummary.untouched) byNode.set(id, 'untouched')
+    // MapView toggles only the four named classes, so this one matches nothing
+    // and the box draws plain — which is the intent. The standing is still
+    // recorded because the card reads this map, and it is the only place the
+    // difference from `untouched` is stated.
+    for (const id of interventionSummary.outside) byNode.set(id, 'outside')
     return byNode
   }, [interventionSummary])
+
+  /**
+   * Which programmes reach the open variable, split by whether this persona is
+   * eligible for them.
+   *
+   * The second list is empty except on a gap. Everywhere else it would either
+   * duplicate the first or answer a question nobody asked — on an `outside`
+   * variable there is nothing to list, which is the point of the state.
+   */
+  const interventionReach = useMemo(() => {
+    const nodeId = selection?.kind === 'node' ? selection.nodeId : null
+    if (mode !== 'intervention' || nodeId === null) {
+      return { reaching: [], ineligible: [] }
+    }
+    const applies = interventionSummary.applicability.applies
+    const reaching = provenanceOf(nodeId, applies, behaviourIndex).via
+    if (reaching.length > 0) return { reaching, ineligible: [] }
+
+    // Every other programme, not just the excluded ones: an undetermined
+    // programme belongs here too, since an unfinished persona should never make
+    // a programme that covers this variable disappear from the card.
+    const rest = programmes.filter((p) => !applies.includes(p))
+    return {
+      reaching,
+      ineligible: provenanceOf(nodeId, rest, behaviourIndex).via,
+    }
+  }, [mode, selection, interventionSummary])
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
@@ -832,10 +869,17 @@ export default function App() {
    * target, which is where the eye already is after following an arrow.
    */
   const anchorNodeId = useMemo(() => {
-    if (!profiling || !selection) return null
+    if (!selection) return null
+    // Intervention hangs a card off factors only: its whole subject is which
+    // programmes reach a variable, and a connection is not something a
+    // programme reaches.
+    if (mode === 'intervention') {
+      return selection.kind === 'node' ? selection.nodeId : null
+    }
+    if (!profiling) return null
     if (selection.kind === 'node') return selection.nodeId
     return selectedEdge?.connection.targetId ?? null
-  }, [profiling, selection, selectedEdge])
+  }, [mode, profiling, selection, selectedEdge])
 
   /** Everything on a route within the step limit — drawn in full on the map. */
   const tracePaths = useMemo(() => {
@@ -1307,6 +1351,21 @@ export default function App() {
           onSelectNode={selectNode}
           onSelectConnection={selectConnection}
         />
+        )}
+
+        {mode === 'intervention' && (
+          <InterventionCard
+            anchor={anchor}
+            container={stage}
+            node={selectedNode}
+            standing={
+              selectedNode ? interventionStanding.get(selectedNode.id) : undefined
+            }
+            reaching={interventionReach.reaching}
+            ineligible={interventionReach.ineligible}
+            withPersona={interventionPersona !== null}
+            onClose={clearSelection}
+          />
         )}
 
         {mode === 'intervention' && (

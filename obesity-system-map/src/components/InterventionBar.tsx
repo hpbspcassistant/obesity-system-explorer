@@ -71,7 +71,15 @@ export function InterventionBar({
             <span className="text-gray-300">·</span>
             <Count n={summary.beyond.length} label="beyond" />
             <span className="text-gray-300">·</span>
-            <Count n={summary.untouched.length} label="untouched" />
+            {/* Folded together because they are the same box on screen: an
+                `outside` variable draws plain, exactly like an untouched one.
+                Counting it separately here would make the bar disagree with the
+                map, and splitting it out would leave the four numbers summing to
+                106 of 108. The card is where the difference is told. */}
+            <Count
+              n={summary.untouched.length + summary.outside.length}
+              label="untouched"
+            />
           </>
         ) : (
           <>
