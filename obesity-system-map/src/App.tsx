@@ -1383,8 +1383,13 @@ export default function App() {
           collapsed={legendCollapsed}
           onCollapsedChange={setLegendCollapsed}
           rightInset={legendRightInset}
-          bottomInset={profiling ? PROFILE_BAR_PX : 0}
+          // Intervention carries a bar of its own, the same height as Profile's.
+          // It was left out here, so the legend sat on top of the persona picker.
+          bottomInset={
+            profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
+          }
           highContrast={highContrast}
+          showSwatches={mode !== 'intervention'}
         />
         {mode === 'explore' && (
         <NodeDetailPanel

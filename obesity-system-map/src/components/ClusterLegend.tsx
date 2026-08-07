@@ -18,6 +18,15 @@ interface ClusterLegendProps {
   bottomInset?: number
   /** Legend swatches follow the map's palette; see src/data/contrast.ts. */
   highContrast: boolean
+  /**
+   * False where the map is not painting variables by their group.
+   *
+   * Intervention paints every box by whether a programme reaches it, so a type
+   * swatch there promises a colour that appears nowhere — and it does it beside
+   * a second key that is telling the truth about the same boxes. The filter
+   * underneath is still worth having, so the swatch goes and the box stays.
+   */
+  showSwatches?: boolean
 }
 
 /** Solid line ending in an arrowhead, as printed on the original legend. */
@@ -77,6 +86,10 @@ const TABS: { id: Taxonomy; label: string; title: string }[] = [
  * So it now shows in every mode and stays put. Panels no longer hide it: it is
  * offset clear of them, and it collapses to a pill when the corner is genuinely
  * needed for something else.
+ *
+ * In Intervention it shows without swatches — see `showSwatches`. The two halves
+ * come apart there: the filter is as useful as anywhere, and the colour key is
+ * not merely redundant but wrong, since that mode paints boxes by reach.
  */
 export function ClusterLegend({
   taxonomy,
@@ -90,6 +103,7 @@ export function ClusterLegend({
   rightInset = 0,
   bottomInset = 0,
   highContrast,
+  showSwatches = true,
 }: ClusterLegendProps) {
   const entries =
     taxonomy === 'type'
@@ -98,9 +112,11 @@ export function ClusterLegend({
           nodeCount: t.nodeCount,
           // A legend showing the artwork's pastel while the map shows the
           // retint would be worse than either on its own.
-          swatch: (highContrast
-            ? (contrastSwatch(t.name) ?? t.swatch)
-            : t.swatch) as string | undefined,
+          swatch: showSwatches
+            ? ((highContrast
+                ? (contrastSwatch(t.name) ?? t.swatch)
+                : t.swatch) as string | undefined)
+            : undefined,
         }))
       : atlasClusters.map((c) => ({
           name: c.name,
