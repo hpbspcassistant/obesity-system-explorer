@@ -535,12 +535,30 @@
   fill: #231f20;
 }
 
+/* The same 0.3 Profile uses. It sat at 0.22 on the reasoning that this mode has
+   less to say about connections, but the two modes are read side by side on the
+   same persona and the web being fainter in one of them reads as a difference
+   in the data rather than a decision about ink. */
 .map-svg.has-intervention [data-layer='edges'] {
-  opacity: 0.22;
+  opacity: 0.3;
 }
 
 /* Behaviours own variables, not connections, so nothing here recolours an edge —
    doing so would assert a claim the data does not make. */
+
+/* The persona's own marked connections, drawn exactly as Profile draws them.
+   Without these the persona's map is a scatter of coloured boxes with nothing
+   joining them, which is not the thing they built in the other mode.
+
+   Only this layer of the three. `profile-link-edges` and `profile-link-badges`
+   are offers to change the profile, and the badge is clickable — MapView routes
+   it to onAcceptLink — so showing them here would let a mode that only reports
+   on reach quietly edit the persona it is reporting on. Ties the gate above on
+   specificity and wins on order. */
+.map-svg.has-intervention [data-layer='profile-marked-edges'] {
+  opacity: 1;
+  pointer-events: none;
+}
 
 /* Light fills with a saturated border rather than solid colour. Labels sit on
    top of these and have to stay readable: a solid green at that saturation puts

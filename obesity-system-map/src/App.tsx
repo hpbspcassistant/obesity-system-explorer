@@ -1176,8 +1176,17 @@ export default function App() {
     }
   }, [mode, tracePaths, search, focusedRouteKey, animatedHops, frameNodes])
 
-  const markedNodeIds = activeProfile?.nodeIds ?? NO_MARKS
-  const markedEdgeIds = activeProfile?.edgeIds ?? NO_EDGE_MARKS
+  /**
+   * Intervention's whitespace view is persona-independent by design — it asks
+   * what HPB reaches for anyone — so it is given no marks at all. Otherwise the
+   * active profile's connections would be drawn across a view that is not about
+   * that profile, and would be the only thing on screen claiming a persona.
+   */
+  const showingMarks = !(mode === 'intervention' && interventionWhitespace)
+  const markedNodeIds =
+    showingMarks ? (activeProfile?.nodeIds ?? NO_MARKS) : NO_MARKS
+  const markedEdgeIds =
+    showingMarks ? (activeProfile?.edgeIds ?? NO_EDGE_MARKS) : NO_EDGE_MARKS
 
   /**
    * The suggestions. Only computed in Profile: elsewhere it would be work
