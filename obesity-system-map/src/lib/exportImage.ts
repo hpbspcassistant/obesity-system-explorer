@@ -75,26 +75,41 @@ function bakeStrokes(
   const nonScaling = computed.getPropertyValue('vector-effect').trim() ===
     'non-scaling-stroke'
   /*
-   * The artwork's own edges are the exception, and getting this wrong is what
-   * made an exported map look like it had been drawn with a marker pen.
+   * Only the overlay layers get the divisor, and everything else keeps its
+   * literal width. Getting this backwards is what made an exported map look like
+   * it had been drawn with a marker pen.
    *
-   * Their non-scaling stroke is a FLOOR, not a design width: high contrast pins
-   * every edge to 0.85px so the web survives being zoomed out on a screen. Run
-   * through the divisor that becomes 0.85 / 0.27 ≈ 3.2 map units, against the
-   * 0.51-0.83 the artwork actually draws — four to six times too heavy, on all
-   * 898 of them at once.
+   * A non-scaling stroke means one of two quite different things here. On the
+   * overlays it is a DESIGN WIDTH: a marked connection is 2.6px because that is
+   * how prominent it is meant to be at any zoom, so its proportion against the
+   * picture is what has to survive, and dividing by the scale that look was
+   * drawn at preserves it.
    *
-   * The overlay layers are the opposite case. A marked connection is 2.6px
-   * because that is how prominent it is meant to be at any zoom, so there the
-   * proportion is the thing to preserve and the divisor is right.
+   * Everywhere else it is only a FLOOR, protecting legibility on a screen. High
+   * contrast pins each edge to 0.85px so the web survives being zoomed out, and
+   * Intervention pins a box outline to 0.9px, 2.2px once it carries a state.
+   * Divided by a fit scale of about 0.27 those become 3.2, 3.4 and 8.3 map units
+   * against artwork that draws its lines at 0.51 to 0.83 — four to nine times
+   * too heavy, and at print size the floor is pointless anyway because a hairline
+   * is perfectly visible on A3.
    *
-   * So: convert where a screen width is the intent, and leave it alone where it
-   * is only a minimum. Undivided, these bake at 0.85 units — a shade bolder than
-   * the artwork and correct at any print size.
+   * The first attempt at this excluded the base edges by name and left the node
+   * boxes inflated, which is why the map still came back heavy: at 8.3 units
+   * their outlines were the widest ink in the file.
    */
-  const isBaseEdge = source.closest("[data-layer='edges']") !== null
+  const PROMINENT = [
+    'edge-highlight',
+    'trace-highlight',
+    'profile-marked-edges',
+    'profile-link-edges',
+    'profile-link-badges',
+  ]
+  const layer = source.closest('[data-layer]')
+  const isProminent =
+    layer instanceof SVGElement &&
+    PROMINENT.includes(layer.dataset.layer ?? '')
   const divisor =
-    nonScaling && !isBaseEdge && referenceScale > 0 ? referenceScale : 1
+    nonScaling && isProminent && referenceScale > 0 ? referenceScale : 1
 
   const width = Number.parseFloat(computed.getPropertyValue('stroke-width'))
   if (Number.isFinite(width)) {
@@ -163,6 +178,19 @@ export async function svgToPngBlob(
 
   const clone = svg.cloneNode(true) as SVGSVGElement
   bakeStyles(svg, clone, referenceScale)
+
+  /*
+   * The invisible click targets have no business in a picture.
+   *
+   * They trace every connection at an 11px non-scaling stroke and are kept out
+   * of sight by `stroke: transparent`, which bakes as `rgba(0, 0, 0, 0)` — CSS
+   * Color 4 syntax in an SVG presentation attribute, which a renderer is under
+   * no obligation to accept. Anything that falls back to the default paints 297
+   * black bands across the map, so leaving them in was a hazard with no upside.
+   */
+  for (const hit of clone.querySelectorAll("[data-layer='edge-hit']")) {
+    hit.remove()
+  }
 
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
   clone.setAttribute('width', String(widthUnits))
