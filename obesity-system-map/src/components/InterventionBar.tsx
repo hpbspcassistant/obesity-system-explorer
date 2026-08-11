@@ -57,15 +57,20 @@ export function InterventionBar({
         onChange={(e) => onPersonaChange(e.target.value || null)}
         className="shrink-0 rounded-md border border-gray-300 px-2 py-1 text-[12px] text-gray-800"
       >
-        <option value="">Whitespace — no persona</option>
+        {/* Named for what it shows, not for the persona it lacks. This is where
+            the mode starts and it works on its own: what the inventory reaches,
+            and what a chosen programme reaches. "Whitespace — no persona" read
+            as a prerequisite nobody had met, and sat next to a greyed-out line
+            apologising for it. */}
+        <option value="">Anyone — no persona</option>
         {profiles.map((p) => (
           <option key={p.id} value={p.id}>
-            {p.name}
+            For {p.name}
           </option>
         ))}
         {profiles.length === 0 && (
           <option value="" disabled>
-            No profiles yet — make one in Profile
+            Add a persona in Profile to see what they are missing
           </option>
         )}
       </select>
@@ -85,9 +90,12 @@ export function InterventionBar({
           </>
         ) : (
           <>
+            {/* "not reached" rather than "whitespace": the term is defined in
+                the key, and a bare number beside a word only the key explains is
+                the worst place to introduce it. */}
             <Count n={summary.beyond.length} label="reached" />
             <span className="text-gray-300">·</span>
-            <Count n={summary.untouched.length} label="whitespace" />
+            <Count n={summary.untouched.length} label="not reached" />
           </>
         )}
       </p>
@@ -132,30 +140,35 @@ export function InterventionBar({
           : 'All programmes'}
       </button>
 
-      <button
-        type="button"
-        role="switch"
-        aria-checked={gapsOnly}
-        disabled={!withPersona || summary.gaps.length === 0}
-        onClick={() => onGapsOnlyChange(!gapsOnly)}
-        title={
-          !withPersona
-            ? 'Choose a persona first'
-            : summary.gaps.length === 0
+      {/* Absent without a persona rather than present and disabled. A gap is
+          "matters to this person and nothing reaches it", so with nobody chosen
+          there is no such thing — and a greyed control advertising a state that
+          cannot occur reads as something withheld. It appears when a persona
+          does, which is also what tells you the persona brought it. */}
+      {withPersona && (
+        <button
+          type="button"
+          role="switch"
+          aria-checked={gapsOnly}
+          disabled={summary.gaps.length === 0}
+          onClick={() => onGapsOnlyChange(!gapsOnly)}
+          title={
+            summary.gaps.length === 0
               ? 'No gaps for this persona'
               : 'Fade everything that is not a gap'
-        }
-        className={[
-          'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
-          !withPersona || summary.gaps.length === 0
-            ? 'cursor-not-allowed border-gray-200 text-gray-300'
-            : gapsOnly
-              ? 'border-gray-900 bg-gray-900 text-white'
-              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-        ].join(' ')}
-      >
-        Gaps only
-      </button>
+          }
+          className={[
+            'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+            summary.gaps.length === 0
+              ? 'cursor-not-allowed border-gray-200 text-gray-300'
+              : gapsOnly
+                ? 'border-gray-900 bg-gray-900 text-white'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+          ].join(' ')}
+        >
+          Gaps only
+        </button>
+      )}
     </div>
   )
 }

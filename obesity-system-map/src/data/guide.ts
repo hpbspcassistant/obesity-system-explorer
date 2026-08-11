@@ -347,18 +347,18 @@ const INTERVENTION: GuideSection = {
   mode: 'intervention',
   steps: [
     {
-      title: 'What this mode is showing',
+      title: 'What HPB reaches',
       body: [
         'Every HPB programme is tagged with the behaviours it addresses, and each behaviour covers a handful of variables on the map. Colour here means a programme reaches that variable — it says nothing about how well, or how much.',
-        'With nobody chosen, the map answers one question: what does HPB touch at all? Everything left white is whitespace.',
+        'This is where the mode starts, and it needs nobody in particular: what does the inventory touch at all? Everything left empty is whitespace — 86 of the 108.',
       ],
-      action: { label: 'Show me the whitespace', id: 'showWhitespace' },
+      action: { label: 'Show me', id: 'showWhitespace' },
     },
     {
-      title: 'One person at a time',
+      title: 'Then narrow it to one person',
       body: [
-        'Pick a persona from the box at the bottom and the map splits four ways: what matters to them and is reached, what matters and is not, what is reached but is outside their map, and everything else.',
-        'The list is the same profiles you make in Profile mode — this mode keeps no personas of its own.',
+        'Everything so far works with nobody in mind. Add a persona and the same map answers a sharper question: of what we reach, what reaches them — and what matters to them that nothing reaches.',
+        'The map splits four ways, and the fourth colour is the one to look for. The list is the same profiles you make in Profile mode; this mode keeps none of its own.',
       ],
       action: { label: 'Use a persona', id: 'showGuidePersona' },
     },
