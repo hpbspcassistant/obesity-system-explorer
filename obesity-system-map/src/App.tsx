@@ -307,12 +307,31 @@ export default function App() {
     })
   }, [])
 
-  const deleteProfile = useCallback((id: string) => {
-    setProfiles((current) => current.filter((p) => p.id !== id))
-    setActiveProfileId((current) => (current === id ? null : current))
-    setReviewOpen(false)
-    setSelection(null)
-  }, [])
+  /**
+   * Deleting the active profile falls back to another one, and only reaches
+   * `null` when that was the last.
+   *
+   * It used to clear the selection outright. With no profile active the mode
+   * puts up the new-profile gate, and that gate deliberately has no cancel —
+   * there is normally nothing behind it to go back to. Delete one of several and
+   * the reader was held there with their remaining profiles unreachable: the
+   * picker that would switch to them lives in the bar, underneath the gate's own
+   * overlay.
+   *
+   * Most recent rather than first, matching where the app opens on load.
+   */
+  const deleteProfile = useCallback(
+    (id: string) => {
+      const remaining = profiles.filter((p) => p.id !== id)
+      setProfiles(remaining)
+      if (activeProfileId === id) {
+        setActiveProfileId(remaining.at(-1)?.id ?? null)
+      }
+      setReviewOpen(false)
+      setSelection(null)
+    },
+    [profiles, activeProfileId],
+  )
 
   /** One form serves both "name a new persona" and "rename this one". */
   const savePersona = useCallback(
