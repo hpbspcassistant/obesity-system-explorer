@@ -5,21 +5,16 @@ import type { Applicability, Programme } from '../lib/reach'
 /**
  * Picking which programmes the map should answer for.
  *
- * The mode's default question is "what reaches this persona", summed over every
- * programme they are eligible for. This asks the narrower one — what does *this*
- * programme reach, or these three — which is how you audit a tagging or price up
- * a portfolio.
+ * Unticking a programme means "suppose we did not run this". It leaves the
+ * inventory, and the map recolours: a variable only it covered stops being
+ * covered and becomes a gap. So the filter answers what a programme is worth —
+ * remove it and see what goes red.
  *
- * It does not recolour anything. The four states stay computed from everything
- * that applies, and a selection only fades what it does not reach; see the
- * `programme-filter` rule in map.css for why recolouring was rejected.
- *
- * Programmes the persona is not eligible for are listed and selectable, marked
- * as such. That is deliberate: five variables in the current inventory are
- * reachable only through gated programmes, so "what would we cover if we
- * widened this" is a real question and there is nowhere else to ask it. The
- * cost is that the map can then show reach this persona cannot actually get,
- * which is what the marking is for.
+ * The list is the whole inventory, never just what is ticked, or there would be
+ * no way to put anything back. Programmes the persona fails the gate for are
+ * shown and marked; ticking one changes nothing for that persona, because the
+ * filter is applied before the gates and eligibility still decides. They are
+ * listed so the reader can see what exists and why it is not counting.
  */
 
 export interface InterventionProgrammePanelProps {
@@ -41,10 +36,16 @@ interface Row {
   standing: keyof Applicability | null
 }
 
+/**
+ * Only `applies` programmes feed the map, so the other two say plainly that
+ * ticking them changes nothing here. The boxes stay operable rather than
+ * disabled: the filter is a statement about the inventory, not about this
+ * persona, and the same choice has to survive switching to one who is eligible.
+ */
 const STANDING_NOTE: Record<keyof Applicability, string | null> = {
   applies: null,
-  undetermined: 'characteristic not set',
-  excluded: 'not eligible',
+  undetermined: 'characteristic not set — not counting',
+  excluded: 'not eligible — not counting',
 }
 
 export function InterventionProgrammePanel({
@@ -133,8 +134,8 @@ export function InterventionProgrammePanel({
           </button>
         </div>
         <p className="mt-0.5 text-[11px] leading-relaxed text-gray-500">
-          The map keeps its colours and fades whatever the chosen programmes do
-          not reach.
+          Untick a programme to see the map without it. What only it covered
+          turns red.
         </p>
 
         <input
@@ -193,13 +194,14 @@ export function InterventionProgrammePanel({
                   aria-label={programme.name}
                   className="mt-0.5 h-4 w-4 shrink-0 accent-gray-900"
                 />
-                {/* The name solos rather than toggles. Auditing one programme is
-                    the common gesture and it would otherwise mean None followed
-                    by finding the row again. */}
+                {/* The name solos rather than toggles: "what if this were the
+                    only thing we ran". An extreme question, and the honest
+                    answer under this model — most of the map goes red — but it
+                    would otherwise mean None followed by finding the row again. */}
                 <button
                   type="button"
                   onClick={() => solo(programme.id)}
-                  title={`Show only ${programme.name}`}
+                  title={`Count only ${programme.name}`}
                   className="min-w-0 flex-1 text-left"
                 >
                   <span className="block text-[12.5px] leading-snug text-gray-800">

@@ -82,13 +82,13 @@ export interface InterventionCardProps {
    * something already covers this variable, just not for them.
    */
   ineligible: NodeProvenance['via']
-  withPersona: boolean
   /**
-   * Programme ids the filter is down to, or null when it is off. Rows outside it
-   * are marked: with a filter on, a faded box whose card lists four programmes
-   * gives no clue which one put it there.
+   * Programmes that would reach it but have been unticked. This is what the
+   * filter is costing, and it is the only place that cost is visible — on the
+   * map an unticked programme simply stops existing.
    */
-  selectedProgrammes: ReadonlySet<string> | null
+  unticked: NodeProvenance['via']
+  withPersona: boolean
   onClose: () => void
 }
 
@@ -99,8 +99,8 @@ export function InterventionCard({
   standing,
   reaching,
   ineligible,
+  unticked,
   withPersona,
-  selectedProgrammes,
   onClose,
 }: InterventionCardProps) {
   if (!node || !standing) return null
@@ -113,9 +113,11 @@ export function InterventionCard({
   // the allowances below are deliberately loose — a behaviour heading and a
   // programme name both wrap at this width more often than not.
   const groups = new Set(
-    [...reaching, ...ineligible].map((v) => v.behaviour?.id ?? 'pinned'),
+    [...reaching, ...unticked, ...ineligible].map(
+      (v) => v.behaviour?.id ?? 'pinned',
+    ),
   ).size
-  const rows = reaching.length + ineligible.length
+  const rows = reaching.length + unticked.length + ineligible.length
   const height = Math.min(MAX_H, 190 + groups * 26 + rows * 19)
   const { left, top } = anchor
     ? placeCard(anchor, container, CARD_W, height)
@@ -150,13 +152,23 @@ export function InterventionCard({
               withPersona ? 'Reached by' : `Reached by ${reaching.length}`
             }
             via={reaching}
-            selectedProgrammes={selectedProgrammes}
           />
         )}
 
-        {/* Named on a gap and nowhere else. "A programme covers this, and they
-            are not eligible" is a different decision from "nothing covers it" —
-            one is a question about the gate, the other about the inventory. */}
+        {/* What the filter is costing on this variable. Listed before the
+            eligibility group because it is the one the reader just caused, and
+            the one they can undo. */}
+        {unticked.length > 0 && (
+          <Programmes
+            heading="Would reach it, but unticked"
+            via={unticked}
+            muted
+          />
+        )}
+
+        {/* "A programme covers this, and they are not eligible" is a different
+            decision from "nothing covers it" — one is a question about the gate,
+            the other about the inventory. */}
         {ineligible.length > 0 && (
           <Programmes
             heading="Covers it, but not for this persona"
@@ -203,31 +215,20 @@ function Programmes({
   heading,
   via,
   muted = false,
-  selectedProgrammes = null,
 }: {
   heading: string
   via: NodeProvenance['via']
   muted?: boolean
-  /** Null when no filter is on, in which case no row is marked. */
-  selectedProgrammes?: ReadonlySet<string> | null
 }) {
-  const groups = new Map<
-    string,
-    { label: string; names: { name: string; filteredOut: boolean }[] }
-  >()
+  const groups = new Map<string, { label: string; names: string[] }>()
   for (const { programme, behaviour } of via) {
     const key = behaviour?.id ?? ' pinned'
-    const entry = {
-      name: programme.name,
-      filteredOut:
-        selectedProgrammes !== null && !selectedProgrammes.has(programme.id),
-    }
     const group = groups.get(key)
-    if (group) group.names.push(entry)
+    if (group) group.names.push(programme.name)
     else {
       groups.set(key, {
         label: behaviour ? `via ${behaviour.label}` : 'named directly',
-        names: [entry],
+        names: [programme.name],
       })
     }
   }
@@ -241,20 +242,9 @@ function Programmes({
         <div key={key} className="mt-1.5">
           <p className="text-[11px] leading-snug text-gray-500">{group.label}</p>
           <ul className={muted ? 'text-gray-500' : 'text-gray-800'}>
-            {group.names.map((entry) => (
-              <li
-                key={entry.name}
-                className={`py-px text-[12px] leading-snug ${
-                  entry.filteredOut ? 'text-gray-400' : ''
-                }`}
-              >
-                {entry.name}
-                {/* Said in words as well as by the greying: the row is a fact
-                    about this variable either way, and only its place in the
-                    current filter is in question. */}
-                {entry.filteredOut && (
-                  <span className="text-gray-300"> · not in filter</span>
-                )}
+            {group.names.map((name) => (
+              <li key={name} className="py-px text-[12px] leading-snug">
+                {name}
               </li>
             ))}
           </ul>

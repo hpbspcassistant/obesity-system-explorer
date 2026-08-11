@@ -20,8 +20,7 @@ export interface InterventionBarProps {
   applicability: Applicability | null
   /** How many programmes the filter is down to, or null when it is off. */
   selectedProgrammes: number | null
-  /** Variables the chosen programmes reach, shown only while the filter is on. */
-  selectionReach: number
+  totalProgrammes: number
   onOpenProgrammes: () => void
   programmePanelOpen: boolean
 }
@@ -44,7 +43,7 @@ export function InterventionBar({
   summary,
   applicability,
   selectedProgrammes,
-  selectionReach,
+  totalProgrammes,
   onOpenProgrammes,
   programmePanelOpen,
 }: InterventionBarProps) {
@@ -111,14 +110,16 @@ export function InterventionBar({
         </p>
       )}
 
-      {/* While filtering, the four counts still describe the whole persona — the
-          filter fades boxes rather than recolouring them — so the selection gets
-          its own figure instead of quietly changing theirs. */}
+      {/* Filled in when a filter is on, because every other number in this bar
+          then describes a smaller inventory than the reader may assume. The
+          counts above already move with it — a variable only an unticked
+          programme covered turns from covered to gap — so the state has to be
+          visible rather than inferable. */}
       <button
         type="button"
         onClick={onOpenProgrammes}
         aria-expanded={programmePanelOpen}
-        title="Choose which programmes the map answers for"
+        title="Choose which programmes to count"
         className={[
           'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
           filtering
@@ -127,7 +128,7 @@ export function InterventionBar({
         ].join(' ')}
       >
         {filtering
-          ? `${selectedProgrammes} programme${selectedProgrammes === 1 ? '' : 's'} · reaches ${selectionReach}`
+          ? `${selectedProgrammes} of ${totalProgrammes} programmes`
           : 'All programmes'}
       </button>
 

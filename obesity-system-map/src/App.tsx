@@ -32,6 +32,7 @@ import {
   programmes,
 } from './data/intervention'
 import {
+  classifyProgrammes,
   nodesOfProgramme,
   provenanceOf,
   reachOf,
@@ -812,11 +813,31 @@ export default function App() {
     [interventionWhitespace, activeProfile],
   )
 
+  /**
+   * The inventory the map is reasoning about.
+   *
+   * Unticking a programme means "suppose we did not run this", so it leaves the
+   * set entirely and everything downstream is computed without it — a variable
+   * only it covered becomes a gap. That is the whole point: the filter answers
+   * what you would lose.
+   *
+   * Applied before the gates, not after, so eligibility still decides who a
+   * surviving programme reaches. Ticking one this persona fails does not smuggle
+   * them past its gate.
+   */
+  const activeProgrammes = useMemo(
+    () =>
+      programmeFilter === null
+        ? programmes
+        : programmes.filter((p) => programmeFilter.has(p.id)),
+    [programmeFilter],
+  )
+
   const interventionSummary = useMemo(() => {
     if (interventionPersona) {
       return summariseForPersona(
         interventionPersona,
-        programmes,
+        activeProgrammes,
         behaviourIndex,
         allNodeIds,
       )
@@ -826,7 +847,7 @@ export default function App() {
     // programme comes back undetermined rather than applying, so the view
     // counted only the ungated programmes and reported 19 reached where the
     // answer is 28.
-    const reached = reachOf(programmes, behaviourIndex)
+    const reached = reachOf(activeProgrammes, behaviourIndex)
     return {
       reached,
       covered: [],
@@ -834,12 +855,12 @@ export default function App() {
       beyond: allNodeIds.filter((id) => reached.has(id)),
       untouched: allNodeIds.filter((id) => !reached.has(id)),
       applicability: {
-        applies: [...programmes],
+        applies: [...activeProgrammes],
         excluded: [],
         undetermined: [],
       },
     }
-  }, [interventionPersona])
+  }, [interventionPersona, activeProgrammes])
 
   const interventionStanding = useMemo(() => {
     const byNode = new Map<number, NodeStanding>()
@@ -851,45 +872,38 @@ export default function App() {
   }, [interventionSummary])
 
   /**
-   * Variables the chosen programmes reach, or undefined when the filter is off.
+   * Which programmes reach the open variable, in three groups that answer three
+   * different questions.
    *
-   * Drawn from every programme in the inventory rather than only the applicable
-   * ones, because the panel lets you tick a programme this persona fails the
-   * gate for — that is how "what would we cover if we widened this" gets asked.
-   * The four states are untouched by any of it; a filter fades, never recolours.
-   */
-  const programmeSelectionNodes = useMemo(() => {
-    if (mode !== 'intervention' || programmeFilter === null) return undefined
-    const chosen = programmes.filter((p) => programmeFilter.has(p.id))
-    return reachOf(chosen, behaviourIndex)
-  }, [mode, programmeFilter])
-
-  /**
-   * Which programmes reach the open variable, split by whether this persona is
-   * eligible for them.
+   *   reaching     counted, and why this box is the colour it is
+   *   unticked     would count if you put it back — what the filter is costing
+   *   ineligible   covers it for other people, but not for this persona
    *
-   * The second list is empty except on a gap. Everywhere else it would either
-   * duplicate the first or answer a question nobody asked — on an `outside`
-   * variable there is nothing to list, which is the point of the state.
+   * Each is empty unless it has something to say, so an unfiltered card looks
+   * exactly as it did before the filter existed.
    */
   const interventionReach = useMemo(() => {
     const nodeId = selection?.kind === 'node' ? selection.nodeId : null
-    if (mode !== 'intervention' || nodeId === null) {
-      return { reaching: [], ineligible: [] }
-    }
-    const applies = interventionSummary.applicability.applies
-    const reaching = provenanceOf(nodeId, applies, behaviourIndex).via
-    if (reaching.length > 0) return { reaching, ineligible: [] }
+    const empty = { reaching: [], unticked: [], ineligible: [] }
+    if (mode !== 'intervention' || nodeId === null) return empty
 
-    // Every other programme, not just the excluded ones: an undetermined
-    // programme belongs here too, since an unfinished persona should never make
-    // a programme that covers this variable disappear from the card.
-    const rest = programmes.filter((p) => !applies.includes(p))
+    const counted = interventionSummary.applicability.applies
+    // Gates re-tested against the WHOLE inventory, so "would apply" can be told
+    // apart from "was unticked". Without this the two collapse and the card
+    // cannot say which of them is keeping a programme off the map.
+    const wouldApply = interventionPersona
+      ? classifyProgrammes(interventionPersona, programmes).applies
+      : [...programmes]
+
+    const unticked = wouldApply.filter((p) => !counted.includes(p))
+    const neverApplies = programmes.filter((p) => !wouldApply.includes(p))
+
     return {
-      reaching,
-      ineligible: provenanceOf(nodeId, rest, behaviourIndex).via,
+      reaching: provenanceOf(nodeId, counted, behaviourIndex).via,
+      unticked: provenanceOf(nodeId, unticked, behaviourIndex).via,
+      ineligible: provenanceOf(nodeId, neverApplies, behaviourIndex).via,
     }
-  }, [mode, selection, interventionSummary])
+  }, [mode, selection, interventionSummary, interventionPersona])
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
@@ -1312,7 +1326,6 @@ export default function App() {
             mode === 'intervention' ? interventionStanding : undefined
           }
           gapsOnly={gapsOnly}
-          selectionNodeIds={programmeSelectionNodes}
           bottomInset={
             profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
           }
@@ -1476,9 +1489,9 @@ export default function App() {
               selectedNode ? interventionStanding.get(selectedNode.id) : undefined
             }
             reaching={interventionReach.reaching}
+            unticked={interventionReach.unticked}
             ineligible={interventionReach.ineligible}
             withPersona={interventionPersona !== null}
-            selectedProgrammes={programmeFilter}
             onClose={clearSelection}
           />
         )}
@@ -1506,20 +1519,13 @@ export default function App() {
               }
             }}
             gapsOnly={gapsOnly}
-            onGapsOnlyChange={(on) => {
-              setGapsOnly(on)
-              // The two fade on opposite rules — gaps only keeps just the red
-              // boxes, a filter keeps just what the selection reaches, and a gap
-              // is reached by nothing — so together they leave an empty map with
-              // two switches lit. Turning one on releases the other.
-              if (on) setProgrammeFilter(null)
-            }}
+            onGapsOnlyChange={setGapsOnly}
             summary={interventionSummary}
             applicability={
               interventionPersona ? interventionSummary.applicability : null
             }
             selectedProgrammes={programmeFilter?.size ?? null}
-            selectionReach={programmeSelectionNodes?.size ?? 0}
+            totalProgrammes={programmes.length}
             programmePanelOpen={programmePanelOpen}
             onOpenProgrammes={() => setProgrammePanelOpen((open) => !open)}
           />
@@ -1527,15 +1533,19 @@ export default function App() {
 
         {mode === 'intervention' && programmePanelOpen && (
           <InterventionProgrammePanel
-            applicability={interventionSummary.applicability}
+            // The full inventory, classified against the persona — not the
+            // filtered set the map is using. A panel listing only what is ticked
+            // could never offer anything back.
+            applicability={
+              interventionPersona
+                ? classifyProgrammes(interventionPersona, programmes)
+                : { applies: [...programmes], excluded: [], undetermined: [] }
+            }
             reachSize={(programme) =>
               nodesOfProgramme(programme, behaviourIndex).length
             }
             selected={programmeFilter}
-            onSelectedChange={(next) => {
-              setProgrammeFilter(next)
-              if (next !== null) setGapsOnly(false)
-            }}
+            onSelectedChange={setProgrammeFilter}
             onClose={() => setProgrammePanelOpen(false)}
             withoutPersona={interventionPersona === null}
           />

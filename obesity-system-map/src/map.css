@@ -566,26 +566,16 @@
   pointer-events: none;
 }
 
-/* Filtering to a set of programmes fades what they do not reach, and leaves
-   everything else in the colour it already had.
- *
- * Recolouring instead — recomputing the four states from the selected
- * programmes alone — was the obvious reading and is wrong. The states are
- * defined against everything that applies to the persona, so narrowing the set
- * turns red from "act here" into "this programme does not do this": filtering
- * the senior to Nutri-Grade produced 2 covered and 10 gaps, and reach per
- * programme is a median of 3 variables, so that is every programme rather than
- * an edge case.
- *
- * Fading keeps every colour true and asks the narrower question the filter is
- * for — what does this reach, and how does it land. Gaps fall out of view on
- * their own, correctly: a gap is reached by nothing, so no selection reaches it.
- */
-.map-svg.has-intervention.programme-filter
-  g[data-node-id]:not(.in-selection) {
-  opacity: 0.12;
-  pointer-events: none;
-}
+/* The programme filter needs no rule of its own. Unticking a programme takes it
+   out of the set the four states are computed from, so a variable only it
+   covered turns from green to red by the rules already above — which is the
+   question being asked: what would we lose without this.
+
+   An earlier version faded what the selection did not reach and left the
+   colours alone. It answered a weaker question, and it fought "Gaps only":
+   fading kept only gaps while the filter kept only what was reached, and a gap
+   is reached by nothing, so the two together emptied the map. Recolouring
+   composes with it instead. */
 
 /* The invisible edge targets trace every connection in one layer, so leaving
    them live would let a click land on a line this mode does not draw. */
