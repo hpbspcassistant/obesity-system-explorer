@@ -143,7 +143,10 @@ export function InterventionCard({
       )
     )
   }, 0)
-  const height = Math.min(MAX_H, 190 + groups * 26 + rows * 19)
+  // 30 per row, not 19: with a bullet, a row gap and 1.45 leading, a name that
+  // fits one line is about 22px and most of these wrap to two. Over-estimating
+  // costs nothing against a maxHeight; under-estimating puts the scrollbar back.
+  const height = Math.min(MAX_H, 190 + groups * 26 + rows * 30)
   const { left, top } = anchor
     ? placeCard(anchor, container, CARD_W, height)
     : cornerPlacement(container, CARD_W)
@@ -301,16 +304,36 @@ function Group({
   return (
     <div className="mt-1.5">
       {/* The count sits with the behaviour, because the section heading totals
-          every behaviour at once and so says nothing about the one being read. */}
-      <p className="text-[11px] leading-snug text-gray-500">
+          every behaviour at once and so says nothing about the one being read.
+          Weighted so it does not read as another programme name. */}
+      <p className="text-[11px] font-medium leading-snug text-gray-500">
         {label}
         {showCount && names.length > 1 && (
-          <span className="text-gray-400"> · {names.length}</span>
+          <span className="font-normal text-gray-400"> · {names.length}</span>
         )}
       </p>
-      <ul className={muted ? 'text-gray-500' : 'text-gray-800'}>
+      {/*
+       * Bulleted, hanging-indented, and spaced.
+       *
+       * These are official programme names — long, parenthesised, abbreviated —
+       * and most of them wrap at this width. Set as a plain run of lines they
+       * were unreadable for a reason that had nothing to do with how many there
+       * were: "Workplace Outreach Wellness (WOW) Programme" broke across two
+       * lines with nothing to say it was one entry, so the block read as twice
+       * as many programmes with half of them nonsense.
+       *
+       * The marker fixes that on its own — a wrapped line is visibly indented
+       * under its own bullet — and the row gap gives the eye somewhere to land
+       * between entries. `py-px` before was almost no separation at all.
+       */}
+      <ul
+        className={[
+          'mt-1 list-outside list-disc space-y-1 pl-3.5 marker:text-gray-300',
+          muted ? 'text-gray-500' : 'text-gray-800',
+        ].join(' ')}
+      >
         {shown.map((name) => (
-          <li key={name} className="py-px text-[12px] leading-snug">
+          <li key={name} className="text-[12px] leading-[1.45] pl-0.5">
             {name}
           </li>
         ))}
