@@ -77,8 +77,8 @@ const TABS: { id: Taxonomy; label: string; title: string }[] = [
  *
  * It used to render in Explore alone, and to slide away entirely whenever
  * anything was selected. Two things followed from that, both bad. The key
- * vanished at the exact moment a factor's colour became relevant, and Profile —
- * whose whole visual language is "a marked factor gets its cluster colour back"
+ * vanished at the exact moment a variable's colour became relevant, and Profile —
+ * whose whole visual language is "a marked variable gets its cluster colour back"
  * — never had a key at all. And because the filter is housed in the same box,
  * changing a filter meant closing whatever you were reading, changing it, then
  * finding your way back.
@@ -248,7 +248,7 @@ export function ClusterLegend({
                   type="button"
                   aria-pressed={!isHidden}
                   onClick={() => onToggleGroup(entry.name)}
-                  title={`${entry.nodeCount} factors — click to ${isHidden ? 'show' : 'hide'}`}
+                  title={`${entry.nodeCount} variables — click to ${isHidden ? 'show' : 'hide'}`}
                   className={[
                     'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[11px]',
                     'border transition-colors duration-150',

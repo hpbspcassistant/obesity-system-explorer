@@ -1,6 +1,6 @@
 import { NO_DEFINITION, definitionOf, nodesById } from '../data/systemMap'
 import { MAX_LOOP_LENGTH, type LoopSearch } from '../lib/loops'
-import { LIST_MAX_HOPS, TOTAL_FACTORS, isEnergyCore } from '../lib/trace'
+import { LIST_MAX_HOPS, TOTAL_VARIABLES, isEnergyCore } from '../lib/trace'
 import type { PathSet, Route, RouteSearch } from '../lib/trace'
 import type { TraceDirection } from '../types'
 
@@ -165,16 +165,16 @@ export function TracePanel({
         <h2 className="text-base font-semibold text-gray-900">Trace</h2>
         <p className="mt-0.5 text-[11px] text-gray-500">
           {isLoops
-            ? 'Loops that leave a factor and come back to it, reinforcing on the way round'
+            ? 'Loops that leave a variable and come back to it, reinforcing on the way round'
             : direction === 'downstream'
               ? 'Following the arrows outward to the energy core'
-              : 'Following the arrows backward — what feeds into this factor'}
+              : 'Following the arrows backward — what feeds into this variable'}
         </p>
       </header>
 
       {startId === null || !paths ? (
         <div className="px-4 py-3 text-sm text-gray-400">
-          Click a factor on the map, or search for one, to start tracing.
+          Click a variable on the map, or search for one, to start tracing.
         </div>
       ) : (
         <div className="min-h-0 flex-1 overflow-y-auto">
@@ -186,8 +186,8 @@ export function TracePanel({
               <button
                 type="button"
                 data-testid="clear-start"
-                aria-label="Clear starting factor"
-                title="Clear starting factor"
+                aria-label="Clear starting variable"
+                title="Clear starting variable"
                 onClick={onClear}
                 className="-mr-1 shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
               >
@@ -203,14 +203,14 @@ export function TracePanel({
               </button>
             </div>
             {/* Not "reaches": a journey ends on arrival, so this counts the
-                factors that lie on a route TO the core, which is narrower than
+                variables that lie on a route TO the core, which is narrower than
                 everything the start eventually influences. */}
             <p data-testid="reach-headline" className="mt-1 text-[11px]">
               {isLoops ? (
                 totalLoops === 0 ? (
                   <span className="text-gray-500">
                     Not part of any reinforcing loop up to {MAX_LOOP_LENGTH}{' '}
-                    factors long.
+                    variables long.
                   </span>
                 ) : (
                   <span className="font-medium text-teal-700">
@@ -222,18 +222,18 @@ export function TracePanel({
               ) : (
                 <span className="text-gray-500">
                   {direction === 'downstream'
-                    ? `${paths.totalNodes} of ${TOTAL_FACTORS} factors lie on a route to ${isEnergyCore(startId) ? 'the rest of the energy core' : 'the energy core'}`
-                    : `${paths.totalNodes} of ${TOTAL_FACTORS} factors feed into this, directly or indirectly`}
+                    ? `${paths.totalNodes} of ${TOTAL_VARIABLES} variables lie on a route to ${isEnergyCore(startId) ? 'the rest of the energy core' : 'the energy core'}`
+                    : `${paths.totalNodes} of ${TOTAL_VARIABLES} variables feed into this, directly or indirectly`}
                 </span>
               )}
             </p>
 
             {/*
-             * What the factor actually means, so Trace is self-contained.
+             * What the variable actually means, so Trace is self-contained.
              *
              * Trace deliberately does not open a detail panel — a click here
-             * picks a starting factor and nothing else — which left "what does
-             * this factor mean?" answerable only in Explore. Switching modes to
+             * picks a starting variable and nothing else — which left "what does
+             * this variable mean?" answerable only in Explore. Switching modes to
              * find out cleared the trace on the way, so reading a definition
              * cost you the work that prompted the question.
              *
@@ -257,12 +257,12 @@ export function TracePanel({
 
           {direction === 'downstream' && isEnergyCore(startId) && (
             <p className="px-4 pb-1 text-[11px] text-gray-500">
-              This factor is part of the energy core, so the trace follows it on
-              to the other core factors.
+              This variable is part of the energy core, so the trace follows it on
+              to the other core variables.
             </p>
           )}
 
-          {/* Nothing to size when the factor sits in no loop. */}
+          {/* Nothing to size when the variable sits in no loop. */}
           {(!isLoops || totalLoops > 0) && (
             <>
               <Section title={isLoops ? 'Loop length' : 'Path length'}>
@@ -282,19 +282,19 @@ export function TracePanel({
                   {showingAll ? (
                     <span className="font-medium text-teal-700">
                       {isLoops
-                        ? `Every loop up to ${MAX_LOOP_LENGTH} factors is shown`
+                        ? `Every loop up to ${MAX_LOOP_LENGTH} variables is shown`
                         : 'Any length — every path is shown'}
                     </span>
                   ) : (
                     <span className="text-gray-600">
                       Up to <span className="font-medium">{maxSteps}</span>{' '}
-                      {isLoops ? 'factors' : 'steps'}
+                      {isLoops ? 'variables' : 'steps'}
                     </span>
                   )}
                 </div>
 
                 <p data-testid="path-counts" className="mt-1.5 text-[11px] text-gray-500">
-                  {paths.nodeIds.length} of {paths.totalNodes} factors ·{' '}
+                  {paths.nodeIds.length} of {paths.totalNodes} variables ·{' '}
                   {paths.connectionIds.length} of {paths.totalConnections} arrows
                 </p>
               </Section>
@@ -311,17 +311,17 @@ export function TracePanel({
                 <p data-testid="route-headline" className="mb-2 text-[11px] text-gray-500">
                   {isLoops
                     ? routes.length === 0
-                      ? `No reinforcing loop closes within ${maxSteps} factors. The shortest through this factor needs ${loops?.shortest}.`
+                      ? `No reinforcing loop closes within ${maxSteps} variables. The shortest through this variable needs ${loops?.shortest}.`
                       : routes.length === totalLoops
-                        ? `All ${totalLoops} reinforcing loop${totalLoops === 1 ? '' : 's'} through this factor, listed in full.`
-                        : `${routes.length} of this factor's ${totalLoops} reinforcing loops — those closing within ${maxSteps} factors.`
+                        ? `All ${totalLoops} reinforcing loop${totalLoops === 1 ? '' : 's'} through this variable, listed in full.`
+                        : `${routes.length} of this variable's ${totalLoops} reinforcing loops — those closing within ${maxSteps} variables.`
                     : direction === 'upstream'
                     ? routes.length === 0
-                      ? `Nothing feeds into this factor within ${listCap} steps.`
-                      : `${routes.length} factor${routes.length === 1 ? '' : 's'} feed in within ${listCap} steps, each shown by its shortest chain.`
+                      ? `Nothing feeds into this variable within ${listCap} steps.`
+                      : `${routes.length} variable${routes.length === 1 ? '' : 's'} feed in within ${listCap} steps, each shown by its shortest chain.`
                     : routes.length === 0
                       ? `No complete routes within ${listCap} steps.`
-                      : `${routes.length} route${routes.length === 1 ? '' : 's'} up to ${listCap} steps, covering ${coveredCount} of the ${litCount} factors on the map.`}
+                      : `${routes.length} route${routes.length === 1 ? '' : 's'} up to ${listCap} steps, covering ${coveredCount} of the ${litCount} variables on the map.`}
                   {listIsBehindMap && direction === 'downstream' && (
                     // The map is complete; only this list is a sample.
                     <span className="text-gray-500">
@@ -335,7 +335,7 @@ export function TracePanel({
                   {isLoops && (
                     // The cap is a limit on what is known, not on what is drawn.
                     <span className="block pt-1 text-gray-400">
-                      Loops longer than {MAX_LOOP_LENGTH} factors are not
+                      Loops longer than {MAX_LOOP_LENGTH} variables are not
                       included — there are thousands, and they cannot be
                       summarised without listing them.
                     </span>

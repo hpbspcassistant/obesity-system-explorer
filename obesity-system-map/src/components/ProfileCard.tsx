@@ -8,19 +8,19 @@ import { ConnectionRow, InfluenceTag } from './ProfileControls'
 import type { Connection, Node } from '../types'
 
 /**
- * The marking surface, floated beside the factor it describes.
+ * The marking surface, floated beside the variable it describes.
  *
  * This replaces a 368px side panel that was pinned to the right edge for the
  * whole session. That panel cost the same screen area whether or not anything
- * was open, and at fit zoom it covered eleven factors — a coherent block of the
+ * was open, and at fit zoom it covered eleven variables — a coherent block of the
  * physical-activity environment — which could then never be clicked. A card
  * that appears at the thing you clicked and leaves when you dismiss it costs
  * nothing the rest of the time, and never hides a fixed region of the map.
  *
- * Everything here is explicit. Opening a factor does not mark it; the button
+ * Everything here is explicit. Opening a variable does not mark it; the button
  * marks it. That is the whole difference between browsing and editing, and it
  * used to be missing — a click on the map toggled the mark, so re-reading a
- * factor you had already marked silently unmarked it.
+ * variable you had already marked silently unmarked it.
  */
 
 const CARD_W = 288
@@ -58,8 +58,8 @@ export function ProfileCard({
 }: ProfileCardProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null)
 
-  // A card reused for a different factor must start at the top, or the new
-  // factor's name is scrolled out of sight and it reads as a dead click.
+  // A card reused for a different variable must start at the top, or the new
+  // variable's name is scrolled out of sight and it reads as a dead click.
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0
   }, [node?.id, edge?.connection.id])
@@ -206,7 +206,7 @@ function NodeBody({
       <MarkButton
         marked={marked}
         onClick={() => onToggleNode(node.id)}
-        what="factor"
+        what="variable"
       />
 
       {definitionOf(node) ? (

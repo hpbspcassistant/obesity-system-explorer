@@ -185,7 +185,7 @@ export default function App() {
   /** Which persona form is up, if any. 'new' has no profile to go back to. */
   const [personaForm, setPersonaForm] = useState<'new' | 'edit' | null>(null)
   const [reviewOpen, setReviewOpen] = useState(false)
-  /** Where the open factor's box currently sits, so the card can follow it. */
+  /** Where the open variable's box currently sits, so the card can follow it. */
   const [anchor, setAnchor] = useState<AnchorRect | null>(null)
   const [stage, setStage] = useState({ width: 0, height: 0 })
   // Trace work. Reset on leaving Trace — cheap to redo, unlike a profile.
@@ -271,7 +271,7 @@ export default function App() {
    * Takes the whole parse result, not just the profile, so what the import did
    * can be said out loud.
    *
-   * A factors-only file has its connections filled in, and a file written against
+   * A variables-only file has its connections filled in, and a file written against
    * an older map may lose marks. Both change what you end up with, and reporting
    * them here rather than in the dialog is the only way anyone reads it: a
    * successful import from the first-run dialog replaces that dialog with the
@@ -361,22 +361,22 @@ export default function App() {
    * Explore and Profile both just open the thing you clicked. Profile used to
    * toggle the mark here as well, which made the most natural gesture on a map
    * — click the box to read it — silently destroy work: clicking an already
-   * marked factor unmarked it, and the change was written to storage in the
-   * same tick with no undo and no confirmation. It also meant the same factor
+   * marked variable unmarked it, and the change was written to storage in the
+   * same tick with no undo and no confirmation. It also meant the same variable
    * behaved differently depending on how you reached it, since arriving via
    * search only ever selected. Marking now lives on the card's button, which is
    * the only control in the mode that changes a profile by itself.
    *
    * Trace is the exception: it is a dedicated workspace with its own panel, so
-   * a click there only picks starting factors and never opens a detail panel.
+   * a click there only picks starting variables and never opens a detail panel.
    *
    * Click-again-to-deselect belongs to Explore only: in Profile the card is a
-   * workspace you act in, so re-clicking its factor must not close it.
+   * workspace you act in, so re-clicking its variable must not close it.
    */
   const handleSelect = useCallback(
     (next: Selection | null) => {
       if (next?.kind === 'node' && mode === 'trace') {
-        // Trace is a dedicated workspace: a click sets the starting factor and
+        // Trace is a dedicated workspace: a click sets the starting variable and
         // nothing else. No selection is set, so no detail panel appears.
         setTraceStartId((current) =>
           current === next.nodeId ? null : next.nodeId,
@@ -387,7 +387,7 @@ export default function App() {
       }
       if (mode === 'trace') {
         // Clicking empty space clears the trace, as it clears a selection in
-        // Explore. Without this the starting factor was the only way out.
+        // Explore. Without this the starting variable was the only way out.
         if (!next) {
           setTraceStartId(null)
           setFocusedRouteKey(null)
@@ -413,7 +413,7 @@ export default function App() {
   const clearSelection = useCallback(() => setSelection(null), [])
 
   /**
-   * Reveals whichever filtered-out groups these factors belong to.
+   * Reveals whichever filtered-out groups these variables belong to.
    *
    * Following a link to something the cluster filter has hidden is otherwise a
    * dead click: the effect above clears the selection on the next render, so the
@@ -444,18 +444,18 @@ export default function App() {
    * Selecting from inside a card rather than from the map.
    *
    * A map click needs no framing: you clicked where you were already looking.
-   * A card link is the opposite — the factor or connection it names is usually
+   * A card link is the opposite — the variable or connection it names is usually
    * off screen, or a pixel wide at the current zoom, so following the link
    * without moving the view leaves the reader hunting for the thing they just
    * asked to see.
    *
-   * Framing is Explore-only. Profile's card is anchored to the factor it
+   * Framing is Explore-only. Profile's card is anchored to the variable it
    * describes and travels with the map, so moving the map there would have the
    * card chase its own anchor. Revealing a hidden group is not mode-specific: a
    * dead click is a dead click everywhere.
    */
   /**
-   * Frames factors clear of everything currently covering the stage.
+   * Frames variables clear of everything currently covering the stage.
    *
    * Every caller already cleared the side panels; none of them knew about the
    * guide, which sits along the bottom. So a route framed to the middle of the
@@ -547,7 +547,7 @@ export default function App() {
     (nodeId: number) => {
       revealGroupsFor([nodeId])
       if (mode === 'trace') {
-        // In Trace the readable way to find a factor must also start the trace.
+        // In Trace the readable way to find a variable must also start the trace.
         setTraceStartId(nodeId)
         setFocusedRouteKey(null)
         setAnimatedHops(null)
@@ -556,10 +556,10 @@ export default function App() {
       setSelection({ kind: 'node', nodeId })
       // Every mode now goes to what you searched for. Explore was the last one
       // that did not, and it was the worst place to leave it out: zoomed in, a
-      // search opened a panel about a factor sitting thousands of pixels off
+      // search opened a panel about a variable sitting thousands of pixels off
       // screen, so the map appeared not to have responded at all. Explore's
       // panel covers the right of the stage, so framing has to clear it the way
-      // Trace's does; Profile's card floats beside the factor and follows it, so
+      // Trace's does; Profile's card floats beside the variable and follows it, so
       // it needs no inset.
       frameNodes([nodeId], mode === 'explore' ? DETAIL_PANEL_PX : 0)
     },
@@ -595,7 +595,7 @@ export default function App() {
   /** The header's question mark opens the menu, not the first-run tour. */
   /**
    * Turning the marked-only view on closes any open card. The card is anchored to
-   * a factor's box, and if that factor is one of the ones about to disappear the
+   * a variable's box, and if that variable is one of the ones about to disappear the
    * card is left describing something no longer on screen.
    */
   const changeMarkedOnly = useCallback((next: boolean) => {
@@ -865,12 +865,12 @@ export default function App() {
   const personaDialogUp = profiling && (!activeProfile || personaForm !== null)
 
   /**
-   * The factor the card hangs off. An edge card anchors to the connection's
+   * The variable the card hangs off. An edge card anchors to the connection's
    * target, which is where the eye already is after following an arrow.
    */
   const anchorNodeId = useMemo(() => {
     if (!selection) return null
-    // Intervention hangs a card off factors only: its whole subject is which
+    // Intervention hangs a card off variables only: its whole subject is which
     // programmes reach a variable, and a connection is not something a
     // programme reaches.
     if (mode === 'intervention') {
@@ -943,9 +943,9 @@ export default function App() {
   }, [animatedHops, search, focusedRouteKey])
 
   /**
-   * A new starting factor is a new question, so the step limit goes back to the
+   * A new starting variable is a new question, so the step limit goes back to the
    * default. Carrying it over was confusing: the useful range differs per start
-   * (9 steps from Education, 17 from a core factor), so a limit tuned for one
+   * (9 steps from Education, 17 from a core variable), so a limit tuned for one
    * would light a third of the map on the next.
    */
   useEffect(() => {

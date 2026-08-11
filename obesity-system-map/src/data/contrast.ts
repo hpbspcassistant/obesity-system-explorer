@@ -127,7 +127,7 @@ export const CONTRAST_HUBS: readonly ContrastHub[] = [
  * colours, and that is the map's way of saying "this one is a hub". Everywhere
  * else the distinction survives high contrast, because Explore and Trace paint
  * the artwork's own fills. Profile is where it was lost: marking repaints a
- * factor to its *type* swatch, so under high contrast all four flattened into
+ * variable to its *type* swatch, so under high contrast all four flattened into
  * the pale palette and became indistinguishable from the 104 ordinary variables
  * around them.
  *
@@ -180,11 +180,11 @@ export function contrastSwatch(typeName: string): string | undefined {
  *
  * Two halves, because Profile does not want a repainted map — it wants a GREY
  * one, with colour reserved to mean "marked". Repainting every box there put
- * bright amber on unmarked factors and collapsed all three of Profile's states
+ * bright amber on unmarked variables and collapsed all three of Profile's states
  * into "everything is coloured", which is the exact problem the grey exists to
  * solve. So outside Profile the fills are rewritten as before, and inside it
  * the palette is published as custom properties instead and map.css decides
- * which factors are allowed to spend them.
+ * which variables are allowed to spend them.
  */
 export function contrastFillCss(): string {
   const repaint = CONTRAST_TYPES.flatMap((type) =>

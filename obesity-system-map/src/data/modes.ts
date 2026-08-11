@@ -46,7 +46,7 @@ export const TRACE_DIRECTIONS: readonly TraceDirectionMeta[] = [
     id: 'loops',
     label: '↻ Reinforcing loops',
     description:
-      'Find loops that leave a factor and come back to it, strengthening themselves on the way round.',
+      'Find loops that leave a variable and come back to it, strengthening themselves on the way round.',
   },
 ]
 

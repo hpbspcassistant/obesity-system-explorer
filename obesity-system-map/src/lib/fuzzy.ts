@@ -115,7 +115,7 @@ export interface Ranked<T> {
  * Being a subsequence is far too weak a test on labels this long: "portion" is a
  * subsequence of "Appropriateness of Maternal Body Composition", and "school" of
  * "Psychological Ambivalence" — which was that query's *only* match, so the field
- * confidently offered one unrelated factor and nothing else.
+ * confidently offered one unrelated variable and nothing else.
  *
  * The scores already separate the two cleanly; they just were not being used to
  * reject anything. Measured against all 108 real labels, every match a person

@@ -58,7 +58,7 @@ export function ProfilePersonaDialog({
         </h2>
         {!editing && (
           <p className="mt-1 text-[12px] leading-relaxed text-gray-600">
-            A profile is a point of view: mark the factors and connections you
+            A profile is a point of view: mark the variables and connections you
             judge to be significant for one person. It is your judgement, not
             the map's.
           </p>

@@ -142,12 +142,12 @@ export function ProfileBar({
 
       {/* Counts. The bare numbers, without the "of 108" denominator the old
           panel showed: a profile is a deliberately small curated set, and
-          framing 12 factors as 11% of the map made a correct one feel unfinished. */}
+          framing 12 variables as 11% of the map made a correct one feel unfinished. */}
       <p className="shrink-0 text-[12px] text-gray-600">
         <strong className="font-semibold tabular-nums text-gray-900">
           {markedNodes}
         </strong>{' '}
-        {markedNodes === 1 ? 'factor' : 'factors'}
+        {markedNodes === 1 ? 'variable' : 'variables'}
         <span className="mx-1.5 text-gray-300">·</span>
         <strong className="font-semibold tabular-nums text-gray-900">
           {markedEdges}
@@ -246,7 +246,7 @@ export function ProfileBar({
         Review
         {unmarkedLinks > 0 && (
           <span
-            title={`${unmarkedLinks} connection${unmarkedLinks === 1 ? '' : 's'} between two marked factors are not marked`}
+            title={`${unmarkedLinks} connection${unmarkedLinks === 1 ? '' : 's'} between two marked variables are not marked`}
             className="rounded-full bg-gray-900 px-1.5 text-[10px] font-medium tabular-nums text-white"
           >
             {unmarkedLinks}

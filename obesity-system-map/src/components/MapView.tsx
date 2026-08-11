@@ -68,7 +68,7 @@ const FIT_PADDING = 0.96
  * that gains nothing and makes short routes feel like a jump cut.
  */
 const FOLLOW_MAX_SCALE = 1.1
-/** Map-unit margin left around framed factors. */
+/** Map-unit margin left around framed variables. */
 const FOCUS_PADDING = 70
 
 // Parsed and annotated once at module scope: the markup is static, so
@@ -111,7 +111,7 @@ const EDGE_INK = '#231f20'
 const TRACE_INK = '#0d9488'
 const FOCUS_INK = '#0f766e'
 /*
- * Profile introduces no colour of its own. Unmarked factors go grey and marked
+ * Profile introduces no colour of its own. Unmarked variables go grey and marked
  * ones get their cluster fill back (see map.css), so a marked connection is
  * simply the artwork's own ink at full strength over a web faded to 0.3 — the
  * only black line on screen. Deliberately not dash: every dashed line in the
@@ -121,7 +121,7 @@ const FOCUS_INK = '#0f766e'
 const MARK_INK = EDGE_INK
 /**
  * Available, meaning any connection you could mark but have not: the ones
- * belonging to the factor whose card is open, and the ones whose two ends are
+ * belonging to the variable whose card is open, and the ones whose two ends are
  * both marked. One reading covers both — black is a decision, grey is an offer.
  *
  * Separating these from marked by weight alone did not work; 1.5px against
@@ -140,7 +140,7 @@ const AVAILABLE_EDGE_PX = 1.6
 /** Diameters of the accept-this-link target, in screen px at any zoom. */
 const LINK_BADGE_PX = 13
 const LINK_BADGE_CORE_PX = 5
-/** Bands for the ring around the factor the card is open on. */
+/** Bands for the ring around the variable the card is open on. */
 const FOCUS_BANDS = [
   { width: 13, opacity: 0.16 },
   { width: 5, opacity: 0.32 },
@@ -225,7 +225,7 @@ const MiniMapContent = memo(function MiniMapContent() {
 })
 
 /**
- * A ring around the factor a trace starts from. The node's own outline carries a
+ * A ring around the variable a trace starts from. The node's own outline carries a
  * crisp non-scaling stroke, but at fit zoom a node box is only ~8px across, so a
  * ring alone is easy to lose among 108 of them. A wide translucent stroke
  * straddles the box edge, putting half its width outside as a constant-width
@@ -289,12 +289,12 @@ export interface MapViewProps {
   taxonomy: Taxonomy
   /** Groups to fade out; an edge fades if either endpoint is hidden. */
   hiddenGroups: ReadonlySet<string>
-  /** Factors marked significant in Profile; persists across modes. */
+  /** Variables marked significant in Profile; persists across modes. */
   markedNodeIds?: ReadonlySet<number>
   /** Connections marked significant in Profile. */
   markedEdgeIds?: ReadonlySet<string>
   /**
-   * Unmarked factors one step from something marked. Drawn as a white box with
+   * Unmarked variables one step from something marked. Drawn as a white box with
    * a ring in their own cluster colour — the colour they would take if marked.
    */
   candidateNodeIds?: ReadonlySet<number>
@@ -311,7 +311,7 @@ export interface MapViewProps {
   /** The one route being studied; changes on hover, so kept separate. */
   traceFocus?: TraceFocus | null
   /**
-   * The factor the floating card is open on. MapView owns the pan/zoom
+   * The variable the floating card is open on. MapView owns the pan/zoom
    * transform, so it is the only thing that can say where that box currently
    * sits on screen.
    */
@@ -357,7 +357,7 @@ export interface MapViewHandle {
   resetView: () => void
   /** Multiplies the current scale about the middle of the viewport. */
   zoomBy: (factor: number) => void
-  /** Frames the given factors, clear of any right-hand panel. */
+  /** Frames the given variables, clear of any right-hand panel. */
   focusOnNodes: (nodeIds: readonly number[], options?: FocusOptions) => void
   /** Renders the whole map, exactly as it currently looks, to a PNG. */
   exportPng: (scale?: number) => Promise<Blob>
@@ -408,7 +408,7 @@ export function MapView({
   )
 
   /**
-   * The factor the card is open on, ringed. Drawn as a halo outside the box
+   * The variable the card is open on, ringed. Drawn as a halo outside the box
    * rather than as a heavier outline, because in Profile the box's own edge is
    * already carrying a state.
    */
@@ -418,7 +418,7 @@ export function MapView({
   )
 
   /**
-   * Where the anchored factor's box currently sits on screen.
+   * Where the anchored variable's box currently sits on screen.
    *
    * Read through refs and called imperatively rather than derived in render:
    * this has to re-run on every frame of a pan, and routing that through React
@@ -541,7 +541,7 @@ export function MapView({
   }, [fitToViewport])
 
   /**
-   * Frames a set of factors. Uses the box geometry rather than measuring the
+   * Frames a set of variables. Uses the box geometry rather than measuring the
    * DOM, so it works regardless of what is currently rendered or dimmed.
    */
   const focusOnNodes = useCallback(
@@ -570,7 +570,7 @@ export function MapView({
       y1 += FOCUS_PADDING
 
       // Centre within the space the panels leave, not the whole wrapper. Both
-      // insets shrink the box the factors are fitted into *and* shift its centre,
+      // insets shrink the box the variables are fitted into *and* shift its centre,
       // which is what keeps a framed route clear of a right-hand panel and of a
       // card along the bottom rather than merely smaller than the viewport.
       const visibleWidth = Math.max(120, host.clientWidth - (options?.rightInset ?? 0))
@@ -678,7 +678,7 @@ export function MapView({
     const groups = svg.querySelectorAll<SVGGElement>('g[data-node-id]')
     overlay.replaceChildren()
 
-    // The clicked factor is flagged in every mode, so the map always shows
+    // The clicked variable is flagged in every mode, so the map always shows
     // which one the panel is describing.
     const clickedNodeId = selection?.kind === 'node' ? selection.nodeId : null
 
@@ -843,7 +843,7 @@ export function MapView({
       group.setAttribute('aria-checked', String(markedNodeIds.has(id)))
       group.setAttribute(
         'aria-label',
-        group.dataset.nodeLabel ?? `Factor ${group.dataset.nodeId}`,
+        group.dataset.nodeLabel ?? `Variable ${group.dataset.nodeId}`,
       )
     }
   }, [mode, markedNodeIds])
@@ -942,7 +942,7 @@ export function MapView({
    * Profile's two edge layers, separated by weight alone.
    *
    * There is deliberately no frontier-edge layer. It drew seventeen suggestion
-   * lines for a three-factor profile, which was clutter rather than guidance,
+   * lines for a three-variable profile, which was clutter rather than guidance,
    * and the only channel left to distinguish it — dash — belongs to the sign of
    * the connection. The suggested *nodes* already answer "where do I go next".
    */
@@ -1104,7 +1104,7 @@ export function MapView({
   )
 
   /**
-   * Enter or Space on a focused factor opens it, matching what a click does.
+   * Enter or Space on a focused variable opens it, matching what a click does.
    * Neither marks it — the card's button is the only thing that does that, by
    * mouse or by keyboard alike.
    */
@@ -1137,7 +1137,7 @@ export function MapView({
           fitToViewport()
         }}
         // The floating card is positioned in screen space, so it has to be told
-        // about every pan and zoom or it detaches from its factor.
+        // about every pan and zoom or it detaches from its variable.
         onTransform={pushAnchor}
         minScale={MIN_SCALE}
         maxScale={MAX_SCALE}

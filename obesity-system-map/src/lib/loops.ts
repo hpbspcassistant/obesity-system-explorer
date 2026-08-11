@@ -6,7 +6,7 @@ import type { PathSet, Route, RouteHop, RouteSearch } from './trace'
 /**
  * Reinforcing loops.
  *
- * A reinforcing loop is a path that leaves a factor, comes back to it, and
+ * A reinforcing loop is a path that leaves a variable, comes back to it, and
  * strengthens itself on the way round — a snowball rather than a thermostat.
  * Whether a loop reinforces or balances is decided by the number of negative
  * links in it: an odd number flips the sign somewhere and the loop damps itself.
@@ -16,7 +16,7 @@ import type { PathSet, Route, RouteHop, RouteSearch } from './trace'
  * Two things this module deliberately does NOT do:
  *
  * 1. It does not claim completeness. The loops are capped at `MAX_LOOP_LENGTH`
- *    factors because loop counts roughly double per extra factor and there is no
+ *    variables because loop counts roughly double per extra variable and there is no
  *    way to characterise the set without enumerating it — unlike reachability,
  *    where two breadth-first passes settle it. Every count here is "up to N".
  *
@@ -45,7 +45,7 @@ export const TOTAL_REINFORCING_LOOPS = meta.reinforcing
 
 const reinforcing = allLoops.filter((loop) => loop.type === 'reinforcing')
 
-/** factor -> the reinforcing loops it sits in, shortest first. */
+/** variable -> the reinforcing loops it sits in, shortest first. */
 const loopsByNode = new Map<number, RawLoop[]>()
 for (const loop of reinforcing) {
   for (const nodeId of loop.nodeIds) {
@@ -58,15 +58,15 @@ for (const list of loopsByNode.values()) {
   list.sort((a, b) => a.nodeIds.length - b.nodeIds.length || a.id.localeCompare(b.id))
 }
 
-/** Factors sitting in at least one reinforcing loop of any known length. */
-export const factorsInReinforcingLoop = nodes.filter((n) => loopsByNode.has(n.id))
+/** Variables sitting in at least one reinforcing loop of any known length. */
+export const variablesInReinforcingLoop = nodes.filter((n) => loopsByNode.has(n.id))
   .length
 
 export function hasReinforcingLoop(nodeId: number): boolean {
   return loopsByNode.has(nodeId)
 }
 
-/** Total reinforcing loops through a factor, ignoring the length slider. */
+/** Total reinforcing loops through a variable, ignoring the length slider. */
 export function reinforcingLoopCount(nodeId: number): number {
   return loopsByNode.get(nodeId)?.length ?? 0
 }
@@ -94,7 +94,7 @@ export interface LoopRoute extends Route {
 }
 
 /**
- * Rotates a loop so it opens on the chosen factor and closes back on it, then
+ * Rotates a loop so it opens on the chosen variable and closes back on it, then
  * reshapes it as a route. Reading "Stress → Perceived Lack of Time → Stress"
  * is what makes the loop legible; the stored form always opens on the loop's
  * lowest id, which is an artefact of how it was found.
@@ -121,9 +121,9 @@ function toRoute(loop: RawLoop, startId: number): LoopRoute {
 
 export interface LoopSearch extends RouteSearch {
   routes: LoopRoute[]
-  /** Loops through this factor at any known length, ignoring the slider. */
+  /** Loops through this variable at any known length, ignoring the slider. */
   totalLoops: number
-  /** Longest loop available through this factor — the top of the slider. */
+  /** Longest loop available through this variable — the top of the slider. */
   longest: number
   shortest: number
 }
@@ -152,7 +152,7 @@ export function reinforcingLoopsThrough(
 }
 
 /**
- * Everything on any reinforcing loop through the factor, for the map. Built by
+ * Everything on any reinforcing loop through the variable, for the map. Built by
  * union over the enumerated loops, so at a given cap the map and the list agree
  * exactly — there is no approximation to explain here.
  */
@@ -190,7 +190,7 @@ export function loopPathSet(startId: number, maxLength: number): PathSet {
     nodeIds: [...nodeIds],
     connectionIds: [...connectionIds],
     // A loop has no destination, so nothing gets the arrival styling — that
-    // orange ring would otherwise land on the starting factor itself.
+    // orange ring would otherwise land on the starting variable itself.
     destinationIds: [],
     stepsForAll: all.reduce((n, l) => Math.max(n, l.nodeIds.length), 2),
     totalNodes,

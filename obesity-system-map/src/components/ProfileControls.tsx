@@ -5,7 +5,7 @@ import type { Connection } from '../types'
  * The small pieces Profile's card and review sheet both use.
  *
  * They live together because the mark control has to look and behave
- * identically everywhere it appears: wherever you tick a factor — on the card,
+ * identically everywhere it appears: wherever you tick a variable — on the card,
  * in the review sheet, in the unmarked-links list — it is the same control
  * doing the same binary thing.
  */
@@ -73,7 +73,7 @@ export function InfluenceTag({ connection }: { connection: Connection }) {
 }
 
 /**
- * One connection, tickable. Clicking the label walks to the other factor
+ * One connection, tickable. Clicking the label walks to the other variable
  * without touching the mark; only the checkbox marks.
  */
 export function ConnectionRow({
@@ -91,7 +91,7 @@ export function ConnectionRow({
 }) {
   const otherId = direction === 'out' ? connection.targetId : connection.sourceId
   const other = nodesById.get(otherId)
-  const label = other?.label ?? `Factor ${otherId}`
+  const label = other?.label ?? `Variable ${otherId}`
   return (
     <li
       className={[

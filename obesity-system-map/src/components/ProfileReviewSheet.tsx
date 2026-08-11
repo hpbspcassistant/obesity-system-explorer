@@ -13,8 +13,8 @@ import { InfluenceTag, MarkToggle } from './ProfileControls'
  *
  * The old panel kept this permanently open and permanently in the way, and it
  * was incomplete: marked connections were counted but never listed, so the only
- * way to remove one was to navigate back to a factor at one of its ends and
- * find it in that factor's list. Here both halves of the profile are reviewable
+ * way to remove one was to navigate back to a variable at one of its ends and
+ * find it in that variable's list. Here both halves of the profile are reviewable
  * and both are undoable in place.
  */
 
@@ -83,10 +83,10 @@ export function ProfileReviewSheet({
       className="absolute inset-x-0 bottom-12 z-20 max-h-[45vh] overflow-y-auto border-t border-gray-200 bg-white/97 shadow-[0_-8px_28px_-10px_rgba(0,0,0,0.2)] backdrop-blur"
     >
       <div className="flex items-start">
-        <Section title="Factors" count={profile.nodeIds.size}>
+        <Section title="Variables" count={profile.nodeIds.size}>
           {groups.length === 0 ? (
             <Empty>
-              Nothing marked yet. Click a factor on the map to open it.
+              Nothing marked yet. Click a variable on the map to open it.
             </Empty>
           ) : (
             <div className="space-y-2">
@@ -121,7 +121,7 @@ export function ProfileReviewSheet({
             </div>
           )}
           <p className="mt-2 border-t border-gray-100 pt-1.5 text-[11px] text-gray-400">
-            {profile.nodeIds.size} of {TOTAL_NODES} factors · {groups.length} of{' '}
+            {profile.nodeIds.size} of {TOTAL_NODES} variables · {groups.length} of{' '}
             {variableTypes.length} clusters
           </p>
         </Section>
@@ -129,7 +129,7 @@ export function ProfileReviewSheet({
         <Section title="Connections" count={profile.edgeIds.size}>
           {edges.length === 0 ? (
             <Empty>
-              Open a factor and tick the connections that matter for this person.
+              Open a variable and tick the connections that matter for this person.
             </Empty>
           ) : (
             <ul>
@@ -177,7 +177,7 @@ export function ProfileReviewSheet({
         >
           {missingLinkIds.length === 0 ? (
             <Empty>
-              None. Every connection between two marked factors is either marked
+              None. Every connection between two marked variables is either marked
               or does not exist.
             </Empty>
           ) : (

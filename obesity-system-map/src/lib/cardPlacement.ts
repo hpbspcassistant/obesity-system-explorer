@@ -1,7 +1,7 @@
 import type { AnchorRect } from '../components/MapView'
 
 /**
- * Where a card hanging off a factor goes.
+ * Where a card hanging off a variable goes.
  *
  * Shared by Profile's marking card and Intervention's reach card. The rule is
  * fiddly enough — prefer one side, flip, then clamp on both axes — that a second
@@ -21,7 +21,7 @@ export interface Placement {
 /**
  * Prefers the right of the box, flips left when that would overflow, and
  * finally clamps into view. Vertically it centres on the box and clamps, so a
- * factor near the top or bottom of the map still gets a whole card.
+ * variable near the top or bottom of the map still gets a whole card.
  */
 export function placeCard(
   anchor: AnchorRect,

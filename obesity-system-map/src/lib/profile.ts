@@ -12,14 +12,14 @@ import type { Connection } from '../types'
 /**
  * Profiles: a curated point of view on the map.
  *
- * A profile is NOT "everything that affects this persona". Almost every factor
+ * A profile is NOT "everything that affects this persona". Almost every variable
  * reaches almost every other, so a "what applies" view would light up the whole
  * map and every persona would look identical. Instead a person marks what they
  * judge to be significant, and that judgement is binary — marked or not. There
  * is deliberately no weight, score or level anywhere in this file, and the store
  * is two sets, so magnitude has nowhere to live even by accident.
  *
- * This module uses only adjacency — which factor connects to which. It shares
+ * This module uses only adjacency — which variable connects to which. It shares
  * the `outgoingByNode`/`incomingByNode` indexes with Trace because those live in
  * the data layer, but it imports nothing from `lib/trace.ts`: no routes, no path
  * enumeration, no distance. Profile grows one step at a time, by hand.
@@ -87,7 +87,7 @@ export function toggleEdge(profile: Profile, connectionId: string): Profile {
   return { ...profile, edgeIds }
 }
 
-/** Every connection touching a factor, in either direction. */
+/** Every connection touching a variable, in either direction. */
 function connectionsTouching(nodeId: number) {
   return [
     ...(outgoingByNode.get(nodeId) ?? []),
@@ -99,10 +99,10 @@ function connectionsTouching(nodeId: number) {
  * The suggestions. One step out from what is already marked, and no further —
  * the point is to answer "where do I go next?", not to reveal the whole map.
  *
- * Factors only. An earlier version also returned the connections reaching out
+ * Variables only. An earlier version also returned the connections reaching out
  * to them, which the map drew as a second layer: seventeen extra lines for a
- * three-factor profile, and no channel left to draw them in, since dash means
- * "negative" throughout the artwork. Naming the factors is the whole job.
+ * three-variable profile, and no channel left to draw them in, since dash means
+ * "negative" throughout the artwork. Naming the variables is the whole job.
  */
 export function frontierOf(profile: Profile): ReadonlySet<number> {
   const nodeIds = new Set<number>()
@@ -122,9 +122,9 @@ export function frontierOf(profile: Profile): ReadonlySet<number> {
 }
 
 /**
- * Every connection running between two factors in the given set.
+ * Every connection running between two variables in the given set.
  *
- * Self-loops are excluded: a connection from a factor to itself has both ends in
+ * Self-loops are excluded: a connection from a variable to itself has both ends in
  * any set containing it, and marking it says nothing about a relationship
  * between two things.
  */
@@ -143,7 +143,7 @@ export function connectionsWithin(
 
 /**
  * Connections whose two ends are both marked but which are not marked
- * themselves. People mark the factors and forget the link that ties them, so
+ * themselves. People mark the variables and forget the link that ties them, so
  * these are offered explicitly rather than left to be noticed.
  */
 export function missingLinks(profile: Profile): string[] {
@@ -170,7 +170,7 @@ export interface ClusterTally {
 }
 
 /**
- * Marked factors grouped for the sidebar, using the map's own colour grouping —
+ * Marked variables grouped for the sidebar, using the map's own colour grouping —
  * the ten the brief asks for. Only groups with something in them are returned.
  */
 export function markedByCluster(profile: Profile): ClusterTally[] {
@@ -224,7 +224,7 @@ export interface ParseResult {
   droppedNodeIds: number[]
   droppedEdgeIds: string[]
   /**
-   * Connections the file did not name, filled in from its factors. Reported so
+   * Connections the file did not name, filled in from its variables. Reported so
    * an import never quietly marks more than the file asked for.
    */
   autoLinkedEdgeIds: string[]
@@ -235,9 +235,9 @@ export interface ParseResult {
  * from a different build of the map. Unknown ids are dropped and reported
  * rather than silently kept, which would leave marks that can never be seen.
  *
- * A file may list factors alone. Writing out connection ids by hand means
+ * A file may list variables alone. Writing out connection ids by hand means
  * looking each one up in the data, which nobody is going to do, so when the file
- * has no `edgeIds` at all every connection running between two of its factors is
+ * has no `edgeIds` at all every connection running between two of its variables is
  * marked for it. The count comes back in the result, because an import that
  * silently marks thirty things the file never mentioned is not an import.
  *
@@ -273,8 +273,8 @@ export function parseProfile(input: unknown): ParseResult | null {
       else droppedEdgeIds.push(value)
     }
   } else {
-    // No edgeIds at all: a factors-only file, so the connections between those
-    // factors are filled in. Anything else would import a set of variables with
+    // No edgeIds at all: a variables-only file, so the connections between those
+    // variables are filled in. Anything else would import a set of variables with
     // nothing joining them, which is not what the map is for.
     for (const id of connectionsWithin(nodeIds)) {
       edgeIds.add(id)

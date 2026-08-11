@@ -10,16 +10,16 @@ import type { Connection, Influence, TraceDirection } from '../types'
 /**
  * Tracing in either direction.
  *
- * Forward ends at the energy core — the factors the original map draws at its
+ * Forward ends at the energy core — the variables the original map draws at its
  * centre, derived from the data rather than hardcoded. Backward has no
- * destination: it simply answers "what feeds into this factor", bounded by the
+ * destination: it simply answers "what feeds into this variable", bounded by the
  * step slider.
  *
  * The map shows EVERY path, never trimmed. That is affordable because the union
- * of all routes is computable without enumerating any of them: a factor lies on
+ * of all routes is computable without enumerating any of them: a variable lies on
  * some route of at most N steps exactly when
  *
- *     distance(start → factor) + distance(factor → destination) <= N
+ *     distance(start → variable) + distance(variable → destination) <= N
  *
  * Two breadth-first passes, no combinatorics. This matters because the routes
  * themselves cannot be enumerated — one forward start has 227 routes within 6
@@ -39,7 +39,7 @@ export function isEnergyCore(nodeId: number): boolean {
   return energyCoreSet.has(nodeId)
 }
 
-export const TOTAL_FACTORS = nodes.length
+export const TOTAL_VARIABLES = nodes.length
 
 /* ------------------------------------------------------------- direction */
 
@@ -57,7 +57,7 @@ function farEnd(connection: Connection, direction: TraceDirection): number {
 
 /**
  * Forward tracing heads somewhere: the energy core, the centre the whole map is
- * about. Backward tracing does not. "Factors with no incoming arrow" looked like
+ * about. Backward tracing does not. "Variables with no incoming arrow" looked like
  * a mirror image, but it is an artefact of where the mapmakers stopped drawing —
  * the eight of them span unrelated clusters and include Ambient Temperature. So
  * backward simply answers "what feeds into this", bounded by the step slider.
@@ -113,7 +113,7 @@ function stepsToDestinations(
 }
 
 /**
- * Steps from the start to each factor, with destinations absorbing: a journey
+ * Steps from the start to each variable, with destinations absorbing: a journey
  * ends the moment it arrives, so we never travel on *through* a destination to
  * reach something beyond it.
  */
@@ -143,7 +143,7 @@ export interface PathSet {
   startId: number
   direction: TraceDirection
   maxSteps: number
-  /** Factors on at least one route within the limit, excluding the start. */
+  /** Variables on at least one route within the limit, excluding the start. */
   nodeIds: number[]
   connectionIds: string[]
   /** Destinations reached within the limit. */
@@ -188,8 +188,8 @@ export function pathSetWithin(
     const far = direction === 'downstream' ? connection.targetId : connection.sourceId
 
     // A journey ends on arrival, so it never leaves a destination. Without this
-    // the arrow rule outruns the factor rule and draws arrows heading out of a
-    // destination toward factors that are — correctly — not lit.
+    // the arrow rule outruns the variable rule and draws arrows heading out of a
+    // destination toward variables that are — correctly — not lit.
     if (isDestination(near, direction) && near !== startId) continue
 
     const a = fromStart.get(near)
@@ -263,10 +263,10 @@ function buildHop(fromId: number, toId: number): RouteHop {
 }
 
 /**
- * Backward: one row per contributing factor, showing its shortest chain into
+ * Backward: one row per contributing variable, showing its shortest chain into
  * the start. Enumerating every backward chain is not an option — a median
- * factor has 47 within 4 steps and busy ones have 764 — and it answers the
- * wrong question anyway. "What affects this?" is about factors, not routes.
+ * variable has 47 within 4 steps and busy ones have 764 — and it answers the
+ * wrong question anyway. "What affects this?" is about variables, not routes.
  */
 function contributorsOf(startId: number, maxHops: number): RouteSearch {
   const parent = new Map<number, number>()

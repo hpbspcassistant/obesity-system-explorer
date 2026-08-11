@@ -1,7 +1,7 @@
 /**
  * Deriving a visible outline colour from a pale fill.
  *
- * Profile draws a suggested factor as a white box ringed in the colour it would
+ * Profile draws a suggested variable as a white box ringed in the colour it would
  * take if marked. That ring has to be legible on white, which the artwork's own
  * fills are nowhere near — and neither is `accentFrom`, which is tuned for a
  * drop-shadow and caps lightness at 0.62, leaving the yellow and cream clusters
