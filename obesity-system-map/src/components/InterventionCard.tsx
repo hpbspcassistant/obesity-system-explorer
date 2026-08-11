@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { cornerPlacement, placeCard } from '../lib/cardPlacement'
 import type { AnchorRect } from './MapView'
 import type { NodeProvenance, NodeStanding } from '../lib/reach'
@@ -19,6 +21,16 @@ import type { Node } from '../types'
 
 const CARD_W = 276
 const MAX_H = 360
+/**
+ * Programme names shown per behaviour before the rest are folded away.
+ *
+ * Grouping by behaviour fixed a flat list repeating one long label thirty times,
+ * and left the other half of the problem standing: sixteen names under a single
+ * heading is the same wall with a tidier top. The count in the heading is the
+ * answer at a glance — "sixteen programmes carry this" — and the names are what
+ * you go looking for afterwards, so four is a sample and the rest is a click.
+ */
+const PREVIEW = 4
 
 /** The map's own status colours, so the card and the box cannot disagree. */
 const TONE: Record<string, { dot: string; ring: string }> = {
@@ -112,12 +124,25 @@ export function InterventionCard({
   // free and under-estimating a scrollbar on a card with three lines in it, so
   // the allowances below are deliberately loose — a behaviour heading and a
   // programme name both wrap at this width more often than not.
-  const groups = new Set(
-    [...reaching, ...unticked, ...ineligible].map(
-      (v) => v.behaviour?.id ?? 'pinned',
-    ),
-  ).size
-  const rows = reaching.length + unticked.length + ineligible.length
+  // Counted as the card first draws it, so a group standing at its cap counts
+  // for the cap and not for everything it is hiding.
+  const groups = [reaching, unticked, ineligible].flatMap((via) => [
+    ...new Set(via.map((v) => v.behaviour?.id ?? 'pinned')),
+  ]).length
+  const rows = [reaching, unticked, ineligible].reduce((total, via) => {
+    const perBehaviour = new Map<string, number>()
+    for (const v of via) {
+      const key = v.behaviour?.id ?? 'pinned'
+      perBehaviour.set(key, (perBehaviour.get(key) ?? 0) + 1)
+    }
+    return (
+      total +
+      [...perBehaviour.values()].reduce(
+        (n, count) => n + Math.min(count, PREVIEW) + (count > PREVIEW ? 1 : 0),
+        0,
+      )
+    )
+  }, 0)
   const height = Math.min(MAX_H, 190 + groups * 26 + rows * 19)
   const { left, top } = anchor
     ? placeCard(anchor, container, CARD_W, height)
@@ -130,7 +155,11 @@ export function InterventionCard({
       style={{ left, top, width: CARD_W, maxHeight: height }}
       className="absolute z-20 flex flex-col overflow-hidden rounded-xl border border-gray-300 bg-white shadow-[0_8px_28px_-6px_rgba(0,0,0,0.26)]"
     >
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      {/* Keyed by the variable, so opening a different one starts fresh: the
+          groups collapse again and the body scrolls back to the top. Without it
+          React reuses these instances and a group left open on one variable is
+          open on the next, describing a different set of programmes. */}
+      <div key={node.id} className="min-h-0 flex-1 overflow-y-auto">
         <div className="border-b border-gray-100 px-3 pb-2.5 pt-3">
           <p className="pr-6 text-[13.5px] font-semibold leading-snug text-gray-900">
             {node.label}
@@ -148,9 +177,9 @@ export function InterventionCard({
 
         {reaching.length > 0 && (
           <Programmes
-            heading={
-              withPersona ? 'Reached by' : `Reached by ${reaching.length}`
-            }
+            // Counted in both views now that the per-behaviour counts only
+            // appear when there is a split, so one of the two always states it.
+            heading={`Reached by ${reaching.length}`}
             via={reaching}
           />
         )}
@@ -239,17 +268,62 @@ function Programmes({
         {heading}
       </p>
       {[...groups].map(([key, group]) => (
-        <div key={key} className="mt-1.5">
-          <p className="text-[11px] leading-snug text-gray-500">{group.label}</p>
-          <ul className={muted ? 'text-gray-500' : 'text-gray-800'}>
-            {group.names.map((name) => (
-              <li key={name} className="py-px text-[12px] leading-snug">
-                {name}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Group
+          key={key}
+          label={group.label}
+          names={group.names}
+          muted={muted}
+          // Only worth stating when there is something to split. With one
+          // behaviour it repeats the total in the heading directly above it.
+          showCount={groups.size > 1}
+        />
       ))}
+    </div>
+  )
+}
+
+/** One behaviour and the programmes that reach the variable through it. */
+function Group({
+  label,
+  names,
+  muted,
+  showCount,
+}: {
+  label: string
+  names: string[]
+  muted: boolean
+  showCount: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const hidden = names.length - PREVIEW
+  const shown = open || hidden <= 0 ? names : names.slice(0, PREVIEW)
+
+  return (
+    <div className="mt-1.5">
+      {/* The count sits with the behaviour, because the section heading totals
+          every behaviour at once and so says nothing about the one being read. */}
+      <p className="text-[11px] leading-snug text-gray-500">
+        {label}
+        {showCount && names.length > 1 && (
+          <span className="text-gray-400"> · {names.length}</span>
+        )}
+      </p>
+      <ul className={muted ? 'text-gray-500' : 'text-gray-800'}>
+        {shown.map((name) => (
+          <li key={name} className="py-px text-[12px] leading-snug">
+            {name}
+          </li>
+        ))}
+      </ul>
+      {hidden > 0 && (
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className="mt-0.5 text-[11px] text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-800"
+        >
+          {open ? 'Show fewer' : `${hidden} more`}
+        </button>
+      )}
     </div>
   )
 }
