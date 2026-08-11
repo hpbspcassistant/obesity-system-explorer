@@ -64,6 +64,56 @@ function RouteChain({ route, loop }: { route: Route; loop?: boolean }) {
  * The link's direction of effect. The source data carries only
  * `influence`/`sign` per connection, so there is no written rationale to show.
  */
+/**
+ * What the variable at the end of the walk actually means.
+ *
+ * The starting variable has had a definition since Trace stopped being a
+ * dead end for "what is this?", but a route is a chain of names and the other
+ * five are just as likely to be unfamiliar. Reading a path meant recognising
+ * every variable on it or going to Explore, which clears the trace.
+ *
+ * One at a time, and it follows the walk: press Trace and this is the variable
+ * you have just arrived at, changing on each step. Definitions for every hop at
+ * once would be six paragraphs where the list is one line per hop, which is a
+ * wall rather than an answer.
+ */
+function ArrivalDefinition({
+  route,
+  animatedHops,
+  startId,
+}: {
+  route: Route
+  animatedHops: number | null
+  startId: number
+}) {
+  // Mid-walk, wherever the last crossed arrow landed; otherwise where the route
+  // ends, which is what the row was chosen for.
+  const nodeId =
+    animatedHops !== null && animatedHops > 0
+      ? (route.nodeIds[Math.min(animatedHops, route.length)] ??
+        route.destinationId)
+      : route.destinationId
+
+  // A loop closes on the variable it left, whose definition is already sitting
+  // above the slider. Repeating it here would be the only thing this slot ever
+  // said in loop mode.
+  if (nodeId === startId) return null
+
+  const node = nodesById.get(nodeId)
+  if (!node) return null
+  const definition = definitionOf(node)
+
+  return (
+    <p className="mb-1.5 border-t border-gray-100 pt-1.5 text-[11px] leading-relaxed">
+      {/* Named, because which variable this describes changes as you walk. */}
+      <span className="font-medium text-gray-700">{node.label}</span>{' '}
+      <span className={definition ? 'text-gray-600' : 'italic text-gray-400'}>
+        {definition ?? NO_DEFINITION}
+      </span>
+    </p>
+  )
+}
+
 function HopLine({
   fromId,
   hop,
@@ -406,6 +456,12 @@ export function TracePanel({
                                 />
                               ))}
                             </ul>
+
+                            <ArrivalDefinition
+                              route={route}
+                              animatedHops={animatedHops}
+                              startId={startId}
+                            />
                           </div>
                         )}
                       </li>
