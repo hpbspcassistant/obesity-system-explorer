@@ -98,8 +98,6 @@ const TRACE_PANEL_PX = 368
 const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
-/** The navigator plus its gap, so the intervention key can stack above it. */
-const MINIMAP_STACK_PX = 145
 /**
  * Output pixels per map unit for an exported PNG. At 1 the image is 3370px wide,
  * which is already beyond what A4 needs at 300dpi; 2 quadruples the file for a
@@ -167,6 +165,11 @@ export default function App() {
     string
   > | null>(null)
   const [programmePanelOpen, setProgrammePanelOpen] = useState(false)
+  /**
+   * Measured, because the two keys are stacked in the same corner and the lower
+   * one changes height with the persona — two rows without one, four with.
+   */
+  const [interventionKeyHeight, setInterventionKeyHeight] = useState(0)
   /**
    * Marked counts as they stood when the current guide step opened.
    *
@@ -1455,8 +1458,14 @@ export default function App() {
           rightInset={legendRightInset}
           // Intervention carries a bar of its own, the same height as Profile's.
           // It was left out here, so the legend sat on top of the persona picker.
+          // In that mode it also stacks above the status key, which sits in this
+          // same corner — hence the measured height and an 8px gap.
           bottomInset={
-            profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
+            mode === 'intervention'
+              ? PROFILE_BAR_PX + interventionKeyHeight + 8
+              : profiling
+                ? PROFILE_BAR_PX
+                : 0
           }
           highContrast={highContrast}
           showSwatches={mode !== 'intervention'}
@@ -1499,7 +1508,9 @@ export default function App() {
         {mode === 'intervention' && (
           <InterventionKey
             personaName={interventionPersona ? (activeProfile?.name ?? null) : null}
-            bottomInset={PROFILE_BAR_PX + MINIMAP_STACK_PX}
+            bottomInset={PROFILE_BAR_PX}
+            rightInset={legendRightInset}
+            onHeightChange={setInterventionKeyHeight}
           />
         )}
 

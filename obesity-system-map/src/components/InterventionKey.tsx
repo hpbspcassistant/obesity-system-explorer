@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 
 /**
  * What the boxes mean, on the screen rather than in someone's head.
@@ -50,15 +51,47 @@ function Row({
 export function InterventionKey({
   personaName,
   bottomInset = 0,
+  rightInset = 0,
+  onHeightChange,
 }: {
   /** Null in the whitespace view, where only two states can occur. */
   personaName: string | null
   bottomInset?: number
+  /** Px of the right edge covered by a panel, so this sits beside it. */
+  rightInset?: number
+  /**
+   * Measured height, so the colour key can be stacked on top of this one rather
+   * than guessing at an offset. It changes with the persona — two rows without
+   * one, four with — so a constant would be wrong half the time.
+   */
+  onHeightChange?: (height: number) => void
 }) {
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  // `personaName` is in the deps, not just left to the observer: it is the one
+  // thing that changes this box's height — two rows become four — and measuring
+  // on the render that changes it means the stack is never briefly overlapping.
+  // The observer stays for everything else, chiefly the text wrapping at a
+  // narrower window or on a long persona name.
+  useEffect(() => {
+    const box = ref.current
+    if (!box || !onHeightChange) return
+    const report = () => onHeightChange(box.offsetHeight)
+    report()
+    const observer = new ResizeObserver(report)
+    observer.observe(box)
+    return () => observer.disconnect()
+  }, [onHeightChange, personaName])
+
   return (
     <div
-      className="absolute left-4 z-30 w-64 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg backdrop-blur"
-      style={{ bottom: 16 + bottomInset }}
+      ref={ref}
+      // Right-hand side, stacked under the colour key. It sat bottom-left until
+      // the two keys being in opposite corners meant reading the map involved
+      // looking in both. The minimap is what kept it there, and is why the old
+      // offset had to clear 145px of navigator that no longer applies.
+      className="absolute z-30 w-56 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg backdrop-blur"
+      style={{ bottom: 16 + bottomInset, right: 16 + rightInset }}
     >
       <p className="mb-2 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
         What the boxes mean
