@@ -699,15 +699,10 @@ export function MapView({
   const exportPng = useCallback(
     async (scale = 1) => {
       const svg = svgRef.current
-      const host = wrapperRef.current
-      if (!svg || !host) throw new Error('MapView: nothing to export yet')
-      const fit = clamp(
-        Math.min(host.clientWidth / MAP_WIDTH, host.clientHeight / MAP_HEIGHT) *
-          FIT_PADDING,
-        MIN_SCALE,
-        MAX_SCALE,
-      )
-      return svgToPngBlob(svg, { scale, referenceScale: fit })
+      if (!svg) throw new Error('MapView: nothing to export yet')
+      // No reference scale any more: strokes bake one map unit per screen pixel,
+      // so the image no longer depends on the size of the window it was taken in.
+      return svgToPngBlob(svg, { scale })
     },
     [],
   )

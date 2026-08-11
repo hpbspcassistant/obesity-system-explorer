@@ -41,79 +41,88 @@ const BAKED = [
   'paint-order',
 ] as const
 
+/**
+ * Line weight for the overlay edges, in map units.
+ *
+ * 0.85 is the widest the artwork draws a connection (0.51, 0.69, 0.83) rounded up,
+ * and the same number high contrast pins the web to. Using `Math.min` against it
+ * rather than assigning it means an overlay thinner than the web stays thinner.
+ */
+const WEB_EDGE_WIDTH = 0.85
+
 export interface ExportOptions {
   /**
-   * Output pixels per map unit. The map is 3370 units wide, so 1 gives a
-   * 3370px image — already past what A4 needs at 300dpi.
+   * Output pixels per map unit. The map is 3370 units wide, so 3 gives a
+   * 10111px image — A3 at 611dpi. See EXPORT_SCALES in App.
    */
   scale?: number
-  /**
-   * Map scale the on-screen look is defined at, used to convert the profile
-   * layers' screen-pixel strokes into map units. See `bakeStrokes`.
-   */
-  referenceScale: number
 }
 
 /**
- * Converts a `non-scaling-stroke` width into ordinary map units.
+ * Flattens a `non-scaling-stroke` width into ordinary map units, one for one.
  *
- * Those strokes exist so a marked connection holds 2.6px on screen at any zoom.
- * Kept as-is in the export they would render 2.6px against a 3370px-wide image —
- * a hairline, on the one layer the whole picture is about. Dividing by the scale
- * the look was designed at restores the proportion instead: 2.6px at fit zoom
- * (~0.3) is about 8.7 map units, which is 8.7 units at any output size.
- *
- * The dash pattern is measured in screen pixels under the same flag, and carries
- * the artwork's meaning for "negative", so it is converted by the same factor.
+ * Those strokes hold a constant screen width at any zoom, which a static image
+ * has no equivalent of, so the flag comes off and the number stays.
  */
 function bakeStrokes(
   source: Element,
   target: Element,
   computed: CSSStyleDeclaration,
-  referenceScale: number,
 ): void {
   const nonScaling = computed.getPropertyValue('vector-effect').trim() ===
     'non-scaling-stroke'
   /*
-   * Only the overlay layers get the divisor, and everything else keeps its
-   * literal width. Getting this backwards is what made an exported map look like
-   * it had been drawn with a marker pen.
+   * A screen pixel becomes one map unit, and nothing is scaled up.
    *
-   * A non-scaling stroke means one of two quite different things here. On the
-   * overlays it is a DESIGN WIDTH: a marked connection is 2.6px because that is
-   * how prominent it is meant to be at any zoom, so its proportion against the
-   * picture is what has to survive, and dividing by the scale that look was
-   * drawn at preserves it.
+   * There used to be a divisor here, dividing every non-scaling width by the fit
+   * scale so it kept its on-screen proportion. It was wrong at every setting, and
+   * two attempts to narrow it down only moved which layer came out heavy:
    *
-   * Everywhere else it is only a FLOOR, protecting legibility on a screen. High
-   * contrast pins each edge to 0.85px so the web survives being zoomed out, and
-   * Intervention pins a box outline to 0.9px, 2.2px once it carries a state.
-   * Divided by a fit scale of about 0.27 those become 3.2, 3.4 and 8.3 map units
-   * against artwork that draws its lines at 0.51 to 0.83 — four to nine times
-   * too heavy, and at print size the floor is pointless anyway because a hairline
-   * is perfectly visible on A3.
+   *   everything    edges 3.2, boxes 3.4 and 8.3 units, against artwork drawn at
+   *                 0.51 to 0.83 — the marker-pen look
+   *   overlays only marked connections at 2.6 / 0.27 = 9.6 units, eleven times
+   *                 the web beside them
    *
-   * The first attempt at this excluded the base edges by name and left the node
-   * boxes inflated, which is why the map still came back heavy: at 8.3 units
-   * their outlines were the widest ink in the file.
+   * The premise was that 2.6px against a 3370px image is a hairline. That was
+   * true when the export ran at scale 1; it is not now the image is 10111px
+   * wide, where 2.6 units is nearly 8 pixels, and on A3 a third of a millimetre.
+   *
+   * So the rule is simply 1px = 1 unit. That is the map as it looks at 100% zoom
+   * — which is what a print of it should be — and it keeps the app's own
+   * hierarchy without inventing one: 0.85 for the web, 0.9 or 2.2 for a box, 2.6
+   * for a marked connection.
    */
-  const PROMINENT = [
-    'edge-highlight',
-    'trace-highlight',
+  /*
+   * The overlay edges are drawn at the web's own weight, not their screen one.
+   *
+   * On screen a marked connection is 2.6px against artwork lines of 0.51 to 0.83
+   * units, and it needs to be: at fit zoom those artwork widths are a fraction of
+   * a pixel, so without extra weight a marked connection would be invisible on
+   * the layer the whole mode is about.
+   *
+   * A print has no such problem. At A3 the web is already a clean 0.1mm line, and
+   * a marked connection four times that reads as heavy rather than as chosen —
+   * which is what it looked like. Tone is doing the work anyway: the artwork web
+   * is faded to 0.3 in Profile and the marked layer is full-strength artwork ink,
+   * so the two are told apart without spending weight on it.
+   */
+  const OVERLAY_EDGES = [
     'profile-marked-edges',
     'profile-link-edges',
-    'profile-link-badges',
+    'edge-highlight',
+    'trace-highlight',
   ]
   const layer = source.closest('[data-layer]')
-  const isProminent =
+  const isOverlayEdge =
     layer instanceof SVGElement &&
-    PROMINENT.includes(layer.dataset.layer ?? '')
-  const divisor =
-    nonScaling && isProminent && referenceScale > 0 ? referenceScale : 1
+    OVERLAY_EDGES.includes(layer.dataset.layer ?? '')
 
   const width = Number.parseFloat(computed.getPropertyValue('stroke-width'))
   if (Number.isFinite(width)) {
-    target.setAttribute('stroke-width', String(width / divisor))
+    target.setAttribute(
+      'stroke-width',
+      String(isOverlayEdge ? Math.min(width, WEB_EDGE_WIDTH) : width),
+    )
   }
 
   const dash = computed.getPropertyValue('stroke-dasharray').trim()
@@ -123,29 +132,25 @@ function bakeStrokes(
       dash
         .split(/[\s,]+/)
         .filter(Boolean)
-        .map((part) => Number.parseFloat(part) / divisor)
+        .map((part) => Number.parseFloat(part))
         .map((n) => (Number.isFinite(n) ? n.toFixed(3) : '0'))
         .join(' '),
     )
   }
 
-  // Flattened, so the divided width is taken at face value.
+  // Flattened, so the width above is taken at face value.
   if (nonScaling) target.setAttribute('vector-effect', 'none')
   void source
 }
 
 /** Walks both trees in step, copying the live look onto the copy. */
-function bakeStyles(
-  source: Element,
-  target: Element,
-  referenceScale: number,
-): void {
+function bakeStyles(source: Element, target: Element): void {
   const computed = window.getComputedStyle(source)
   for (const property of BAKED) {
     const value = computed.getPropertyValue(property)
     if (value) target.setAttribute(property, value)
   }
-  bakeStrokes(source, target, computed, referenceScale)
+  bakeStrokes(source, target, computed)
 
   // Class names are dead weight once the styling is inline, and their absence
   // makes the exported file readable if anyone opens it.
@@ -154,7 +159,7 @@ function bakeStyles(
   const from = source.children
   const to = target.children
   for (let i = 0; i < from.length && i < to.length; i += 1) {
-    bakeStyles(from[i], to[i], referenceScale)
+    bakeStyles(from[i], to[i])
   }
 }
 
@@ -166,7 +171,7 @@ function bakeStyles(
  */
 export async function svgToPngBlob(
   svg: SVGSVGElement,
-  { scale = 1, referenceScale }: ExportOptions,
+  { scale = 1 }: ExportOptions,
 ): Promise<Blob> {
   const viewBox = svg.getAttribute('viewBox')
   const [, , widthUnits, heightUnits] = (viewBox ?? '0 0 0 0')
@@ -177,7 +182,7 @@ export async function svgToPngBlob(
   }
 
   const clone = svg.cloneNode(true) as SVGSVGElement
-  bakeStyles(svg, clone, referenceScale)
+  bakeStyles(svg, clone)
 
   /*
    * The invisible click targets have no business in a picture.
