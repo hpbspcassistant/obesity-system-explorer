@@ -794,9 +794,6 @@ export default function App() {
       gaps: [],
       beyond: allNodeIds.filter((id) => reached.has(id)),
       untouched: allNodeIds.filter((id) => !reached.has(id)),
-      // Nothing to be outside of: `outside` means "in this persona's map and
-      // unreachable", and there is no persona here.
-      outside: [],
       applicability: {
         applies: [...programmes],
         excluded: [],
@@ -811,11 +808,6 @@ export default function App() {
     for (const id of interventionSummary.gaps) byNode.set(id, 'gap')
     for (const id of interventionSummary.beyond) byNode.set(id, 'beyond')
     for (const id of interventionSummary.untouched) byNode.set(id, 'untouched')
-    // MapView toggles only the four named classes, so this one matches nothing
-    // and the box draws plain — which is the intent. The standing is still
-    // recorded because the card reads this map, and it is the only place the
-    // difference from `untouched` is stated.
-    for (const id of interventionSummary.outside) byNode.set(id, 'outside')
     return byNode
   }, [interventionSummary])
 
@@ -1109,11 +1101,10 @@ export default function App() {
                   provenanceOf(b, programmes, behaviourIndex).via.length -
                   provenanceOf(a, programmes, behaviourIndex).via.length,
               )[0]
-            : // Prefer one in the persona's own map, where the card can draw the
-              // distinction the step is about; otherwise any unreached variable.
-              (interventionSummary.gaps[0] ??
-              interventionSummary.outside[0] ??
-              interventionSummary.untouched[0])
+            : // A gap by preference — in the persona's map and unreached, which
+              // is what the step is about. Falls back to any unreached variable
+              // for the whitespace view, which has no persona and so no gaps.
+              (interventionSummary.gaps[0] ?? interventionSummary.untouched[0])
         if (wanted === undefined) return
         setSelection({ kind: 'node', nodeId: wanted })
         frameNodes([wanted])

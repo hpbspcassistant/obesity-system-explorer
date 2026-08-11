@@ -272,52 +272,40 @@ export function whitespaceOf(
 /* ----------------------------------------------------- per-node accounting */
 
 /**
- * How a node stands relative to one persona.
+ * How a node stands relative to one persona: two questions crossed.
  *
- * `gap` is the one worth building the view around: something judged significant
- * for this person that no applicable programme touches, *but which some
- * programme could touch*. That last clause is what `outside` exists to carve
- * off, and the split matters because the two call for opposite responses:
+ *                        reached          not reached
+ *   in their map         covered          gap
+ *   not in their map     beyond           untouched
  *
- *   gap      a programme reaches this variable for somebody. This persona is
- *            missing out, so widening or adding one would land.
- *   outside  nothing in the inventory reaches it for anybody. No programme
- *            could be pointed at it without first extending the behaviour
- *            vocabulary — and for the deep-physiology variables, nothing
- *            should be.
+ * `gap` is the one the view is built around, and it means exactly what the grid
+ * says — in this persona's map, and nothing that applies to them reaches it. No
+ * further qualification.
  *
- * Painting both red told the reader to act on variables where no action is
- * possible. `outside` is deliberately given no colour of its own: it draws as
- * an ordinary empty box, and the card is where the difference is explained.
+ * There was briefly a fifth standing splitting `gap` by whether ANY programme
+ * could reach the node for anyone, drawn without colour on the grounds that
+ * "nothing could act here" is not somewhere to act. It was removed because the
+ * test it relied on does not exist in the data: "no behaviour covers this" was
+ * standing in for "nothing could ever act on this", and those differ. Resting
+ * metabolic rate is genuinely out of scope; peer pressure is simply not in HPB's
+ * vocabulary yet. Treating every vocabulary gap as a law of nature emptied the
+ * gap state almost entirely — four to seven real findings per persona rendered
+ * identically to the eighty-five variables they had never marked.
+ *
+ * Should the deliberately out-of-scope variables ever be listed explicitly, the
+ * split can come back and mean what it claimed. Until then the card carries the
+ * nuance: click a gap and it names any programme covering it for other people.
  */
-export type NodeStanding =
-  | 'covered'
-  | 'gap'
-  | 'beyond'
-  | 'untouched'
-  | 'outside'
+export type NodeStanding = 'covered' | 'gap' | 'beyond' | 'untouched'
 
-/**
- * `reachable` is the reach of every programme with gates ignored — what HPB
- * touches for anyone at all. Omit it and every unreached node in the persona's
- * map counts as a gap, which is the older, blunter reading.
- *
- * Not the same as "some behaviour owns this node", which was the first version
- * of this test and is wrong: a node pinned through `extraNodes` is owned by no
- * behaviour, yet a programme plainly reaches it. Under that test a persona who
- * simply failed that programme's gate would see the node as unreachable, when
- * the honest answer is that a programme exists and they are not eligible for it.
- */
 export function standingOf(
   nodeId: number,
   inPersonaMap: ReadonlySet<number>,
   reached: ReadonlySet<number>,
-  reachable?: ReadonlySet<number>,
 ): NodeStanding {
   const inMap = inPersonaMap.has(nodeId)
   if (reached.has(nodeId)) return inMap ? 'covered' : 'beyond'
-  if (!inMap) return 'untouched'
-  return reachable && !reachable.has(nodeId) ? 'outside' : 'gap'
+  return inMap ? 'gap' : 'untouched'
 }
 
 export interface ReachSummary {
@@ -326,8 +314,6 @@ export interface ReachSummary {
   gaps: number[]
   beyond: number[]
   untouched: number[]
-  /** In the persona's map, and beyond anything the inventory could reach. */
-  outside: number[]
 }
 
 /**
@@ -345,10 +331,6 @@ export function summariseForPersona(
 ): ReachSummary & { applicability: Applicability } {
   const applicability = classifyProgrammes(persona, programmes)
   const reached = reachOf(applicability.applies, behaviours)
-  // Gates off, every programme: the ceiling on what could ever be reached, which
-  // is what separates a gap from a variable nothing addresses. Computed from the
-  // same list, so the two can never disagree.
-  const reachable = reachOf(programmes, behaviours)
   const inMap = new Set(persona.applicabilityNodes)
 
   const summary: ReachSummary = {
@@ -357,14 +339,12 @@ export function summariseForPersona(
     gaps: [],
     beyond: [],
     untouched: [],
-    outside: [],
   }
   for (const id of allNodeIds) {
-    const standing = standingOf(id, inMap, reached, reachable)
+    const standing = standingOf(id, inMap, reached)
     if (standing === 'covered') summary.covered.push(id)
     else if (standing === 'gap') summary.gaps.push(id)
     else if (standing === 'beyond') summary.beyond.push(id)
-    else if (standing === 'outside') summary.outside.push(id)
     else summary.untouched.push(id)
   }
   return { ...summary, applicability }

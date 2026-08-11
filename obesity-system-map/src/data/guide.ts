@@ -371,12 +371,12 @@ const INTERVENTION: GuideSection = {
       action: { label: 'Open a reached one', id: 'openReachedVariable' },
     },
     {
-      title: 'When nothing reaches it',
+      title: 'The gaps',
       body: [
-        'An empty box is two different situations. Either no programme that applies to this person reaches it — a gap, and somewhere to act — or no programme reaches it for anyone, so there is nothing to point at it without adding a behaviour first.',
-        'Most of the map is the second kind, and much of that is correct: nothing acts directly on resting metabolic rate. The card tells you which you are looking at.',
+        'Red is the point of the mode: something that matters for this person, that nothing reaching them addresses. Expect a handful per persona, not one or two.',
+        'Two quite different things produce it, and the card tells you which. Either a programme covers that variable but this person is not eligible — an argument about the gate — or nothing in the inventory covers it for anyone, which is an argument about what HPB runs. Some of the second kind are correct: nothing acts directly on resting metabolic rate.',
       ],
-      action: { label: 'Open one nothing reaches', id: 'openUnreachedVariable' },
+      action: { label: 'Open a gap', id: 'openUnreachedVariable' },
     },
     {
       title: 'Who a programme is for',

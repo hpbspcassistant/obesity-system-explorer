@@ -97,20 +97,6 @@ export function InterventionKey({
         </ul>
       )}
 
-      {/* An empty box is two situations wearing one colour, deliberately: a
-          variable nothing could ever reach is not somewhere to act, so it is
-          not worth a colour of its own. It is worth saying out loud, though —
-          "neither" alone reads as "irrelevant", and one of the two is not.
-
-          Only with a persona. In the whitespace view an empty box already means
-          exactly "no programme reaches this", so the same sentence there offers
-          a distinction that does not exist. */}
-      {personaName !== null && (
-        <p className="mt-2 border-t border-gray-100 pt-2 text-[10.5px] leading-snug text-gray-500">
-          An empty box can also mean no programme could reach that variable at
-          all. Click one to see which it is.
-        </p>
-      )}
     </div>
   )
 }
