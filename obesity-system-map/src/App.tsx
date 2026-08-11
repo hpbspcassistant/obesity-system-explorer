@@ -1375,6 +1375,7 @@ export default function App() {
           intervention={
             mode === 'intervention' ? interventionStanding : undefined
           }
+          interventionPersona={interventionPersona !== null}
           gapsOnly={gapsOnly}
           bottomInset={
             profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0

@@ -537,7 +537,7 @@
    them under 4.5:1, while the border carries the signal at a glance. */
 .map-svg.has-intervention g[data-node-id].is-covered > path,
 .map-svg.has-intervention g[data-node-id].is-gap > path,
-.map-svg.has-intervention g[data-node-id].is-beyond > path {
+.map-svg.has-intervention:not(.has-persona) g[data-node-id].is-beyond > path {
   stroke-width: 2.2;
 }
 
@@ -553,8 +553,23 @@
   stroke: #dc2626;
 }
 
-/* A programme reaches it, but it is outside this persona's map. */
-.map-svg.has-intervention g[data-node-id].is-beyond > path {
+/*
+ * A programme reaches it, but it is outside this persona's map.
+ *
+ * Coloured only when there is no persona, where it is the whole point: with
+ * nobody chosen every reached variable is `beyond`, so this orange IS the
+ * "HPB reaches this" state and removing it would empty that view.
+ *
+ * With a persona it draws plain. Only what is in their map lights up — green
+ * where a programme reaches it, red where nothing does — so colour on the map
+ * means "this matters to this person" and nothing else. The state itself is
+ * still computed and still counted in the bar, and the card still explains it
+ * when one is clicked; it just stops competing for attention with the two
+ * states that are about the person in front of you.
+ */
+.map-svg.has-intervention:not(.has-persona)
+  g[data-node-id].is-beyond
+  > path {
   fill: #fed7aa;
   stroke: #ea580c;
 }

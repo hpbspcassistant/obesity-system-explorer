@@ -329,6 +329,14 @@ export interface MapViewProps {
   markedOnly?: boolean
   /** node id -> how it stands against HPB programme reach; Intervention only. */
   intervention?: ReadonlyMap<number, string>
+  /**
+   * Whether Intervention is answering for a persona rather than for anyone.
+   *
+   * Decides which states get a colour: with a persona only what is in their map
+   * lights up, so `beyond` draws plain. Without one, `beyond` is the only state
+   * that can occur for a reached variable and carries the whole view.
+   */
+  interventionPersona?: boolean
   /** Fades everything that is not a gap for the current persona. */
   gapsOnly?: boolean
   /** Whether to draw the navigator thumbnail. */
@@ -390,6 +398,7 @@ export function MapView({
   highContrast = false,
   markedOnly = false,
   intervention,
+  interventionPersona = false,
   gapsOnly = false,
   showMiniMap = true,
   bottomInset = 0,
@@ -1225,6 +1234,9 @@ export function MapView({
               mode === 'profile' ? 'has-profile' : '',
               mode === 'profile' && markedOnly ? 'marked-only' : '',
               mode === 'intervention' ? 'has-intervention' : '',
+              mode === 'intervention' && interventionPersona
+                ? 'has-persona'
+                : '',
               mode === 'intervention' && gapsOnly ? 'gaps-only' : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',

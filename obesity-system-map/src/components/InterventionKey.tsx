@@ -107,6 +107,12 @@ export function InterventionKey({
           </Row>
         </ul>
       ) : (
+        /*
+         * Three rows, not four. Only what is in this persona's map is coloured
+         * now, so the row for "reached, but outside their map" had a swatch that
+         * appears nowhere — and an empty box means one thing again: not theirs.
+         * The count is still in the bar, and the card still says so on a click.
+         */
         <ul className="space-y-1.5">
           <Row standing="is-covered">
             Matters for {personaName}, and a programme reaches it
@@ -118,14 +124,8 @@ export function InterventionKey({
               <span className="block text-gray-500">the gap — act here</span>
             )}
           </Row>
-          <Row standing="is-beyond">
-            A programme reaches it, but it is outside their map
-            {(
-              <span className="block text-gray-500">worth reviewing</span>
-            )}
-          </Row>
           <Row standing="is-untouched">
-            Neither
+            Not in their map
           </Row>
         </ul>
       )}
