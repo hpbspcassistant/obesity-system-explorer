@@ -74,7 +74,27 @@ function bakeStrokes(
 ): void {
   const nonScaling = computed.getPropertyValue('vector-effect').trim() ===
     'non-scaling-stroke'
-  const divisor = nonScaling && referenceScale > 0 ? referenceScale : 1
+  /*
+   * The artwork's own edges are the exception, and getting this wrong is what
+   * made an exported map look like it had been drawn with a marker pen.
+   *
+   * Their non-scaling stroke is a FLOOR, not a design width: high contrast pins
+   * every edge to 0.85px so the web survives being zoomed out on a screen. Run
+   * through the divisor that becomes 0.85 / 0.27 ≈ 3.2 map units, against the
+   * 0.51-0.83 the artwork actually draws — four to six times too heavy, on all
+   * 898 of them at once.
+   *
+   * The overlay layers are the opposite case. A marked connection is 2.6px
+   * because that is how prominent it is meant to be at any zoom, so there the
+   * proportion is the thing to preserve and the divisor is right.
+   *
+   * So: convert where a screen width is the intent, and leave it alone where it
+   * is only a minimum. Undivided, these bake at 0.85 units — a shade bolder than
+   * the artwork and correct at any print size.
+   */
+  const isBaseEdge = source.closest("[data-layer='edges']") !== null
+  const divisor =
+    nonScaling && !isBaseEdge && referenceScale > 0 ? referenceScale : 1
 
   const width = Number.parseFloat(computed.getPropertyValue('stroke-width'))
   if (Number.isFinite(width)) {

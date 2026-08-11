@@ -99,11 +99,22 @@ const DETAIL_PANEL_PX = 352
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
 /**
- * Output pixels per map unit for an exported PNG. At 1 the image is 3370px wide,
- * which is already beyond what A4 needs at 300dpi; 2 quadruples the file for a
- * size nobody has asked for.
+ * Output pixels per map unit for an exported PNG, best first.
+ *
+ * The map is 3370 x 2384 units, so scale 1 is 3370px wide — which is 288dpi at
+ * A4 and only 204dpi at A3. The earlier note here claimed that was "beyond what
+ * A4 needs at 300dpi" and was simply wrong, which is why prints looked soft.
+ *
+ *   scale 1   3370 x 2384    8 MP    A3 at 204dpi
+ *   scale 2   6741 x 4768   32 MP    A3 at 408dpi, A2 at 288, A1 at 204
+ *   scale 3  10111 x 7152   72 MP    A3 at 612dpi, A2 at 432, A1 at 306
+ *
+ * Tried in order because the largest is a 72-megapixel canvas — around 290MB of
+ * bitmap — and a machine that cannot allocate it should quietly produce a smaller
+ * file rather than an "Export failed" the reader can do nothing about. Even the
+ * last rung clears 300dpi at A4.
  */
-const EXPORT_SCALE = 1
+const EXPORT_SCALES = [3, 2, 1] as const
 
 /** Either the menu of walkthroughs, or a place within one of them. */
 type GuideView =
@@ -683,15 +694,19 @@ export default function App() {
 
   const exportPng = useCallback(async () => {
     setExportState('working')
-    try {
-      const blob = await mapRef.current?.exportPng(EXPORT_SCALE)
-      if (!blob) throw new Error('no image produced')
-      downloadBlob(blob, exportName())
-      setExportState('idle')
-    } catch {
-      setExportState('failed')
-      window.setTimeout(() => setExportState('idle'), 4000)
+    for (const scale of EXPORT_SCALES) {
+      try {
+        const blob = await mapRef.current?.exportPng(scale)
+        if (!blob) throw new Error('no image produced')
+        downloadBlob(blob, exportName())
+        setExportState('idle')
+        return
+      } catch {
+        // Try the next size down. Only the last failure is the reader's problem.
+      }
     }
+    setExportState('failed')
+    window.setTimeout(() => setExportState('idle'), 4000)
   }, [exportName])
 
   const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
