@@ -1371,7 +1371,7 @@ export default function App() {
             {importNotice && (
               <div
                 role="status"
-                className="absolute inset-x-0 bottom-12 z-30 flex items-start gap-2 border-t border-gray-200 bg-white/97 px-3 py-2 text-[12px] leading-snug text-gray-700 backdrop-blur"
+                className="absolute inset-x-0 bottom-12 z-30 flex items-start gap-2 border-t border-gray-200 bg-white/97 px-3 py-2 text-[12px] leading-snug text-gray-700"
               >
                 <span className="min-w-0 flex-1">{importNotice}</span>
                 <button

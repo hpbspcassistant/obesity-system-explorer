@@ -51,7 +51,7 @@ export function InterventionBar({
   const filtering = selectedProgrammes !== null
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3 backdrop-blur">
+    <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3">
       <select
         value={personaId ?? ''}
         onChange={(e) => onPersonaChange(e.target.value || null)}

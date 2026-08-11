@@ -154,7 +154,7 @@ export function ClusterLegend({
           onClick={() => onCollapsedChange(false)}
           aria-expanded={false}
           title="Show the colour key and cluster filter"
-          className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/95 px-3 py-2 text-[11px] font-medium text-gray-700 shadow-lg backdrop-blur hover:bg-gray-50"
+          className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/95 px-3 py-2 text-[11px] font-medium text-gray-700 shadow-lg hover:bg-gray-50"
         >
           {/* A few swatches, so the pill says "colour key" without the words. */}
           <span aria-hidden="true" className="flex shrink-0 gap-0.5">
@@ -181,7 +181,7 @@ export function ClusterLegend({
 
   return (
     <div className={shell} style={{ ...position, maxHeight }}>
-      <div className="flex min-h-0 w-56 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+      <div className="flex min-h-0 w-56 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg">
         <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
           <div
             role="radiogroup"

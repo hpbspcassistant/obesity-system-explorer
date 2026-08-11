@@ -90,7 +90,7 @@ export function InterventionKey({
       // the two keys being in opposite corners meant reading the map involved
       // looking in both. The minimap is what kept it there, and is why the old
       // offset had to clear 145px of navigator that no longer applies.
-      className="absolute z-30 w-56 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg backdrop-blur"
+      className="absolute z-30 w-56 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg"
       style={{ bottom: 16 + bottomInset, right: 16 + rightInset }}
     >
       <p className="mb-2 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">

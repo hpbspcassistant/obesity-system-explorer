@@ -58,6 +58,15 @@ const [, , MAP_WIDTH, MAP_HEIGHT] = MAP_VIEW_BOX.split(/\s+/).map(Number)
 
 const MIN_SCALE = 0.05
 const MAX_SCALE = 12
+/**
+ * Shortest gap between two applied wheel zooms, in ms — one frame at 60Hz.
+ *
+ * Deltas arriving inside it are summed and applied together. exp is additive in
+ * its exponent, so exp(-(a+b)k) equals exp(-ak) * exp(-bk) and the coalesced
+ * step lands exactly where the separate ones would have.
+ */
+const WHEEL_MIN_INTERVAL_MS = 16
+
 /** Exponent per wheel unit; one mouse notch (deltaY 100) zooms ~13%. */
 const WHEEL_SENSITIVITY = 0.00125
 /** Breathing room around the map when fitting it to the viewport. */
@@ -494,36 +503,90 @@ export function MapView({
     const host = wrapperRef.current
     if (!host) return
 
-    const onWheel = (event: WheelEvent) => {
+    /*
+     * Deltas are accumulated and applied once a frame.
+     *
+     * Applying each event as it arrived was the cause of the wheel lag. A
+     * high-resolution wheel or a trackpad sends several events per frame, and
+     * every setTransform forces a synchronous re-layout of around 1,350 paths
+     * carrying `vector-effect: non-scaling-stroke` — 898 edges under high
+     * contrast, 297 invisible hit targets, 161 node boxes — because a
+     * non-scaling stroke has to be re-tessellated at each new scale. Three
+     * events in one frame meant three of those, and only the last was ever seen.
+     *
+     * Coalescing changes nothing about where the zoom lands: the deltas sum, and
+     * exp(-(a+b)k) is exp(-ak) * exp(-bk), so one applied step is exactly the
+     * two it replaces.
+     */
+    let pendingDelta = 0
+    let cursor = { x: 0, y: 0 }
+    let timer = 0
+    let lastApplied = 0
+
+    const apply = () => {
+      timer = 0
+      lastApplied = performance.now()
       const api = apiRef.current
-      if (!api) return
-      event.preventDefault()
+      const delta = pendingDelta
+      pendingDelta = 0
+      if (!api || delta === 0) return
 
       const { scale, positionX, positionY } = api.state
       const next = clamp(
-        scale * Math.exp(-event.deltaY * WHEEL_SENSITIVITY),
+        scale * Math.exp(-delta * WHEEL_SENSITIVITY),
         MIN_SCALE,
         MAX_SCALE,
       )
       if (next === scale) return
 
       // Keep the point under the cursor pinned while the scale changes.
-      const rect = host.getBoundingClientRect()
-      const cx = event.clientX - rect.left
-      const cy = event.clientY - rect.top
       const ratio = next / scale
-
       api.setTransform(
-        cx - (cx - positionX) * ratio,
-        cy - (cy - positionY) * ratio,
+        cursor.x - (cursor.x - positionX) * ratio,
+        cursor.y - (cursor.y - positionY) * ratio,
         next,
         0,
       )
     }
 
+    const onWheel = (event: WheelEvent) => {
+      if (!apiRef.current) return
+      event.preventDefault()
+
+      const rect = host.getBoundingClientRect()
+      // The latest position wins: the anchor should be where the pointer is now,
+      // not where it was when the first event of this batch arrived.
+      cursor = { x: event.clientX - rect.left, y: event.clientY - rect.top }
+      pendingDelta += event.deltaY
+
+      /*
+       * A clock, not requestAnimationFrame.
+       *
+       * rAF is the textbook answer and was the first version, but it makes the
+       * control depend on frames being produced: where they are not — a
+       * background tab, a headless or non-compositing host — the callback never
+       * runs and the wheel does nothing at all. Trading lag for a zoom that
+       * sometimes ignores you is the wrong way round.
+       *
+       * The first notch of a gesture applies at once, so the response is
+       * immediate, and the rest are held to one application per frame's worth of
+       * time with a trailing timer so the last notch always lands.
+       */
+      const since = performance.now() - lastApplied
+      if (since >= WHEEL_MIN_INTERVAL_MS) {
+        if (timer !== 0) clearTimeout(timer)
+        apply()
+      } else if (timer === 0) {
+        timer = window.setTimeout(apply, WHEEL_MIN_INTERVAL_MS - since)
+      }
+    }
+
     // Non-passive so preventDefault actually stops the page from scrolling.
     host.addEventListener('wheel', onWheel, { passive: false })
-    return () => host.removeEventListener('wheel', onWheel)
+    return () => {
+      host.removeEventListener('wheel', onWheel)
+      if (timer !== 0) clearTimeout(timer)
+    }
   }, [])
 
   useEffect(() => {
@@ -1225,7 +1288,7 @@ export function MapView({
             className="pointer-events-none absolute left-4 z-20"
             style={{ bottom: 16 + bottomInset }}
           >
-            <div className="pointer-events-auto overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-1 shadow-lg backdrop-blur">
+            <div className="pointer-events-auto overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-1 shadow-lg">
               <MiniMap
                 width={168}
                 height={119}

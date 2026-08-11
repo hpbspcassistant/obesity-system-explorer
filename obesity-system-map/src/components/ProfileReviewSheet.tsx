@@ -80,7 +80,7 @@ export function ProfileReviewSheet({
     <div
       role="region"
       aria-label="Profile review"
-      className="absolute inset-x-0 bottom-12 z-20 max-h-[45vh] overflow-y-auto border-t border-gray-200 bg-white/97 shadow-[0_-8px_28px_-10px_rgba(0,0,0,0.2)] backdrop-blur"
+      className="absolute inset-x-0 bottom-12 z-20 max-h-[45vh] overflow-y-auto border-t border-gray-200 bg-white/97 shadow-[0_-8px_28px_-10px_rgba(0,0,0,0.2)]"
     >
       <div className="flex items-start">
         <Section title="Variables" count={profile.nodeIds.size}>
