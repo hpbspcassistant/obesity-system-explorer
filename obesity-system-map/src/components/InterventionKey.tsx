@@ -130,6 +130,13 @@ export function InterventionKey({
         </ul>
       )}
 
+      {/* The card is the most useful thing in this mode and, outside the
+          walkthrough, nothing announced it. A legend is the right place to say
+          so: it is already the surface a reader consults to work out what they
+          are looking at, and one quiet line costs no new chrome. */}
+      <p className="mt-2 border-t border-gray-100 pt-2 text-[10.5px] leading-snug text-gray-500">
+        Click any variable to see which programmes reach it.
+      </p>
     </div>
   )
 }
