@@ -18,6 +18,12 @@ export interface InterventionBarProps {
   onGapsOnlyChange: (on: boolean) => void
   summary: ReachSummary
   applicability: Applicability | null
+  /** How many programmes the filter is down to, or null when it is off. */
+  selectedProgrammes: number | null
+  /** Variables the chosen programmes reach, shown only while the filter is on. */
+  selectionReach: number
+  onOpenProgrammes: () => void
+  programmePanelOpen: boolean
 }
 
 function Count({ n, label }: { n: number; label: string }) {
@@ -37,8 +43,13 @@ export function InterventionBar({
   onGapsOnlyChange,
   summary,
   applicability,
+  selectedProgrammes,
+  selectionReach,
+  onOpenProgrammes,
+  programmePanelOpen,
 }: InterventionBarProps) {
   const withPersona = personaId !== null
+  const filtering = selectedProgrammes !== null
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3 backdrop-blur">
@@ -99,6 +110,26 @@ export function InterventionBar({
           )}
         </p>
       )}
+
+      {/* While filtering, the four counts still describe the whole persona — the
+          filter fades boxes rather than recolouring them — so the selection gets
+          its own figure instead of quietly changing theirs. */}
+      <button
+        type="button"
+        onClick={onOpenProgrammes}
+        aria-expanded={programmePanelOpen}
+        title="Choose which programmes the map answers for"
+        className={[
+          'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          filtering
+            ? 'border-gray-900 bg-gray-900 text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+        ].join(' ')}
+      >
+        {filtering
+          ? `${selectedProgrammes} programme${selectedProgrammes === 1 ? '' : 's'} · reaches ${selectionReach}`
+          : 'All programmes'}
+      </button>
 
       <button
         type="button"

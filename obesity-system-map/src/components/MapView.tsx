@@ -322,6 +322,12 @@ export interface MapViewProps {
   intervention?: ReadonlyMap<number, string>
   /** Fades everything that is not a gap for the current persona. */
   gapsOnly?: boolean
+  /**
+   * Variables reached by the chosen programmes, or undefined when no programme
+   * filter is on. Everything outside the set fades; nothing is recoloured, so
+   * the four states keep meaning what the key says they mean.
+   */
+  selectionNodeIds?: ReadonlySet<number>
   /** Whether to draw the navigator thumbnail. */
   showMiniMap?: boolean
   /**
@@ -382,6 +388,7 @@ export function MapView({
   markedOnly = false,
   intervention,
   gapsOnly = false,
+  selectionNodeIds,
   showMiniMap = true,
   bottomInset = 0,
   ref,
@@ -811,6 +818,22 @@ export function MapView({
   }, [intervention])
 
   /**
+   * Which boxes the chosen programmes reach. Separate from the standing above so
+   * the two never interfere: a filter decides what is visible, never what colour
+   * anything is.
+   */
+  useEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+    for (const group of svg.querySelectorAll<SVGGElement>('g[data-node-id]')) {
+      group.classList.toggle(
+        'in-selection',
+        selectionNodeIds?.has(Number(group.dataset.nodeId)) ?? false,
+      )
+    }
+  }, [selectionNodeIds])
+
+  /**
    * The 108 node boxes are bare <g> elements straight out of the artwork, which
    * left the map reachable by mouse only. In Profile the map *is* the primary
    * input, so each box becomes a real checkbox: focusable, named, and reporting
@@ -1168,6 +1191,9 @@ export function MapView({
               mode === 'profile' && markedOnly ? 'marked-only' : '',
               mode === 'intervention' ? 'has-intervention' : '',
               mode === 'intervention' && gapsOnly ? 'gaps-only' : '',
+              mode === 'intervention' && selectionNodeIds
+                ? 'programme-filter'
+                : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',
               traceFocus?.nodeIds.length ? 'has-trace-focus' : '',

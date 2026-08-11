@@ -32,6 +32,7 @@ import {
   programmes,
 } from './data/intervention'
 import {
+  nodesOfProgramme,
   provenanceOf,
   reachOf,
   summariseForPersona,
@@ -39,6 +40,7 @@ import {
   type PersonaCharacteristics,
 } from './lib/reach'
 import { InterventionCard } from './components/InterventionCard'
+import { InterventionProgrammePanel } from './components/InterventionProgrammePanel'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -153,6 +155,17 @@ export default function App() {
   // HPB touches in general, which is nobody's question in particular.
   const [interventionWhitespace, setInterventionWhitespace] = useState(true)
   const [gapsOnly, setGapsOnly] = useState(false)
+  /**
+   * Programme ids the map is narrowed to, or null for "all of them".
+   *
+   * Null rather than a set holding everything, so the bar can say "All
+   * programmes" and the map can leave the fade off entirely rather than fading
+   * nothing.
+   */
+  const [programmeFilter, setProgrammeFilter] = useState<ReadonlySet<
+    string
+  > | null>(null)
+  const [programmePanelOpen, setProgrammePanelOpen] = useState(false)
   /**
    * Marked counts as they stood when the current guide step opened.
    *
@@ -744,7 +757,14 @@ export default function App() {
       if (event.key !== 'Escape') return
       if (guideOpenRef.current) closeGuide()
       else if (selectionRef.current) setSelection(null)
-      else setReviewOpen(false)
+      else {
+        // Both are outermost-but-one, and only one of them can be on screen at a
+        // time: the review sheet is Profile's and the programme panel is
+        // Intervention's, so closing both unconditionally is the same as closing
+        // whichever is there.
+        setReviewOpen(false)
+        setProgrammePanelOpen(false)
+      }
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
@@ -831,6 +851,20 @@ export default function App() {
   }, [interventionSummary])
 
   /**
+   * Variables the chosen programmes reach, or undefined when the filter is off.
+   *
+   * Drawn from every programme in the inventory rather than only the applicable
+   * ones, because the panel lets you tick a programme this persona fails the
+   * gate for — that is how "what would we cover if we widened this" gets asked.
+   * The four states are untouched by any of it; a filter fades, never recolours.
+   */
+  const programmeSelectionNodes = useMemo(() => {
+    if (mode !== 'intervention' || programmeFilter === null) return undefined
+    const chosen = programmes.filter((p) => programmeFilter.has(p.id))
+    return reachOf(chosen, behaviourIndex)
+  }, [mode, programmeFilter])
+
+  /**
    * Which programmes reach the open variable, split by whether this persona is
    * eligible for them.
    *
@@ -870,7 +904,10 @@ export default function App() {
       ? TRACE_PANEL_PX
       : mode === 'explore' && selection !== null
         ? DETAIL_PANEL_PX
-        : 0
+        : // Same width as Trace's panel, and the same reason for the offset.
+          mode === 'intervention' && programmePanelOpen
+          ? TRACE_PANEL_PX
+          : 0
   const profiling = mode === 'profile'
   /** Whether the persona naming/renaming dialog is on screen. */
   const personaDialogUp = profiling && (!activeProfile || personaForm !== null)
@@ -1275,6 +1312,7 @@ export default function App() {
             mode === 'intervention' ? interventionStanding : undefined
           }
           gapsOnly={gapsOnly}
+          selectionNodeIds={programmeSelectionNodes}
           bottomInset={
             profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
           }
@@ -1440,6 +1478,7 @@ export default function App() {
             reaching={interventionReach.reaching}
             ineligible={interventionReach.ineligible}
             withPersona={interventionPersona !== null}
+            selectedProgrammes={programmeFilter}
             onClose={clearSelection}
           />
         )}
@@ -1467,11 +1506,38 @@ export default function App() {
               }
             }}
             gapsOnly={gapsOnly}
-            onGapsOnlyChange={setGapsOnly}
+            onGapsOnlyChange={(on) => {
+              setGapsOnly(on)
+              // The two fade on opposite rules — gaps only keeps just the red
+              // boxes, a filter keeps just what the selection reaches, and a gap
+              // is reached by nothing — so together they leave an empty map with
+              // two switches lit. Turning one on releases the other.
+              if (on) setProgrammeFilter(null)
+            }}
             summary={interventionSummary}
             applicability={
               interventionPersona ? interventionSummary.applicability : null
             }
+            selectedProgrammes={programmeFilter?.size ?? null}
+            selectionReach={programmeSelectionNodes?.size ?? 0}
+            programmePanelOpen={programmePanelOpen}
+            onOpenProgrammes={() => setProgrammePanelOpen((open) => !open)}
+          />
+        )}
+
+        {mode === 'intervention' && programmePanelOpen && (
+          <InterventionProgrammePanel
+            applicability={interventionSummary.applicability}
+            reachSize={(programme) =>
+              nodesOfProgramme(programme, behaviourIndex).length
+            }
+            selected={programmeFilter}
+            onSelectedChange={(next) => {
+              setProgrammeFilter(next)
+              if (next !== null) setGapsOnly(false)
+            }}
+            onClose={() => setProgrammePanelOpen(false)}
+            withoutPersona={interventionPersona === null}
           />
         )}
 
