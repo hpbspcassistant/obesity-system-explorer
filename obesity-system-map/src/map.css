@@ -571,17 +571,24 @@
    been on them and is not enough on its own — it asks you to already be over a
    box and watching the cursor.
  *
- * The border thickens rather than the fill changing or the box lifting. Fill is
- * the state and must not move; a scale on 108 boxes reads as jumpy at this
- * density; and the four states are already told apart by their border, so
- * borrowing that channel for a moment says "this thing is live" in the language
- * the mode already speaks.
+ * A shadow, not a thicker border. The border was the obvious choice and does not
+ * work: an empty box outlines at 0.9px but a coloured one already sits at 2.2px,
+ * so one width cannot be a visible change from both bases. Taking it far enough
+ * to register on a coloured box would have looked clumsy on the small ones and
+ * bled into their neighbours at this density.
+ *
+ * A shadow is additive, so it reads the same from every state, and it leaves the
+ * encoding alone — fill is the state and must not move under the pointer, and
+ * the border carries the state's own colour.
+ *
+ * On the path rather than the group, so the label inside stays crisp instead of
+ * picking up a halo of its own.
  *
  * Scoped to the nodes layer so the key's own swatches, which carry the same
  * classes on purpose, do not react to being pointed at.
  */
 .map-svg.has-intervention [data-layer='nodes'] g[data-node-id]:hover > path {
-  stroke-width: 2.4;
+  filter: drop-shadow(0 0 3px rgba(15, 23, 42, 0.55));
 }
 
 /* The programme filter needs no rule of its own. Unticking a programme takes it
