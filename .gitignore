@@ -1,0 +1,13 @@
+# Source spreadsheets stay out of the repository.
+#
+# These hold HPB's own programme inventory and the map's working geometry. They
+# were tracked until the history was rewritten to drop them, so this rule is what
+# stops `git add -A` putting them back.
+#
+# hpb-programme-inventory-tagged-C.xlsx is still the input to
+# obesity-system-map/tools/import_inventory.py. Keep it beside this file to
+# regenerate src/data/intervention/programmes.json; a fresh clone will not have
+# it and cannot regenerate until someone supplies it.
+*.xlsx
+*.xls
+*.xlsm
