@@ -646,21 +646,53 @@ export default function App() {
    * than appearing to have ignored the press — and reports a failure rather than
    * leaving someone waiting for a file that is never going to arrive.
    */
+  /**
+   * Saves whatever the map is currently showing.
+   *
+   * The name carries the view, because these end up in a folder together and a
+   * gap map for one persona is indistinguishable from a whitespace map by its
+   * thumbnail. Every part of the state that changes what was drawn goes into it:
+   * who it was for, whether the programme set was narrowed, and whether only
+   * some states were showing.
+   */
+  const exportName = useCallback(() => {
+    const slug = (text: string) =>
+      text.replace(/[^a-z0-9]+/gi, '-').toLowerCase().replace(/^-|-$/g, '')
+
+    if (mode === 'intervention') {
+      // The same test `interventionPersona` makes, spelled out from the two
+      // values behind it: that memo is derived further down the file, and this
+      // callback is needed up here beside the other export plumbing.
+      const forPersona = !interventionWhitespace && activeProfile !== null
+      const who = forPersona ? slug(activeProfile.name) : 'anyone'
+      const narrowed =
+        programmeFilter === null ? '' : `-${programmeFilter.size}-programmes`
+      return `intervention-${who || 'persona'}${narrowed}${gapsOnly ? '-gaps' : ''}.png`
+    }
+    return `profile-${slug(activeProfile?.name ?? 'map') || 'map'}${
+      markedOnly ? '-marked' : ''
+    }.png`
+  }, [
+    mode,
+    interventionWhitespace,
+    activeProfile,
+    programmeFilter,
+    gapsOnly,
+    markedOnly,
+  ])
+
   const exportPng = useCallback(async () => {
     setExportState('working')
     try {
       const blob = await mapRef.current?.exportPng(EXPORT_SCALE)
       if (!blob) throw new Error('no image produced')
-      const safe = (activeProfile?.name ?? 'map')
-        .replace(/[^a-z0-9]+/gi, '-')
-        .toLowerCase()
-      downloadBlob(blob, `profile-${safe || 'map'}${markedOnly ? '-marked' : ''}.png`)
+      downloadBlob(blob, exportName())
       setExportState('idle')
     } catch {
       setExportState('failed')
       window.setTimeout(() => setExportState('idle'), 4000)
     }
-  }, [activeProfile, markedOnly])
+  }, [exportName])
 
   const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
 
@@ -1539,6 +1571,8 @@ export default function App() {
             totalProgrammes={programmes.length}
             programmePanelOpen={programmePanelOpen}
             onOpenProgrammes={() => setProgrammePanelOpen((open) => !open)}
+            onExportPng={exportPng}
+            exportState={exportState}
           />
         )}
 

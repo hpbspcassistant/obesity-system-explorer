@@ -1,3 +1,4 @@
+import { ExportPngButton } from './ExportPngButton'
 import type { Applicability, ReachSummary } from '../lib/reach'
 import type { Profile } from '../lib/profile'
 
@@ -23,6 +24,8 @@ export interface InterventionBarProps {
   totalProgrammes: number
   onOpenProgrammes: () => void
   programmePanelOpen: boolean
+  onExportPng: () => void
+  exportState: 'idle' | 'working' | 'failed'
 }
 
 function Count({ n, label }: { n: number; label: string }) {
@@ -46,6 +49,8 @@ export function InterventionBar({
   totalProgrammes,
   onOpenProgrammes,
   programmePanelOpen,
+  onExportPng,
+  exportState,
 }: InterventionBarProps) {
   const withPersona = personaId !== null
   const filtering = selectedProgrammes !== null
@@ -169,6 +174,12 @@ export function InterventionBar({
           Gaps only
         </button>
       )}
+
+      {/* Last, after everything that decides what the image will contain. A gap
+          map for one persona and a whitespace map are the two things this mode
+          produces that anyone wants to keep, and until now neither could leave
+          it. */}
+      <ExportPngButton onExport={onExportPng} state={exportState} />
     </div>
   )
 }

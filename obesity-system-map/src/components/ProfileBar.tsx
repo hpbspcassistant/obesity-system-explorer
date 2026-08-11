@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { ExportPngButton } from './ExportPngButton'
 import { downloadProfile } from '../lib/profile'
 import type { ParseResult, Profile } from '../lib/profile'
 import { ImportButton } from './ProfilePersonaDialog'
@@ -200,37 +201,7 @@ export function ProfileBar({
           this is the profile by itself, and with it off it is the profile in the
           context of the whole map. Both are wanted at different times, which is
           why there is one button rather than two. */}
-      <button
-        type="button"
-        data-testid="export-png"
-        disabled={exportState === 'working'}
-        onClick={onExportPng}
-        title="Save the whole map as a PNG image"
-        className={[
-          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
-          exportState === 'failed'
-            ? 'border-rose-300 bg-rose-50 text-rose-700'
-            : exportState === 'working'
-              ? 'cursor-wait border-gray-200 text-gray-400'
-              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-        ].join(' ')}
-      >
-        <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
-          <path
-            d="M8 2v7.5M5 7l3 3 3-3M2.5 12.5h11"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        {exportState === 'working'
-          ? 'Saving…'
-          : exportState === 'failed'
-            ? 'Export failed'
-            : 'Export PNG'}
-      </button>
+      <ExportPngButton onExport={onExportPng} state={exportState} />
 
       <button
         type="button"
