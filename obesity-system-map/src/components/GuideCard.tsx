@@ -351,7 +351,7 @@ export function GuideCard({
           type="button"
           onClick={() => {
             if (!last) onIndexChange(index + 1)
-            // The first-run tour's last step introduces the three modes, which is
+            // The first-run tour's last step introduces the four modes, which is
             // the moment to offer a closer look at one. Every other section just
             // finishes.
             else if (section.endsAtContents) onFinish()

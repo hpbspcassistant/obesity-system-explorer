@@ -96,7 +96,7 @@ export interface GuideSection {
   mode?: MapMode
   /**
    * Whether finishing lands on the contents rather than closing. True for the
-   * first-run tour, whose last step introduces the three modes — the moment to
+   * first-run tour, whose last step introduces the four modes — the moment to
    * offer a closer look at one.
    */
   endsAtContents?: boolean
