@@ -110,19 +110,13 @@ export interface NodeGroupOptions {
    * extra bookkeeping.
    */
   labelFor?: (nodeId: number, fill: string | undefined) => LabelLayout | null
-  /**
-   * Corner position for the "marked" pip. Marks get their own visual channel
-   * so they never overwrite the selection ring — a node can be both, and both
-   * must stay readable.
-   */
-  pipFor?: (nodeId: number) => { cx: number; cy: number } | null
 }
 
 export function groupNodePaths(
   inner: string,
   options: NodeGroupOptions,
 ): string {
-  const { taxonomiesOf, labelFor, pipFor } = options
+  const { taxonomiesOf, labelFor } = options
   const root = parseFragment(inner, 'nodes layer')
   const paths = drawablePaths(root)
   if (paths.length === 0) throw new Error('annotateSvg: nodes layer has no paths')
@@ -208,16 +202,6 @@ export function groupNodePaths(
         text.appendChild(tspan)
       })
       group.appendChild(text)
-    }
-
-    const pip = pipFor?.(id)
-    if (pip) {
-      const dot = doc.createElementNS(SVG_NS, 'circle')
-      dot.setAttribute('class', 'node-mark')
-      dot.setAttribute('cx', pip.cx.toFixed(2))
-      dot.setAttribute('cy', pip.cy.toFixed(2))
-      dot.setAttribute('r', '3.6')
-      group.appendChild(dot)
     }
 
     parent.appendChild(group)

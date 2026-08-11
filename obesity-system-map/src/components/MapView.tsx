@@ -93,10 +93,6 @@ const nodesInner = groupNodePaths(
       const box = nodeBoxesById.get(nodeId)
       return node && box ? layoutLabel(node.label, box, fill) : null
     },
-    pipFor: (nodeId) => {
-      const box = nodeBoxesById.get(nodeId)
-      return box ? { cx: box.x + box.w - 5, cy: box.y + 5 } : null
-    },
   },
 )
 

@@ -204,40 +204,12 @@
   user-select: none;
 }
 
-/* --------------------------------------------------------------- mode marks */
-
-/* Outside Profile a mark is a corner pip, not a ring. Rings are the
-   selection/trace channel, and a node can be marked *and* selected — sharing
-   one channel meant the mark silently overwrote the selection ring. */
-.map-svg .node-mark {
-  display: none;
-  fill: #7c3aed;
-  pointer-events: none;
-}
-
-.map-svg g[data-node-id].is-marked .node-mark {
-  display: inline;
-}
-
-/* Except where the box already says it. Profile gives a marked factor its
-   colour back, and Intervention paints "in this persona's map" as covered or
-   gap — so in both the pip restates what the fill has just said, in a violet
-   belonging to neither palette.
-
-   Intervention's whitespace view hides it too, and there the pip is not
-   redundant but wrong: that view is deliberately persona-independent, and a dot
-   marking one profile's choices is the only thing on screen claiming otherwise. */
-.map-svg.has-profile g[data-node-id].is-marked .node-mark,
-.map-svg.has-intervention g[data-node-id].is-marked .node-mark {
-  display: none;
-}
-
-/* Marked factors stay legible even while another node's neighbourhood is
-   showing — losing your profile behind a dim would defeat the point. */
-.map-svg.has-selection
-  g[data-node-id].is-marked:not(.is-selected):not(.is-neighbour):not(.is-endpoint) {
-  opacity: 0.55;
-}
+/* Marks are shown by Profile and Intervention, which each paint them into the
+   box itself, and nowhere else. Explore and Trace used to carry a violet corner
+   pip as well; it is gone, along with the rule that held marked boxes out of
+   Explore's dim to keep it visible. That rule was the last trace of a mark in
+   those modes, and a dozen boxes sitting brighter than their neighbours for no
+   stated reason is a worse signal than none. */
 
 /* ----------------------------------------------------------------- profile */
 
