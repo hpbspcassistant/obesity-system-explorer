@@ -97,6 +97,11 @@ const NO_LINKS: readonly string[] = Object.freeze([])
 const TRACE_PANEL_PX = 368
 /** Width of Explore's detail panel (w-[22rem]) — same job, different panel. */
 const DETAIL_PANEL_PX = 352
+/**
+ * Below this the key, a panel and the map cannot all have room, so the key gives
+ * way. Chosen to sit under a 1024 tablet in landscape and over a portrait one.
+ */
+const NARROW_PX = 1000
 /** Height of Profile's bottom bar (h-12), so the legend clears it. */
 const PROFILE_BAR_PX = 48
 /**
@@ -133,7 +138,9 @@ export default function App() {
   const [taxonomy, setTaxonomy] = useState<Taxonomy>('type')
   // Whether the colour key is shrunk to a pill. A preference about the screen
   // rather than about the work, so it is kept across modes like High contrast.
-  const [legendCollapsed, setLegendCollapsed] = useState(false)
+  const [legendCollapsed, setLegendCollapsed] = useState(
+    () => window.innerWidth < NARROW_PX,
+  )
   // The group filter's popover. Held here rather than in the legend because the
   // walkthrough demonstrates a filter, and a demonstration inside a closed
   // popover shows the reader a map changing for no visible reason.
@@ -1169,6 +1176,26 @@ export default function App() {
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
+
+  /**
+   * Shrink the key to its pill on a narrow window.
+   *
+   * The key is 224px and a panel is 368px. At 768 that leaves 160px of map
+   * between them — a fifth of the screen for the thing the tool is about. The
+   * pill recovers most of it, and the key is reference rather than work, so it
+   * is the right thing to give up first.
+   *
+   * A nudge, not a lock: it collapses on the way past the threshold and expanding
+   * it again works, overlaying the map as any panel does. Anything stronger would
+   * mean a control that ignores being pressed.
+   */
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth < NARROW_PX) setLegendCollapsed(true)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
   const profiling = mode === 'profile'
   /** Whether the persona naming/renaming dialog is on screen. */

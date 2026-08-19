@@ -58,14 +58,24 @@ export function MapHeader({
             Obesity System Map
           </span>
         </h1>
-        <p className="mt-0.5 truncate text-xs leading-tight text-gray-500">
+        {/* Provenance, and the widest thing in this block at about 270px. Below
+            1280 that width is the difference between the header holding one row
+            and wrapping, so it stands down — the walkthrough still says where
+            the map comes from, and a second header row costs 45px of map on
+            every screen that can least afford it. */}
+        <p className="mt-0.5 truncate text-xs leading-tight text-gray-500 max-xl:hidden">
           Adapted from UK Government Foresight Programme, 2007
         </p>
       </div>
 
       <ModeSwitcher mode={mode} onModeChange={onModeChange} />
 
-      <div className="flex min-w-0 flex-1 justify-center">{children}</div>
+      {/* A floor, so the field wraps onto a row of its own rather than being
+          crushed. Everything else in this header costs about 1016px, so it keeps
+          one row down to ~1210 — every common laptop width — and below that a
+          second row is the honest outcome: at 768 this slot had squeezed the
+          search to 74px, about five characters. */}
+      <div className="flex min-w-[12rem] flex-1 justify-center">{children}</div>
 
       {/* A view preference, so it sits with Reset view rather than with the
           mode switcher: it changes how the map looks, never what a click does. */}

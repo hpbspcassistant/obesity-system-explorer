@@ -109,7 +109,7 @@ export function InterventionProgrammePanel({
   return (
     <aside
       aria-label="Filter by programme"
-      className="absolute bottom-0 right-0 top-0 z-20 flex w-[23rem] flex-col border-l border-gray-200 bg-white"
+      className="absolute bottom-0 right-0 top-0 z-20 flex w-[23rem] max-w-[85vw] flex-col border-l border-gray-200 bg-white"
     >
       <div className="shrink-0 border-b border-gray-200 px-3 pb-2.5 pt-3">
         <div className="flex items-baseline justify-between gap-2">
