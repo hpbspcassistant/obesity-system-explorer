@@ -52,113 +52,6 @@ function Count({ n, label }: { n: number; label: string }) {
   )
 }
 
-/* ------------------------------------------------------------ standings */
-
-/**
- * The two standings the bar no longer shows, and what all four actually mean.
- *
- * Every one of them was a bare word beside a number — "beyond", "untouched" —
- * which reads as jargon to everyone who did not build the mode. Demoting them
- * without explaining them would only have hidden the problem, so this is where
- * the sentences live.
- */
-function StandingDetails({
-  summary,
-  personaName,
-}: {
-  summary: ReachSummary
-  personaName: string
-}) {
-  const [open, setOpen] = useState(false)
-  const wrapRef = useRef<HTMLDivElement | null>(null)
-  const buttonRef = useRef<HTMLButtonElement | null>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDown = (event: PointerEvent) => {
-      if (!wrapRef.current?.contains(event.target as globalThis.Node))
-        setOpen(false)
-    }
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      event.stopPropagation()
-      setOpen(false)
-      buttonRef.current?.focus()
-    }
-    document.addEventListener('pointerdown', onDown)
-    document.addEventListener('keydown', onKey, true)
-    return () => {
-      document.removeEventListener('pointerdown', onDown)
-      document.removeEventListener('keydown', onKey, true)
-    }
-  }, [open])
-
-  const rows = [
-    {
-      label: 'Covered',
-      n: summary.covered.length,
-      note: `Applies to ${personaName}, and a programme reaches it`,
-    },
-    {
-      label: 'Opportunity area',
-      n: summary.gaps.length,
-      note: `Applies to ${personaName}, and nothing reaching them addresses it`,
-    },
-    {
-      label: 'Reached, outside their map',
-      n: summary.beyond.length,
-      note: 'A programme reaches it, but it is not part of this persona',
-    },
-    {
-      label: 'Not in their map',
-      n: summary.untouched.length,
-      note: 'Nothing marked here, so the mode makes no claim either way',
-    },
-  ]
-
-  return (
-    <div ref={wrapRef} className="relative shrink-0">
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={() => setOpen((c) => !c)}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        className={[
-          'rounded-md border px-2.5 py-1 text-xs transition-colors',
-          open
-            ? 'border-gray-900 bg-gray-900 text-white'
-            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-        ].join(' ')}
-      >
-        Details
-      </button>
-
-      {open && (
-        <div
-          role="dialog"
-          aria-label="What each state means"
-          className="absolute bottom-full right-0 mb-1.5 w-72 rounded-lg border border-gray-200 bg-white p-2 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]"
-        >
-          <ul className="space-y-1.5">
-            {rows.map((row) => (
-              <li key={row.label} className="px-1">
-                <p className="flex items-baseline justify-between gap-2 text-sm text-gray-900">
-                  <span>{row.label}</span>
-                  <strong className="shrink-0 font-semibold tabular-nums">
-                    {row.n}
-                  </strong>
-                </p>
-                <p className="text-xs leading-snug text-gray-500">{row.note}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  )
-}
-
 /* --------------------------------------------------------- shared menu parts */
 
 function Chevron() {
@@ -515,8 +408,6 @@ export function InterventionBar({
   onQuickCharacteristicsChange,
 }: InterventionBarProps) {
   const withPersona = personaId !== null
-  const activePersonaName =
-    profiles.find((p) => p.id === personaId)?.name ?? 'this persona'
   const filtering = selectedProgrammes !== null
 
   const exportChoices: ExportChoice[] = [
@@ -573,8 +464,8 @@ export function InterventionBar({
       {/* Two numbers, not four. Covered and opportunity areas are the two a
           reader acts on; "beyond" and "untouched" describe the rest of the map
           and were sitting at the same weight, in words that mean nothing until
-          somebody explains them. Details does the explaining, which is the part
-          that was missing rather than the numbers themselves. */}
+          somebody explains them. They are still on the map, in the key beside
+          it, and in the card on a click — the bar just stops reciting them. */}
       <p className="flex shrink-0 items-center gap-2 text-xs text-gray-600">
         {withPersona ? (
           <>
@@ -598,11 +489,6 @@ export function InterventionBar({
         )}
       </p>
 
-      {/* Only with a persona: without one the map has two states and both are
-          already named in full beside this. */}
-      {withPersona && (
-        <StandingDetails summary={summary} personaName={activePersonaName} />
-      )}
 
       {applicability && (
         <p
