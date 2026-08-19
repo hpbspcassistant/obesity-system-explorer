@@ -22,9 +22,18 @@ export const allProgrammes = programmesRaw as unknown as readonly Programme[]
  * reaches should not count something nobody can join. 'verify' stays in — that
  * flags a detail nobody has confirmed yet, not a programme that is not running,
  * and excluding those would understate reach on a technicality.
+ *
+ * Programmes mapped to no variable are dropped too. Six of the forty-two are
+ * dental, optical and screening services with nothing on this map to point at,
+ * and a programme that can never light a box cannot answer the only question
+ * this mode asks. Kept in, they padded the denominator — "23 of 42" — and could
+ * be reported undetermined for a persona missing a characteristic, sending the
+ * reader off to complete a persona to resolve a programme that would still light
+ * nothing. They stay in the file, and in `allProgrammes`, because they are part
+ * of the inventory; they are just not part of the reach question.
  */
 export const programmes: readonly Programme[] = allProgrammes.filter(
-  (programme) => programme.status !== 'ended',
+  (programme) => programme.status !== 'ended' && programme.nodes.length > 0,
 )
 
 /**
