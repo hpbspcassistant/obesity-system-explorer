@@ -349,8 +349,8 @@ const INTERVENTION: GuideSection = {
     {
       title: 'What HPB reaches',
       body: [
-        'Every HPB programme is tagged with the behaviours it addresses, and each behaviour covers a handful of variables on the map. Colour here means a programme reaches that variable — it says nothing about how well, or how much.',
-        'This is where the mode starts, and it needs nobody in particular: what does the inventory touch at all? Everything left empty is whitespace — 86 of the 108.',
+        'Every HPB programme is mapped to the variables it addresses. Colour here means a programme reaches that variable — it says nothing about how well, or how much.',
+        'This is where the mode starts, and it needs nobody in particular: what does the inventory touch at all? Everything left empty is whitespace.',
       ],
       action: { label: 'Show me', id: 'showWhitespace' },
     },
@@ -365,15 +365,15 @@ const INTERVENTION: GuideSection = {
     {
       title: 'Which programmes reach a variable',
       body: [
-        'Click any box. The card names every programme that reaches it, grouped under the behaviour each one came through.',
-        'That behaviour line is the working. A programme "reaching" a variable is a claim someone made when tagging the inventory, and the behaviour is how you check it.',
+        'Click any box. The card names every programme that reaches it, together with the reason each one is mapped there.',
+        'That reason is the working. A programme "reaching" a variable is a claim someone made when tagging the inventory, and the reason is how you check it.',
       ],
       action: { label: 'Open a reached one', id: 'openReachedVariable' },
     },
     {
       title: 'The gaps',
       body: [
-        'Red is the point of the mode: something that matters for this person, that nothing reaching them addresses. Expect a handful per persona, not one or two.',
+        'The opportunity areas are the point of the mode: something that matters for this person, that nothing reaching them addresses. Expect a handful per persona, not one or two.',
         'Two quite different things produce it, and the card tells you which. Either a programme covers that variable but this person is not eligible — an argument about the gate — or nothing in the inventory covers it for anyone, which is an argument about what HPB runs. Some of the second kind are correct: nothing acts directly on resting metabolic rate.',
       ],
       action: { label: 'Open a gap', id: 'openUnreachedVariable' },
@@ -381,7 +381,7 @@ const INTERVENTION: GuideSection = {
     {
       title: 'Who a programme is for',
       body: [
-        'Each programme carries a rule about who it is for — an age band, a life stage, being a parent or a smoker. The persona’s characteristics decide which ones count, and the bar says how many of the inventory applied.',
+        "Each programme carries a rule about who it is for — an age band, a role, being a parent or a smoker. The persona’s characteristics decide which ones count, and the bar says how many of the inventory applied.",
         'Leave a characteristic unset and any programme testing it is reported as undetermined rather than dropped, so an unfinished persona never quietly shrinks the map. Fill them in under Edit persona in Profile mode.',
       ],
     },

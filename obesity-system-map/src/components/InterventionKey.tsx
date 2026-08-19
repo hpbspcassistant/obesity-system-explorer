@@ -115,14 +115,12 @@ export function InterventionKey({
          */
         <ul className="space-y-1.5">
           <Row standing="is-covered">
-            Matters for {personaName}, and a programme reaches it
+            Applies to {personaName}, and HPB reaches it
           </Row>
           <Row standing="is-gap">
-            Matters for {personaName} —{' '}
-            <strong className="font-semibold">nothing reaches it</strong>
-            {(
-              <span className="block text-gray-500">the gap — act here</span>
-            )}
+            Applies to {personaName}, but{' '}
+            <strong className="font-semibold">nothing reaches it yet</strong>
+            {' '}— opportunity area
           </Row>
           <Row standing="is-untouched">
             Not in their map

@@ -31,6 +31,8 @@ export interface ProfileBarProps {
   onMarkedOnlyChange: (markedOnly: boolean) => void
   /** Saves the map as it currently looks. */
   onExportPng: () => void
+  /** Saves one PNG per profile. */
+  onBulkExportPng: () => void
   /** 'working' while rasterising, 'failed' briefly if it did not. */
   exportState: 'idle' | 'working' | 'failed'
   onSelectProfile: (id: string | null) => void
@@ -51,6 +53,7 @@ export function ProfileBar({
   markedOnly,
   onMarkedOnlyChange,
   onExportPng,
+  onBulkExportPng,
   exportState,
   onSelectProfile,
   onNewProfile,
@@ -260,6 +263,16 @@ export function ProfileBar({
             >
               Export JSON
             </MenuItem>
+            {profiles.length > 1 && (
+              <MenuItem
+                onClick={() => {
+                  onBulkExportPng()
+                  setOpen(null)
+                }}
+              >
+                Export all PNGs
+              </MenuItem>
+            )}
             <div className="px-1.5 py-1">
               <ImportButton onImport={onImportProfile} />
             </div>

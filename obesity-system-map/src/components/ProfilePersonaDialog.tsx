@@ -163,16 +163,71 @@ export function ImportButton({
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null)
+  const [pasteOpen, setPasteOpen] = useState(false)
+  const [pasteText, setPasteText] = useState('')
+
+  const tryParse = (raw: string) => {
+    try {
+      const result = parseProfile(JSON.parse(raw))
+      if (!result) {
+        setNote({ ok: false, text: 'That JSON is not a profile (it needs a name).' })
+        return
+      }
+      setPasteText('')
+      setPasteOpen(false)
+      onImport(result)
+    } catch {
+      setNote({ ok: false, text: 'Could not parse as JSON.' })
+    }
+  }
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className={`w-full rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 ${className}`}
-      >
-        Import a profile file
-      </button>
+      <div className="flex gap-1.5">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className={`flex-1 rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 ${className}`}
+        >
+          Import file
+        </button>
+        <button
+          type="button"
+          onClick={() => { setPasteOpen((v) => !v); setNote(null) }}
+          className={[
+            'rounded border px-3 py-1.5 text-sm transition-colors',
+            pasteOpen
+              ? 'border-gray-900 bg-gray-900 text-white'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+          ].join(' ')}
+        >
+          Paste JSON
+        </button>
+      </div>
+      {pasteOpen && (
+        <div className="mt-1.5">
+          <textarea
+            value={pasteText}
+            onChange={(e) => { setPasteText(e.target.value); setNote(null) }}
+            placeholder='Paste profile JSON here…'
+            rows={4}
+            className="w-full rounded border border-gray-300 px-2 py-1.5 font-mono text-[11px] text-gray-800 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none"
+          />
+          <button
+            type="button"
+            disabled={pasteText.trim().length === 0}
+            onClick={() => tryParse(pasteText.trim())}
+            className={[
+              'mt-1 w-full rounded border px-3 py-1.5 text-sm transition-colors',
+              pasteText.trim().length === 0
+                ? 'cursor-not-allowed border-gray-200 text-gray-300'
+                : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
+            ].join(' ')}
+          >
+            Import
+          </button>
+        </div>
+      )}
       {note && (
         <p
           role="status"
@@ -199,11 +254,6 @@ export function ImportButton({
               })
               return
             }
-            // Reported by the caller, not here. A successful import from the
-            // first-run dialog replaces that dialog with the map, so a note set
-            // on this component is unmounted in the same tick and never read —
-            // which is how an import that fills in connections says nothing
-            // about having done so.
             onImport(result)
           } catch {
             setNote({ ok: false, text: 'That file could not be read as JSON.' })

@@ -36,7 +36,7 @@ import {
 } from '../lib/annotateSvg'
 import { contrastFillCss } from '../data/contrast'
 import { extractSvgInner, readSvgViewBox } from '../lib/inlineSvg'
-import { svgToPngBlob } from '../lib/exportImage'
+import { svgToPngBlob, type ExportOverlay } from '../lib/exportImage'
 import '../map.css'
 
 /**
@@ -373,7 +373,7 @@ export interface MapViewHandle {
   /** Frames the given variables, clear of any right-hand panel. */
   focusOnNodes: (nodeIds: readonly number[], options?: FocusOptions) => void
   /** Renders the whole map, exactly as it currently looks, to a PNG. */
-  exportPng: (scale?: number) => Promise<Blob>
+  exportPng: (scale?: number, overlay?: ExportOverlay) => Promise<Blob>
 }
 
 const NO_MARKS: ReadonlySet<number> = new Set()
@@ -706,12 +706,10 @@ export function MapView({
    * the view a whole-map export corresponds to, so it is the one to match.
    */
   const exportPng = useCallback(
-    async (scale = 1) => {
+    async (scale = 1, overlay?: ExportOverlay) => {
       const svg = svgRef.current
       if (!svg) throw new Error('MapView: nothing to export yet')
-      // No reference scale any more: strokes bake one map unit per screen pixel,
-      // so the image no longer depends on the size of the window it was taken in.
-      return svgToPngBlob(svg, { scale })
+      return svgToPngBlob(svg, { scale, overlay })
     },
     [],
   )

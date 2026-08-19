@@ -109,7 +109,7 @@ export function PersonaCharacteristicsForm({
                 className="w-full rounded border border-gray-300 px-1.5 py-1 text-[12px] text-gray-800 focus:border-gray-800 focus:outline-none"
               >
                 <option value="">Not set yet</option>
-                {values.map((v) => (
+                {values.filter((v): v is string | boolean => v !== null).map((v) => (
                   <option key={String(v)} value={encode(v)}>
                     {humanise(v)}
                   </option>

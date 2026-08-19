@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { ClusterLegend } from './components/ClusterLegend'
 import { EdgeDetailPanel } from './components/EdgeDetailPanel'
@@ -25,10 +26,9 @@ import {
   type GuideActionId,
   type GuideSectionId,
 } from './data/guide'
-import { downloadBlob } from './lib/exportImage'
+import { downloadBlob, type ExportOverlay, type LegendEntry, type InfluenceEntry } from './lib/exportImage'
 import {
   allNodeIds,
-  behaviourIndex,
   programmes,
 } from './data/intervention'
 import {
@@ -42,6 +42,7 @@ import {
 } from './lib/reach'
 import { InterventionCard } from './components/InterventionCard'
 import { InterventionProgrammePanel } from './components/InterventionProgrammePanel'
+import { contrastSwatch } from './data/contrast'
 import { DEFAULT_MODE, DEFAULT_TRACE_DIRECTION } from './data/modes'
 import {
   edgeSelectionOf,
@@ -164,6 +165,8 @@ export default function App() {
   // whether the persona is being applied at all — the whitespace view asks what
   // HPB touches in general, which is nobody's question in particular.
   const [interventionWhitespace, setInterventionWhitespace] = useState(true)
+  const [quickCharacteristics, setQuickCharacteristics] =
+    useState<PersonaCharacteristics>({})
   const [gapsOnly, setGapsOnly] = useState(false)
   /**
    * Programme ids the map is narrowed to, or null for "all of them".
@@ -692,11 +695,51 @@ export default function App() {
     markedOnly,
   ])
 
+  const buildExportOverlay = useCallback((): ExportOverlay | undefined => {
+    if (mode === 'intervention') {
+      const forPersona = !interventionWhitespace && activeProfile !== null
+      const legend: LegendEntry[] = forPersona
+        ? [
+            { fill: '#bbf7d0', stroke: '#16a34a', label: 'Covered' },
+            { fill: '#fef9c3', stroke: '#ca8a04', label: 'Opportunity' },
+            { fill: '#ffffff', stroke: '#d8d5cf', label: 'Not in their map' },
+          ]
+        : [
+            { fill: '#bbf7d0', stroke: '#16a34a', label: 'Reached by HPB' },
+            { fill: '#ffffff', stroke: '#d8d5cf', label: 'Whitespace' },
+          ]
+      return {
+        mode: 'Intervention',
+        persona: forPersona ? (activeProfile?.name ?? null) : 'Anyone',
+        legend,
+      }
+    }
+    if (mode === 'profile') {
+      const legend: LegendEntry[] = variableTypes.map((t) => ({
+        fill: (highContrast ? (contrastSwatch(t.name) ?? t.swatch) : t.swatch) as string,
+        stroke: '#9EA4AB',
+        label: t.name,
+      }))
+      const influence: InfluenceEntry[] = [
+        { kind: 'positive', label: 'Positive influence' },
+        { kind: 'negative', label: 'Negative influence' },
+      ]
+      return {
+        mode: 'Profile',
+        persona: activeProfile?.name ?? null,
+        legend,
+        influence,
+      }
+    }
+    return undefined
+  }, [mode, interventionWhitespace, activeProfile, highContrast])
+
   const exportPng = useCallback(async () => {
     setExportState('working')
+    const overlay = buildExportOverlay()
     for (const scale of EXPORT_SCALES) {
       try {
-        const blob = await mapRef.current?.exportPng(scale)
+        const blob = await mapRef.current?.exportPng(scale, overlay)
         if (!blob) throw new Error('no image produced')
         downloadBlob(blob, exportName())
         setExportState('idle')
@@ -707,7 +750,110 @@ export default function App() {
     }
     setExportState('failed')
     window.setTimeout(() => setExportState('idle'), 4000)
-  }, [exportName])
+  }, [exportName, buildExportOverlay])
+
+  const waitForSettle = () =>
+    new Promise<void>((r) => setTimeout(() => requestAnimationFrame(() => r()), 350))
+
+  const bulkExportPng = useCallback(async () => {
+    if (profiles.length === 0) return
+    setExportState('working')
+    const slug = (text: string) =>
+      text.replace(/[^a-z0-9]+/gi, '-').toLowerCase().replace(/^-|-$/g, '')
+    const originalProfileId = activeProfileId
+    const originalWhitespace = interventionWhitespace
+
+    // Kill CSS transitions so bakeStyles reads the final values, not mid-flight ones.
+    const svg = mapRef.current
+    const mapEl = document.querySelector('.map-svg') as HTMLElement | null
+    if (mapEl) mapEl.style.setProperty('--map-ease', '0s')
+
+    const exportOne = async (
+      overlay: ExportOverlay,
+      fileName: string,
+    ): Promise<boolean> => {
+      await waitForSettle()
+      for (const scale of EXPORT_SCALES) {
+        try {
+          const blob = await svg?.exportPng(scale, overlay)
+          if (!blob) throw new Error('no image produced')
+          downloadBlob(blob, fileName)
+          return true
+        } catch { /* try next scale */ }
+      }
+      return false
+    }
+
+    try {
+      if (mode === 'profile') {
+        for (const profile of profiles) {
+          flushSync(() => setActiveProfileId(profile.id))
+          const legend: LegendEntry[] = variableTypes.map((t) => ({
+            fill: (highContrast ? (contrastSwatch(t.name) ?? t.swatch) : t.swatch) as string,
+            stroke: '#9EA4AB',
+            label: t.name,
+          }))
+          const influence: InfluenceEntry[] = [
+            { kind: 'positive', label: 'Positive influence' },
+            { kind: 'negative', label: 'Negative influence' },
+          ]
+          const overlay: ExportOverlay = {
+            mode: 'Profile',
+            persona: profile.name,
+            legend,
+            influence,
+          }
+          const name = `profile-${slug(profile.name) || 'persona'}${markedOnly ? '-marked' : ''}.png`
+          await exportOne(overlay, name)
+        }
+      } else if (mode === 'intervention') {
+        // "Anyone" view first
+        flushSync(() => setInterventionWhitespace(true))
+        const anyoneOverlay: ExportOverlay = {
+          mode: 'Intervention',
+          persona: 'Anyone',
+          legend: [
+            { fill: '#bbf7d0', stroke: '#16a34a', label: 'Reached by HPB' },
+            { fill: '#ffffff', stroke: '#d8d5cf', label: 'Whitespace' },
+          ],
+        }
+        await exportOne(anyoneOverlay, 'intervention-anyone.png')
+
+        // Then each persona
+        for (const profile of profiles) {
+          flushSync(() => {
+            setActiveProfileId(profile.id)
+            setInterventionWhitespace(false)
+          })
+          const overlay: ExportOverlay = {
+            mode: 'Intervention',
+            persona: profile.name,
+            legend: [
+              { fill: '#bbf7d0', stroke: '#16a34a', label: 'Covered' },
+              { fill: '#fef9c3', stroke: '#ca8a04', label: 'Opportunity' },
+              { fill: '#ffffff', stroke: '#d8d5cf', label: 'Not in their map' },
+            ],
+          }
+          const name = `intervention-${slug(profile.name) || 'persona'}.png`
+          await exportOne(overlay, name)
+        }
+      }
+    } finally {
+      if (mapEl) mapEl.style.removeProperty('--map-ease')
+      flushSync(() => {
+        setActiveProfileId(originalProfileId)
+        setInterventionWhitespace(originalWhitespace)
+      })
+      setExportState('idle')
+    }
+  }, [
+    profiles,
+    activeProfileId,
+    interventionWhitespace,
+    mode,
+    highContrast,
+    markedOnly,
+  ])
 
   const openGuide = useCallback(() => setGuide({ kind: 'contents' }), [])
 
@@ -852,6 +998,8 @@ export default function App() {
    * person; its characteristics decide which programmes reach them. Two inputs
    * to two different questions, which is why neither is derived from the other.
    */
+  const hasQuickFilter = Object.keys(quickCharacteristics).length > 0
+
   const interventionPersona = useMemo(
     () =>
       interventionWhitespace || !activeProfile
@@ -861,6 +1009,14 @@ export default function App() {
             applicabilityNodes: [...activeProfile.nodeIds],
           },
     [interventionWhitespace, activeProfile],
+  )
+
+  const quickFilterPersona = useMemo(
+    () =>
+      interventionWhitespace && hasQuickFilter
+        ? { characteristics: quickCharacteristics, applicabilityNodes: [] as number[] }
+        : null,
+    [interventionWhitespace, hasQuickFilter, quickCharacteristics],
   )
 
   /**
@@ -888,16 +1044,22 @@ export default function App() {
       return summariseForPersona(
         interventionPersona,
         activeProgrammes,
-        behaviourIndex,
         allNodeIds,
       )
     }
-    // Whitespace ignores gates outright. Running it through an empty persona
-    // instead looked equivalent and is not: with no characteristics every gated
-    // programme comes back undetermined rather than applying, so the view
-    // counted only the ungated programmes and reported 19 reached where the
-    // answer is 28.
-    const reached = reachOf(activeProgrammes, behaviourIndex)
+    if (quickFilterPersona) {
+      const applicability = classifyProgrammes(quickFilterPersona, activeProgrammes)
+      const reached = reachOf(applicability.applies)
+      return {
+        reached,
+        covered: [],
+        gaps: [],
+        beyond: allNodeIds.filter((id) => reached.has(id)),
+        untouched: allNodeIds.filter((id) => !reached.has(id)),
+        applicability,
+      }
+    }
+    const reached = reachOf(activeProgrammes)
     return {
       reached,
       covered: [],
@@ -910,7 +1072,7 @@ export default function App() {
         undetermined: [],
       },
     }
-  }, [interventionPersona, activeProgrammes])
+  }, [interventionPersona, quickFilterPersona, activeProgrammes])
 
   const interventionStanding = useMemo(() => {
     const byNode = new Map<number, NodeStanding>()
@@ -941,19 +1103,65 @@ export default function App() {
     // Gates re-tested against the WHOLE inventory, so "would apply" can be told
     // apart from "was unticked". Without this the two collapse and the card
     // cannot say which of them is keeping a programme off the map.
-    const wouldApply = interventionPersona
-      ? classifyProgrammes(interventionPersona, programmes).applies
+    const effectivePersona = interventionPersona ?? quickFilterPersona
+    const wouldApply = effectivePersona
+      ? classifyProgrammes(effectivePersona, programmes).applies
       : [...programmes]
 
     const unticked = wouldApply.filter((p) => !counted.includes(p))
     const neverApplies = programmes.filter((p) => !wouldApply.includes(p))
 
     return {
-      reaching: provenanceOf(nodeId, counted, behaviourIndex).via,
-      unticked: provenanceOf(nodeId, unticked, behaviourIndex).via,
-      ineligible: provenanceOf(nodeId, neverApplies, behaviourIndex).via,
+      reaching: provenanceOf(nodeId, counted).via,
+      unticked: provenanceOf(nodeId, unticked).via,
+      ineligible: provenanceOf(nodeId, neverApplies).via,
     }
   }, [mode, selection, interventionSummary, interventionPersona])
+
+  const exportCoverage = useCallback((profileIds: string[]) => {
+    const nodeLabel = (id: number) => nodesById.get(id)?.label ?? `#${id}`
+
+    const buildReport = (profile: Profile) => {
+      const result = summariseForPersona(
+        { characteristics: profile.characteristics, applicabilityNodes: [...profile.nodeIds] },
+        programmes,
+        allNodeIds,
+      )
+      return {
+        persona: profile.name,
+        counts: {
+          covered: result.covered.length,
+          opportunities: result.gaps.length,
+          beyond: result.beyond.length,
+          untouched: result.untouched.length,
+        },
+        programmes: {
+          applies: result.applicability.applies.map((p) => p.name),
+          excluded: result.applicability.excluded.map((p) => p.name),
+          undetermined: result.applicability.undetermined.map((p) => p.name),
+        },
+        nodes: {
+          covered: result.covered.map(nodeLabel),
+          opportunities: result.gaps.map(nodeLabel),
+          beyond: result.beyond.map(nodeLabel),
+        },
+      }
+    }
+
+    const chosen = profiles.filter((p) => profileIds.includes(p.id))
+    if (chosen.length === 0) return
+
+    const data = chosen.length === 1
+      ? buildReport(chosen[0])
+      : chosen.map(buildReport)
+
+    const filename = chosen.length === 1
+      ? `coverage-${chosen[0].name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.json`
+      : 'coverage-all-personas.json'
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    downloadBlob(blob, filename)
+  }, [profiles])
 
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
@@ -1218,8 +1426,8 @@ export default function App() {
               // to show rather than a lone programme.
               [...interventionSummary.reached].sort(
                 (a, b) =>
-                  provenanceOf(b, programmes, behaviourIndex).via.length -
-                  provenanceOf(a, programmes, behaviourIndex).via.length,
+                  provenanceOf(b, programmes).via.length -
+                  provenanceOf(a, programmes).via.length,
               )[0]
             : // A gap by preference — in the persona's map and unreached, which
               // is what the step is about. Falls back to any unreached variable
@@ -1451,6 +1659,7 @@ export default function App() {
               markedOnly={markedOnly}
               onMarkedOnlyChange={changeMarkedOnly}
               onExportPng={exportPng}
+              onBulkExportPng={bulkExportPng}
               exportState={exportState}
               onSelectProfile={setActiveProfileId}
               onNewProfile={() => setPersonaForm('new')}
@@ -1567,11 +1776,10 @@ export default function App() {
             profiles={profiles}
             personaId={interventionWhitespace ? null : activeProfileId}
             onPersonaChange={(id) => {
-              // Selecting a persona here selects it everywhere: one answer to
-              // "who are we talking about" for the whole app.
               if (id) {
                 setActiveProfileId(id)
                 setInterventionWhitespace(false)
+                setQuickCharacteristics({})
               } else {
                 setInterventionWhitespace(true)
                 setGapsOnly(false)
@@ -1581,14 +1789,20 @@ export default function App() {
             onGapsOnlyChange={setGapsOnly}
             summary={interventionSummary}
             applicability={
-              interventionPersona ? interventionSummary.applicability : null
+              (interventionPersona || quickFilterPersona)
+                ? interventionSummary.applicability
+                : null
             }
             selectedProgrammes={programmeFilter?.size ?? null}
             totalProgrammes={programmes.length}
             programmePanelOpen={programmePanelOpen}
             onOpenProgrammes={() => setProgrammePanelOpen((open) => !open)}
             onExportPng={exportPng}
+            onBulkExportPng={bulkExportPng}
             exportState={exportState}
+            onExportCoverage={exportCoverage}
+            quickCharacteristics={quickCharacteristics}
+            onQuickCharacteristicsChange={setQuickCharacteristics}
           />
         )}
 
@@ -1598,17 +1812,20 @@ export default function App() {
             // filtered set the map is using. A panel listing only what is ticked
             // could never offer anything back.
             applicability={
-              interventionPersona
-                ? classifyProgrammes(interventionPersona, programmes)
+              (interventionPersona || quickFilterPersona)
+                ? classifyProgrammes(
+                    (interventionPersona ?? quickFilterPersona)!,
+                    programmes,
+                  )
                 : { applies: [...programmes], excluded: [], undetermined: [] }
             }
             reachSize={(programme) =>
-              nodesOfProgramme(programme, behaviourIndex).length
+              nodesOfProgramme(programme).length
             }
             selected={programmeFilter}
             onSelectedChange={setProgrammeFilter}
             onClose={() => setProgrammePanelOpen(false)}
-            withoutPersona={interventionPersona === null}
+            withoutPersona={!interventionPersona && !quickFilterPersona}
           />
         )}
 

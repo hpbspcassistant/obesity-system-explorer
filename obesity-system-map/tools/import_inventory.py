@@ -1,26 +1,24 @@
 """
-Turns the tagged HPB programme inventory into src/data/intervention/programmes.json.
+Turns the programme-node remapping spreadsheet into src/data/intervention/programmes.json.
 
 Run it again whenever the spreadsheet changes:
 
-    python tools/import_inventory.py ../hpb-programme-inventory-tagged-C.xlsx
+    python tools/import_inventory.py ../programme-node-remapping.xlsx [reasons.json]
 
-Everything the app reads is generated here, so the spreadsheet stays the source
-of truth and nobody hand-edits the JSON. Three columns do the work:
+An optional second argument is a JSON file keyed by programme name, whose values
+are {nodeId: reason} objects.  When present, its reasons override column K.
 
-  Behaviours (tagged)   semicolon-separated behaviour names, mapped to the ids
-                        in behaviours.json by TAG_TO_BEHAVIOUR below.
-  Gate (who it's for)   a sentence. Translated by GATE_RULES into a machine gate,
-                        with the original kept in `gateSource` so the translation
-                        can be audited rather than trusted.
-  Node trim (Option C)  per-behaviour node overrides, "activity->71,49 · ...".
-                        A behaviour not named keeps its whole node set, which is
-                        what the workbook's own notes specify.
+Columns used (0-indexed):
+
+  0  Programme name
+  6  FY26/27 workplan check status  -> derives `status`
+  7  Proposed nodes                 -> "71 Physical Activity\n49 ..."
+  9  Gate (structured)              -> parsed into machine gate
+ 10  Reason (tool display)          -> "71 Physical Activity — reason\n..."
 
 The script refuses to write anything it cannot fully account for: an unknown
-behaviour tag, an untranslatable gate, or a trim naming a node outside the
-behaviour it trims all abort the run. Silently dropping any of those would leave
-the overlay quietly wrong, which is worse than not regenerating it.
+gate, a node id in the reason column that was not in the proposed-nodes column,
+or a missing reason for a proposed node all abort the run.
 """
 
 import json
@@ -34,137 +32,156 @@ import openpyxl
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parent / "src" / "data" / "intervention"
 
-# Spreadsheet tag -> behaviours.json id.
-TAG_TO_BEHAVIOUR = {
-    "physical activity": "physical-activity",
-    "healthy eating": "healthy-eating",
-    "sugar reduction": "sugar-reduction",
-    "sodium reduction": "sodium-reduction",
-    "healthy environment/access": "healthy-environment",
-    "sedentary/screen": "sedentary-screen",
-    "social connection": "social-connection",
-    "mental wellbeing": "mental-wellbeing",
-    "health literacy": "health-literacy",
-    "smoking/vaping": "smoking-vaping",
-    "sleep": "sleep",
-    "health screening": "health-screening",
-    "vision/hearing/oral": "sensory-oral-health",
-    "immunisation": "immunisation",
-}
+# ----------------------------------------------------------------- gates
 
-# Short key used in the trim column -> behaviours.json id.
-TRIM_TO_BEHAVIOUR = {
-    "activity": "physical-activity",
-    "eating": "healthy-eating",
-    "literacy": "health-literacy",
-    "environment": "healthy-environment",
-    "social": "social-connection",
-}
+def parse_gate(text):
+    """Turn the structured gate string into a machine gate."""
+    text = (text or "").strip()
+    if not text or text == "(sunsetted)":
+        return "everyone"
 
-SCHOOL_AGE = {"life_stage": ["school-child", "youth"]}
-WORKING = {"life_stage": "working-adult"}
-PARENT = {"is_parent": True}
+    if re.match(r"^everyone", text, re.I):
+        return "everyone"
 
-# Matched in order, first hit wins, so the specific cases precede the general
-# ones. A gate listing several unrelated audiences becomes a list of clauses;
-# anything a persona can satisfy on any one of them is in.
-GATE_RULES = [
-    (r"^everyone", "everyone"),
-    (r"^students.*high-risk", [{**SCHOOL_AGE, "conditions": ["overweight-high-risk"]}]),
-    (
-        r"^students.*myopic",
-        [{**SCHOOL_AGE, "conditions": ["myopic"], "ses": "lower-income"}],
-    ),
-    # "students, staff & parents" is three groups, not one person who is all
-    # three. Same for the preschool framework, which names parents and staff.
-    (r"^students,\s*staff", [SCHOOL_AGE, WORKING, PARENT]),
-    (r"^preschool children\s*\(\+", [{"life_stage": "young-child"}, WORKING, PARENT]),
-    (r"^preschool children", [{"life_stage": "young-child"}]),
-    (r"^students", [SCHOOL_AGE]),
-    (r"^working adults", [WORKING]),
-    (r"^seniors 50\+", [{"age_band": ["50-59", "60-plus"]}]),
-    (r"^seniors 60\+", [{"age_band": ["60-plus"]}]),
-    (
-        r"^seniors\s*\(frailty",
-        [{"life_stage": "senior", "conditions": ["frailty-or-falls-risk"]}],
-    ),
-    (r"^senior men", [{"life_stage": "senior", "sex": "male"}]),
-    (r"^seniors", [{"life_stage": "senior"}]),
-    (r"^(smokers|vapers)", [{"smoker_or_vaper": True}]),
-    (
-        r"^lower-income families\s*\(children",
-        [{"ses": "lower-income", "life_stage": ["young-child", "school-child"]}],
-    ),
-    (r"^lower-income families", [{"ses": "lower-income"}]),
-    (r"^haj pilgrims", [{"conditions": ["haj-pilgrim"]}]),
-    (r"^adults not yet screened", [{"conditions": ["not-yet-screened"]}]),
-    (
-        r"^children, seniors",
-        [{"life_stage": ["young-child", "school-child", "youth", "senior"]}],
-    ),
-    (r"^parents", [PARENT]),
-]
+    # Handle OR-joined clauses: "role=X OR age_band ∈ {a,b} OR ..."
+    if " OR " in text:
+        clauses = [_parse_single_clause(part.strip()) for part in text.split(" OR ")]
+        return clauses
 
+    return [_parse_single_clause(text)]
+
+
+def _parse_single_clause(text):
+    """Parse 'role=working AND work_type=manual-industrial' into a dict."""
+    # Strip trailing bracket comments from the whole clause first
+    text = re.sub(r"\s*\[.*?\]\s*$", "", text).strip()
+
+    clause = {}
+    parts = re.split(r"\s+AND\s+", text)
+    for part in parts:
+        part = part.strip()
+        # Strip trailing parenthetical comments
+        part = re.sub(r"\s*\(.*\)\s*$", "", part).strip()
+        # Strip trailing bracket comments
+        part = re.sub(r"\s*\[.*?\]\s*$", "", part).strip()
+        if not part:
+            continue
+
+        # field ∈ {val1, val2, ...}
+        m = re.match(r"^(\w+)\s*[∈]\s*\{([^}]+)\}", part)
+        if m:
+            field = m.group(1)
+            values = [v.strip() for v in m.group(2).split(",")]
+            clause[field] = _coerce_values(values) if len(values) > 1 else _coerce_single(values[0])
+            continue
+
+        # condition=X -> conditions: [X] (must precede generic field=value)
+        m = re.match(r"^condition\s*=\s*([a-z0-9-]+)", part)
+        if m:
+            clause["conditions"] = [m.group(1).strip()]
+            continue
+
+        # field=value
+        m = re.match(r"^(\w+)\s*=\s*([a-z0-9-]+)", part)
+        if m:
+            field = m.group(1)
+            value = m.group(2).strip()
+            clause[field] = _coerce_single(value)
+            continue
+
+        raise SystemExit(f"Cannot parse gate clause part: {part!r}")
+
+    return clause
+
+
+def _coerce_single(value):
+    if value == "true":
+        return True
+    if value == "false":
+        return False
+    return value
+
+
+def _coerce_values(values):
+    return [_coerce_single(v) for v in values]
+
+
+# ----------------------------------------------------------------- nodes
+
+def parse_nodes(text):
+    """Parse '71 Physical Activity\\n49 Level of ...' into a list of node ids."""
+    text = (text or "").strip()
+    if not text or text.startswith("("):
+        return []
+    ids = []
+    for line in text.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+        m = re.match(r"^(\d+)\s+", line)
+        if m:
+            ids.append(int(m.group(1)))
+    return ids
+
+
+def parse_reasons(text):
+    """Parse '71 Physical Activity — reason\\n49 ...' into {node_id: reason}."""
+    text = (text or "").strip()
+    if not text or text.startswith("("):
+        return {}
+    reasons = {}
+    for line in text.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+        m = re.match(r"^(\d+)\s+[^—→]+[—→]\s*(.+)$", line)
+        if m:
+            reasons[int(m.group(1))] = m.group(2).strip()
+    return reasons
+
+
+# ----------------------------------------------------------------- status
+
+def derive_status(text):
+    """Map the workplan check column to a programme status."""
+    text = (text or "").strip().lower()
+    if "sunsetted" in text or "sunset" in text:
+        return "ended"
+    if "accurate" in text:
+        return "current"
+    # Everything else (verify, check, transition, not in workplan, etc.)
+    return "verify"
+
+
+# ----------------------------------------------------------------- slug
 
 def slug(name):
-    """A stable id from the programme name — the sheet has no id column."""
+    """A stable id from the programme name."""
     plain = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
-    # Drop parenthesised asides first: they carry abbreviations and edition
-    # names that churn between exports, and an id that churns breaks nothing
-    # loudly — it just silently stops matching anything saved against it.
     plain = re.sub(r"\([^)]*\)", " ", plain)
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", plain.lower())).strip("-")
 
 
-def parse_gate(text):
-    for pattern, gate in GATE_RULES:
-        if re.search(pattern, text.strip(), re.I):
-            return gate
-    raise SystemExit(f"Untranslatable gate: {text!r}\nAdd a rule to GATE_RULES.")
-
-
-def parse_trim(text, addresses, behaviour_nodes, programme):
-    """'activity->71,49 · literacy->(none: ...)' -> {behaviour id: [nodes]}."""
-    text = (text or "").strip()
-    if not text or text.lower() in {"(full bundle)", "none"}:
-        return {}
-
-    trim = {}
-    for part in re.split(r"[·|]", text):
-        if "→" not in part:
-            continue
-        key, values = (s.strip() for s in part.split("→", 1))
-        behaviour = TRIM_TO_BEHAVIOUR.get(key.lower())
-        if behaviour is None:
-            raise SystemExit(f"{programme}: unknown trim key {key!r}")
-        if behaviour not in addresses:
-            raise SystemExit(
-                f"{programme}: trims {behaviour!r}, which it does not address"
-            )
-        nodes = [int(n) for n in re.findall(r"\d+", values)]
-        # A trim narrows a behaviour; it never adds. Anything outside the
-        # behaviour's own set is a tagging error or belongs in extraNodes, and
-        # either way guessing which would bake the mistake in.
-        outside = sorted(set(nodes) - set(behaviour_nodes[behaviour]))
-        if outside:
-            raise SystemExit(
-                f"{programme}: trim {behaviour!r} names {outside}, "
-                f"outside the behaviour's nodes {behaviour_nodes[behaviour]}"
-            )
-        trim[behaviour] = nodes
-    return trim
-
+# ----------------------------------------------------------------- main
 
 def main():
-    source = Path(sys.argv[1] if len(sys.argv) > 1 else HERE.parent.parent / "hpb-programme-inventory-tagged-C.xlsx")
-    behaviours = json.loads((DATA / "behaviours.json").read_text("utf-8"))
-    behaviour_nodes = {b["id"]: b["nodes"] for b in behaviours}
+    source = Path(
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else HERE.parent.parent / "programme-node-remapping.xlsx"
+    )
 
-    rows = list(
-        openpyxl.load_workbook(source, data_only=True)["Programme Capture"].iter_rows(
-            values_only=True
-        )
-    )[1:]
+    reasons_override = {}
+    if len(sys.argv) > 2:
+        reasons_path = Path(sys.argv[2])
+        raw = json.loads(reasons_path.read_text("utf-8"))
+        for prog_name, entries in raw.items():
+            reasons_override[prog_name] = {int(k): v for k, v in entries.items()}
+        print(f"Loaded reason overrides for {len(reasons_override)} programmes")
+
+    wb = openpyxl.load_workbook(source, read_only=True)
+    ws = wb[wb.sheetnames[0]]
+    rows = list(ws.iter_rows(values_only=True))[1:]  # skip header
 
     out, seen = [], set()
     for row in rows:
@@ -172,43 +189,56 @@ def main():
         if not name:
             continue
 
-        addresses = []
-        for tag in str(row[7] or "").split(";"):
-            tag = tag.strip().lower()
-            if not tag:
-                continue
-            if tag not in TAG_TO_BEHAVIOUR:
-                raise SystemExit(f"{name}: unknown behaviour tag {tag!r}")
-            behaviour = TAG_TO_BEHAVIOUR[tag]
-            # The two files are edited separately and drift. A behaviour that
-            # has been deleted or renamed out of behaviours.json would otherwise
-            # sail through here and contribute no nodes at runtime, which looks
-            # exactly like a programme that reaches nothing.
-            if behaviour not in behaviour_nodes:
-                raise SystemExit(
-                    f"{name}: tag {tag!r} maps to {behaviour!r}, "
-                    f"which behaviours.json does not define"
-                )
-            addresses.append(behaviour)
+        status_text = str(row[6] or "")
+        status = derive_status(status_text)
+
+        # Skip sunsetted programmes entirely
+        nodes_text = str(row[7] or "").strip()
+        if nodes_text.startswith("(sunsetted)") or status == "ended":
+            continue
+
+        node_ids = parse_nodes(row[7])
+        reasons = reasons_override.get(name) or parse_reasons(row[10])
+
+        # Programmes with (none) reach no nodes — still include them
+        gate_text = str(row[9] or "").strip()
+        if gate_text.startswith("(sunsetted)"):
+            continue
 
         identifier = slug(name)
         if identifier in seen:
             raise SystemExit(f"Duplicate id {identifier!r} from {name!r}")
         seen.add(identifier)
 
-        gate_source = str(row[8] or "").strip()
+        gate = parse_gate(gate_text)
+
+        # Build the nodes array with reasons
+        nodes_with_reasons = []
+        for nid in node_ids:
+            reason = reasons.get(nid)
+            if reason is None:
+                raise SystemExit(
+                    f"{name}: node {nid} is in proposed-nodes but has no reason"
+                )
+            nodes_with_reasons.append({"id": nid, "reason": reason})
+
+        # Check for reasons referencing nodes not in the proposed list
+        extra_reason_ids = set(reasons.keys()) - set(node_ids)
+        if extra_reason_ids:
+            raise SystemExit(
+                f"{name}: reason references nodes {sorted(extra_reason_ids)} "
+                f"not in proposed-nodes {node_ids}"
+            )
+
         programme = {
             "id": identifier,
             "name": name,
             "source": str(row[3] or "").strip(),
-            "status": str(row[5] or "").strip().lower() or "verify",
-            "gate": parse_gate(gate_source),
-            "gateSource": gate_source,
-            "addresses": addresses,
+            "status": status,
+            "gate": gate,
+            "gateSource": str(row[1] or "").strip(),
+            "nodes": nodes_with_reasons,
         }
-        trim = parse_trim(row[9], addresses, behaviour_nodes, name)
-        if trim:
-            programme["trim"] = trim
         out.append(programme)
 
     (DATA / "programmes.json").write_text(
@@ -219,10 +249,8 @@ def main():
     for programme in out:
         if programme["status"] == "ended":
             continue
-        for behaviour in programme["addresses"]:
-            reached.update(
-                programme.get("trim", {}).get(behaviour, behaviour_nodes[behaviour])
-            )
+        for node in programme["nodes"]:
+            reached.add(node["id"])
     print(f"{len(out)} programmes -> {DATA / 'programmes.json'}")
     print(f"{len(reached)} nodes reached with gates ignored")
 

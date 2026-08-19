@@ -5,49 +5,41 @@
     "source": "HealthHub",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "sleep",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        79
-      ],
-      "healthy-eating": [
-        81,
-        86,
-        85,
-        73
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
-  },
-  {
-    "id": "national-steps-challenge",
-    "name": "National Steps Challenge",
-    "source": "HealthHub",
-    "status": "current",
-    "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "physical-activity",
-      "sedentary-screen"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        79
-      ]
-    }
+    "gateSource": "General public (meal-logging features noted for ages 18+; challenges require users to be 17+)",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Tracks daily steps and active minutes, encouraging people to move more."
+      },
+      {
+        "id": 49,
+        "reason": "Activity challenges and rewards point people toward exercise in their own time."
+      },
+      {
+        "id": 40,
+        "reason": "The app helps people find and sign up for activities, making exercise easier to access."
+      },
+      {
+        "id": 41,
+        "reason": "The app is free and rewards activity with points, lowering the cost barrier to being active."
+      },
+      {
+        "id": 46,
+        "reason": "Its core purpose is helping people keep track of their own energy balance, through step, activity and meal logging."
+      },
+      {
+        "id": 11,
+        "reason": "Meal logging with nutrition information helps people judge how healthy their food is."
+      },
+      {
+        "id": 22,
+        "reason": "Sends weekly mental-wellness tasks that offer coping and stress support."
+      },
+      {
+        "id": 2,
+        "reason": "Badges and progress milestones recognise effort, which supports confidence."
+      }
+    ]
   },
   {
     "id": "age-strong",
@@ -62,47 +54,41 @@
         ]
       }
     ],
-    "gateSource": "seniors 50+",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "sleep",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        83
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
-  },
-  {
-    "id": "move-it",
-    "name": "MOVE IT (free exercise classes)",
-    "source": "HPB web",
-    "status": "current",
-    "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "physical-activity"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        40,
-        83
-      ]
-    }
+    "gateSource": "\"Adults aged 50 and over\" (\"specially designed by experts for adults aged 50 and over\")",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Its guided workouts get users aged 50 and over moving regularly."
+      },
+      {
+        "id": 49,
+        "reason": "The workouts are a form of recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "Strength, balance and flexibility routines build the fitness needed for everyday tasks."
+      },
+      {
+        "id": 35,
+        "reason": "Guided workouts teach older users how to move well, not just how much."
+      },
+      {
+        "id": 46,
+        "reason": "Daily tasks and quizzes build the habit of tracking one's own health."
+      },
+      {
+        "id": 11,
+        "reason": "Nutrition quizzes build knowledge of healthier eating."
+      },
+      {
+        "id": 22,
+        "reason": "Mental-wellbeing quizzes offer coping and stress-awareness content."
+      },
+      {
+        "id": 2,
+        "reason": "Rewards and milestones recognise progress, which supports confidence."
+      }
+    ]
   },
   {
     "id": "live-well-age-well",
@@ -117,23 +103,41 @@
         ]
       }
     ],
-    "gateSource": "seniors 50+",
-    "addresses": [
-      "physical-activity",
-      "mental-wellbeing",
-      "social-connection"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        83
-      ],
-      "social-connection": [
-        6,
-        27
-      ]
-    }
+    "gateSource": "\"Adults aged 50 and above\"",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Islandwide activities keep adults aged 50 and over active."
+      },
+      {
+        "id": 49,
+        "reason": "Sessions such as Zumba Gold and Tai Chi are recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "Fall-prevention training builds the strength and balance needed for daily life."
+      },
+      {
+        "id": 41,
+        "reason": "Activities are free, removing the cost barrier to exercising."
+      },
+      {
+        "id": 6,
+        "reason": "Group sessions bring older adults together in person."
+      },
+      {
+        "id": 27,
+        "reason": "Activities are run in groups."
+      },
+      {
+        "id": 22,
+        "reason": "Runs resilience and coping workshops that help people manage stressful situations."
+      },
+      {
+        "id": 2,
+        "reason": "Runs confidence and positive-thinking workshops that build self-confidence."
+      }
+    ]
   },
   {
     "id": "healthy-workplace-ecosystem",
@@ -142,56 +146,52 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "working-adult"
+        "role": "working",
+        "work_type": [
+          "employee",
+          "manual-industrial"
+        ]
       }
     ],
-    "gateSource": "working adults (participating workplaces)",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        40
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
-  },
-  {
-    "id": "workplace-outreach-wellness-programme",
-    "name": "Workplace Outreach Wellness (WOW) Programme",
-    "source": "HPB web",
-    "status": "verify",
-    "gate": [
+    "gateSource": "Workers/tenants at participating office buildings, commercial complexes and industrial estates (extended to SMEs)",
+    "nodes": [
       {
-        "life_stage": "working-adult"
+        "id": 71,
+        "reason": "Brings exercise sessions into the workplace, raising how much staff move."
+      },
+      {
+        "id": 49,
+        "reason": "The workplace exercise sessions are recreational activity."
+      },
+      {
+        "id": 40,
+        "reason": "On-site sessions make exercise convenient at work."
+      },
+      {
+        "id": 41,
+        "reason": "The sessions are free to staff, removing the cost barrier."
+      },
+      {
+        "id": 27,
+        "reason": "Sessions are run in groups."
+      },
+      {
+        "id": 81,
+        "reason": "Healthier food options at work lower the calorie density of what's available."
+      },
+      {
+        "id": 86,
+        "reason": "Healthier food options at work raise the nutritional quality of what's available."
+      },
+      {
+        "id": 11,
+        "reason": "Health talks and cooking workshops build staff's nutrition knowledge."
+      },
+      {
+        "id": 46,
+        "reason": "Health coaching helps staff manage their own health."
       }
-    ],
-    "gateSource": "working adults / companies",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "mental-wellbeing",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    ]
   },
   {
     "id": "eat-drink-shop-healthy-challenge",
@@ -199,21 +199,21 @@
     "source": "HealthHub",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "healthy-eating",
-      "sugar-reduction",
-      "health-literacy"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11
-      ]
-    }
+    "gateSource": "Singapore residents/consumers with a Healthy 365 account; \"be at least 17 years old\"",
+    "nodes": [
+      {
+        "id": 11,
+        "reason": "Rewarding healthier purchases helps shoppers learn to spot the better options."
+      },
+      {
+        "id": 81,
+        "reason": "Rewards shift buying toward less calorie-dense products."
+      },
+      {
+        "id": 86,
+        "reason": "Rewards shift buying toward more nutritious products."
+      }
+    ]
   },
   {
     "id": "nutri-grade",
@@ -221,17 +221,25 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "sugar-reduction",
-      "healthy-eating"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
+    "gateSource": "Applies to beverages sold in Singapore (pre-packaged drinks, dispenser drinks, and freshly prepared drinks from 30 Dec 2023); consumers use it to identify higher-sugar/higher-saturated-fat drinks",
+    "nodes": [
+      {
+        "id": 5,
+        "reason": "Advertising of the least healthy (Grade D) drinks is banned, cutting people's exposure to unhealthy-drink ads."
+      },
+      {
+        "id": 11,
+        "reason": "Front-of-pack A-to-D grades let people quickly see how healthy a drink is."
+      },
+      {
+        "id": 81,
+        "reason": "Grading and reformulation pressure lower the sugar, and so the calories, in drinks."
+      },
+      {
+        "id": 86,
+        "reason": "The scheme pushes drinks toward better nutritional quality."
+      }
+    ]
   },
   {
     "id": "healthier-choice-symbol",
@@ -239,20 +247,21 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "healthy-eating",
-      "health-literacy"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11
-      ]
-    }
+    "gateSource": "Food/beverage companies (to endorse packaged products); consumers use it to identify healthier packaged options",
+    "nodes": [
+      {
+        "id": 11,
+        "reason": "The symbol is a quick cue that helps shoppers identify healthier packaged food."
+      },
+      {
+        "id": 81,
+        "reason": "Products carrying the symbol must meet limits that cap calorie density."
+      },
+      {
+        "id": 86,
+        "reason": "Products carrying the symbol must meet higher nutritional standards."
+      }
+    ]
   },
   {
     "id": "healthier-dining-programme",
@@ -260,16 +269,21 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "healthy-eating"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
+    "gateSource": "Food and beverage (F&B) operators",
+    "nodes": [
+      {
+        "id": 76,
+        "reason": "Encourages restaurants to include wholegrains, adding fibre to meals eaten out."
+      },
+      {
+        "id": 81,
+        "reason": "Helps eateries offer lower-calorie dishes."
+      },
+      {
+        "id": 86,
+        "reason": "Increases the availability of better-quality dishes when eating out."
+      }
+    ]
   },
   {
     "id": "healthier-ingredient-development-scheme",
@@ -277,18 +291,21 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "healthy-eating",
-      "sodium-reduction"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86,
-        76
-      ]
-    }
+    "gateSource": "Food manufacturers and importers supplying healthier ingredients to F&B/retail outlets in Singapore (Singapore-registered, ≥3 years operating)",
+    "nodes": [
+      {
+        "id": 76,
+        "reason": "Promotes wholegrain and higher-fibre ingredients in food production."
+      },
+      {
+        "id": 81,
+        "reason": "Healthier ingredients lower the calorie density of everyday food."
+      },
+      {
+        "id": 86,
+        "reason": "Healthier ingredients raise the nutritional quality of everyday food."
+      }
+    ]
   },
   {
     "id": "siu-dai-by-default-movement",
@@ -296,9 +313,16 @@
     "source": "HPB web",
     "status": "verify",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "sugar-reduction"
+    "gateSource": "F&B operators, especially coffeeshop/drinks-stall operators",
+    "nodes": [
+      {
+        "id": 81,
+        "reason": "Reduced-sugar default drinks cut the calories in drinks."
+      },
+      {
+        "id": 86,
+        "reason": "Lower-sugar defaults improve the nutritional quality of drinks sold."
+      }
     ]
   },
   {
@@ -307,20 +331,26 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "sodium-reduction"
+    "gateSource": "Food operators (hawkers, caterers, restaurants) and ingredient manufacturers",
+    "nodes": [
+      {
+        "id": 86,
+        "reason": "Lowering the salt in recipes improves the nutritional quality of food."
+      }
     ]
   },
   {
     "id": "healthier-ingredient-promotion-programme",
     "name": "Healthier Ingredient Promotion Programme (HIPP)",
     "source": "HPB web",
-    "status": "current",
+    "status": "verify",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "sodium-reduction"
+    "gateSource": "Food operators, especially hawkers",
+    "nodes": [
+      {
+        "id": 86,
+        "reason": "Hawkers switching to lower-sodium ingredients raise the nutritional quality of hawker food."
+      }
     ]
   },
   {
@@ -333,9 +363,16 @@
         "smoker_or_vaper": true
       }
     ],
-    "gateSource": "smokers / vapers",
-    "addresses": [
-      "smoking-vaping"
+    "gateSource": "Smokers and vapers who want to quit, \"regardless of previous failed attempts\"",
+    "nodes": [
+      {
+        "id": 23,
+        "reason": "Support and messaging reinforce the social norm against smoking."
+      },
+      {
+        "id": 28,
+        "reason": "The programme's direct aim is helping people quit smoking or vaping."
+      }
     ]
   },
   {
@@ -344,14 +381,21 @@
     "source": "HealthHub",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone",
-    "addresses": [
-      "mental-wellbeing",
-      "health-literacy"
-    ],
-    "trim": {
-      "health-literacy": []
-    }
+    "gateSource": "General public, with sub-sections for youths, working adults, seniors, families and organisations",
+    "nodes": [
+      {
+        "id": 22,
+        "reason": "Self-help tools and breathing exercises directly target stress."
+      },
+      {
+        "id": 2,
+        "reason": "Its resources build a sense of purpose and self-confidence."
+      },
+      {
+        "id": 34,
+        "reason": "Better stress management reduces the urge to comfort-eat."
+      }
+    ]
   },
   {
     "id": "mindline-at-work",
@@ -360,12 +404,23 @@
     "status": "verify",
     "gate": [
       {
-        "life_stage": "working-adult"
+        "role": "working",
+        "work_type": [
+          "employee",
+          "manual-industrial"
+        ]
       }
     ],
-    "gateSource": "working adults",
-    "addresses": [
-      "mental-wellbeing"
+    "gateSource": "Organisations / employees (workplace)",
+    "nodes": [
+      {
+        "id": 22,
+        "reason": "Workplace mental-health resources target work stress."
+      },
+      {
+        "id": 2,
+        "reason": "Supports employees' confidence and sense of purpose."
+      }
     ]
   },
   {
@@ -374,44 +429,29 @@
     "source": "News",
     "status": "verify",
     "gate": "everyone",
-    "gateSource": "everyone (community)",
-    "addresses": [
-      "health-literacy",
-      "social-connection"
-    ],
-    "trim": {
-      "health-literacy": [
-        11,
-        46
-      ],
-      "social-connection": [
-        6
-      ]
-    }
+    "gateSource": "Local community stakeholders/partners (community volunteers)",
+    "nodes": []
   },
   {
     "id": "jom-check",
     "name": "Jom Check!",
     "source": "CoS speech",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
+        "age_band": [
+          "25-39",
+          "40-49",
+          "50-59",
+          "60-plus"
+        ],
         "conditions": [
           "not-yet-screened"
         ]
       }
     ],
-    "gateSource": "adults not yet screened / enrolled",
-    "addresses": [
-      "health-screening",
-      "health-literacy"
-    ],
-    "trim": {
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Residents (adults) who have not yet enrolled in Healthier SG or done their health screening",
+    "nodes": []
   },
   {
     "id": "healthy-preschool-accreditation-framework",
@@ -420,35 +460,32 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "young-child"
-      },
-      {
-        "life_stage": "working-adult"
-      },
-      {
-        "is_parent": true
+        "role": "preschooler"
       }
     ],
-    "gateSource": "preschool children (+ parents/staff)",
-    "addresses": [
-      "healthy-eating",
-      "physical-activity",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Preschools – covering children, parents and staff",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "A preschool activity culture gets young children moving more."
+      },
+      {
+        "id": 49,
+        "reason": "Active play at preschool is recreational activity."
+      },
+      {
+        "id": 26,
+        "reason": "Building activity into preschool helps set a child's early, lasting activity habits."
+      },
+      {
+        "id": 81,
+        "reason": "Healthier preschool meals lower the calorie density of what children are served."
+      },
+      {
+        "id": 86,
+        "reason": "Healthier preschool meals raise the nutritional quality of what children are served."
+      }
+    ]
   },
   {
     "id": "healthy-meals-in-schools-programme",
@@ -457,46 +494,61 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": [
-          "school-child",
-          "youth"
+        "role": [
+          "primary-student",
+          "secondary-student"
         ]
       }
     ],
-    "gateSource": "students",
-    "addresses": [
-      "healthy-eating",
-      "sugar-reduction",
-      "sodium-reduction"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86,
-        73
-      ]
-    }
+    "gateSource": "Students; support directed at school canteen committees and F&B vendors",
+    "nodes": [
+      {
+        "id": 81,
+        "reason": "Less fat and sugar in canteen food lowers its calorie density."
+      },
+      {
+        "id": 86,
+        "reason": "Food guidelines raise the nutritional quality of school meals."
+      },
+      {
+        "id": 76,
+        "reason": "More wholegrains, fruit and vegetables add fibre to school food."
+      },
+      {
+        "id": 73,
+        "reason": "Serving healthier food daily helps students build lasting eating habits."
+      }
+    ]
   },
   {
     "id": "healthy-meals-in-pre-schools-programme",
     "name": "Healthy Meals in Pre-schools Programme (HMPP)",
     "source": "HPB web",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
-        "life_stage": "young-child"
+        "role": "preschooler"
       }
     ],
-    "gateSource": "preschool children",
-    "addresses": [
-      "healthy-eating"
-    ],
-    "trim": {
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
+    "gateSource": "Preschools / preschool children",
+    "nodes": [
+      {
+        "id": 81,
+        "reason": "Healthier preschool meals lower their calorie density."
+      },
+      {
+        "id": 86,
+        "reason": "Four-food-group meals raise the nutritional quality of preschool food."
+      },
+      {
+        "id": 76,
+        "reason": "Wholegrains, fruit and vegetables add fibre to preschool meals."
+      },
+      {
+        "id": 73,
+        "reason": "Preschools help shape children's healthy eating habits from a young age."
+      }
+    ]
   },
   {
     "id": "youth-preventive-health-and-dental-services",
@@ -505,59 +557,14 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": [
-          "school-child",
-          "youth"
+        "role": [
+          "primary-student",
+          "secondary-student"
         ]
       }
     ],
-    "gateSource": "students (P1-S5)",
-    "addresses": [
-      "health-screening",
-      "immunisation",
-      "sensory-oral-health"
-    ]
-  },
-  {
-    "id": "student-health-advisor-programme",
-    "name": "Student Health Advisor (Lifestyle Coach) Programme",
-    "source": "HPB web",
-    "status": "current",
-    "gate": [
-      {
-        "life_stage": [
-          "school-child",
-          "youth"
-        ],
-        "conditions": [
-          "overweight-high-risk"
-        ]
-      }
-    ],
-    "gateSource": "students (identified high-risk)",
-    "addresses": [
-      "healthy-eating",
-      "physical-activity",
-      "smoking-vaping",
-      "health-literacy",
-      "health-screening"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86,
-        73
-      ],
-      "health-literacy": [
-        11,
-        46,
-        20
-      ]
-    }
+    "gateSource": "Primary 1–6 and Secondary 1–5 students",
+    "nodes": []
   },
   {
     "id": "health-promoting-schools-framework",
@@ -566,39 +573,40 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": [
-          "school-child",
-          "youth"
+        "role": [
+          "primary-student",
+          "secondary-student",
+          "tertiary-student"
         ]
-      },
-      {
-        "life_stage": "working-adult"
-      },
-      {
-        "is_parent": true
       }
     ],
-    "gateSource": "students, staff & parents (all levels)",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "mental-wellbeing",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Students, staff and parents at primary, secondary, JC and tertiary levels",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "A whole-school health culture promotes student activity."
+      },
+      {
+        "id": 49,
+        "reason": "Supports recreational and PE activity in schools."
+      },
+      {
+        "id": 35,
+        "reason": "School PE teaches students how to use their bodies."
+      },
+      {
+        "id": 81,
+        "reason": "A healthy-living culture extends to lower-calorie school food."
+      },
+      {
+        "id": 86,
+        "reason": "Promotes better-quality school food."
+      },
+      {
+        "id": 11,
+        "reason": "Health education builds students' food and health knowledge."
+      }
+    ]
   },
   {
     "id": "project-silver-screen",
@@ -607,16 +615,11 @@
     "status": "verify",
     "gate": [
       {
-        "age_band": [
-          "60-plus"
-        ]
+        "age_band": "60-plus"
       }
     ],
-    "gateSource": "seniors 60+",
-    "addresses": [
-      "sensory-oral-health",
-      "health-screening"
-    ]
+    "gateSource": "\"Singaporeans aged 60 and above\" (Singaporeans and PRs) not screened in the past year",
+    "nodes": []
   },
   {
     "id": "steady-lah",
@@ -625,22 +628,50 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "senior",
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ],
         "conditions": [
           "frailty-or-falls-risk"
         ]
       }
     ],
-    "gateSource": "seniors (frailty / falls risk)",
-    "addresses": [
-      "physical-activity"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        83
-      ]
-    }
+    "gateSource": "Seniors, especially those at risk of frailty or falls",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Strength and balance sessions raise how much seniors move."
+      },
+      {
+        "id": 49,
+        "reason": "The sessions are recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "Progressive strength and balance work builds the fitness that prevents falls."
+      },
+      {
+        "id": 35,
+        "reason": "Balance and strength training teaches seniors to move safely."
+      },
+      {
+        "id": 86,
+        "reason": "Nutrition workshops help frail seniors get enough protein, improving their diet quality."
+      },
+      {
+        "id": 11,
+        "reason": "Nutrition workshops build seniors' knowledge of healthy eating."
+      },
+      {
+        "id": 6,
+        "reason": "A small group meeting over several sessions builds social connection."
+      },
+      {
+        "id": 27,
+        "reason": "Sessions are run as a group."
+      }
+    ]
   },
   {
     "id": "happy",
@@ -649,29 +680,47 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "senior",
-        "conditions": [
-          "frailty-or-falls-risk"
+        "age_band": [
+          "50-59",
+          "60-plus"
         ]
       }
     ],
-    "gateSource": "seniors (frailty risk)",
-    "addresses": [
-      "physical-activity",
-      "social-connection",
-      "mental-wellbeing"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        83
-      ],
-      "social-connection": [
-        6,
-        27,
-        36
-      ]
-    }
+    "gateSource": "Seniors, including those at risk of frailty",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Promotes physical activity among seniors."
+      },
+      {
+        "id": 49,
+        "reason": "The exercise sessions are recreational activity."
+      },
+      {
+        "id": 83,
+        "reason": "Frailty-prevention exercises build strength and balance."
+      },
+      {
+        "id": 6,
+        "reason": "Peer-led community sessions bring seniors together in person."
+      },
+      {
+        "id": 27,
+        "reason": "Delivered as group activities."
+      },
+      {
+        "id": 36,
+        "reason": "Peer-led promotion makes being active a valued, normal thing among seniors."
+      },
+      {
+        "id": 2,
+        "reason": "Cognitive and social engagement supports confidence."
+      },
+      {
+        "id": 22,
+        "reason": "Healthy-ageing support helps seniors manage stress."
+      }
+    ]
   },
   {
     "id": "move-it-feel-strong",
@@ -680,25 +729,35 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "senior"
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ]
       }
     ],
-    "gateSource": "seniors",
-    "addresses": [
-      "physical-activity",
-      "social-connection"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        83
-      ],
-      "social-connection": [
-        6,
-        27
-      ]
-    }
+    "gateSource": "Seniors (delivered at Active Ageing Centres)",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Group exercise raises how much seniors move."
+      },
+      {
+        "id": 49,
+        "reason": "The sessions are recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "The programme builds functional strength."
+      },
+      {
+        "id": 6,
+        "reason": "In-person group sessions bring seniors together."
+      },
+      {
+        "id": 27,
+        "reason": "Run as group exercise."
+      }
+    ]
   },
   {
     "id": "rise-programme",
@@ -707,39 +766,52 @@
     "status": "verify",
     "gate": [
       {
-        "life_stage": [
-          "young-child",
-          "school-child",
-          "youth",
-          "senior"
+        "role": "primary-student"
+      },
+      {
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ]
+      },
+      {
+        "age_band": [
+          "13-18",
+          "19-24"
         ]
       }
     ],
-    "gateSource": "children, seniors & youth (intergenerational)",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "social-connection",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ],
-      "social-connection": [
-        6,
-        27
-      ]
-    }
+    "gateSource": "Youth volunteers, children (student-care) and seniors (Active Ageing Centres)",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Games and fitness activities get children and seniors moving."
+      },
+      {
+        "id": 49,
+        "reason": "The games and fitness sessions are recreational activity."
+      },
+      {
+        "id": 81,
+        "reason": "Healthy meals served together lower the calorie density of what's eaten."
+      },
+      {
+        "id": 86,
+        "reason": "Healthy meals and choosing better dining options improve diet quality."
+      },
+      {
+        "id": 11,
+        "reason": "Food-centre visits teach seniors to spot healthier dishes, and sessions teach children healthy-living tips."
+      },
+      {
+        "id": 6,
+        "reason": "Intergenerational sessions build in-person connection between youth, children and seniors."
+      },
+      {
+        "id": 27,
+        "reason": "Delivered as facilitated group sessions."
+      }
+    ]
   },
   {
     "id": "peer-support-programme",
@@ -747,18 +819,21 @@
     "source": "HPB web",
     "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone (youth 15-24 outreach)",
-    "addresses": [
-      "mental-wellbeing",
-      "social-connection",
-      "health-literacy"
-    ],
-    "trim": {
-      "health-literacy": [],
-      "social-connection": [
-        6
-      ]
-    }
+    "gateSource": "Members of the public (Level 2 electives for those wanting specialised skills); youth outreach aged 15–24",
+    "nodes": [
+      {
+        "id": 6,
+        "reason": "Training equips people to give in-person emotional support, strengthening social connection."
+      },
+      {
+        "id": 2,
+        "reason": "Giving and receiving peer support builds confidence and a sense of purpose."
+      },
+      {
+        "id": 22,
+        "reason": "Emotional support helps people manage stress."
+      }
+    ]
   },
   {
     "id": "quitvape-programme",
@@ -770,9 +845,16 @@
         "smoker_or_vaper": true
       }
     ],
-    "gateSource": "vapers (youth-focused)",
-    "addresses": [
-      "smoking-vaping"
+    "gateSource": "People who vape and want to quit (youth-focused promotion)",
+    "nodes": [
+      {
+        "id": 23,
+        "reason": "Anti-vaping messaging reinforces the norm against vaping."
+      },
+      {
+        "id": 28,
+        "reason": "Cessation support directly helps people quit vaping."
+      }
     ]
   },
   {
@@ -782,32 +864,44 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": "working-adult"
+        "role": "working",
+        "work_type": [
+          "employee",
+          "manual-industrial"
+        ]
       }
     ],
-    "gateSource": "working adults (employees)",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "health-literacy",
-      "health-screening"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        83
-      ],
-      "healthy-eating": [
-        81,
-        86,
-        73
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Employees at participating workplaces",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "The 12-week programme raises how much staff move."
+      },
+      {
+        "id": 49,
+        "reason": "The activity component is recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "A fitness focus, with a body-composition check, builds general fitness."
+      },
+      {
+        "id": 81,
+        "reason": "Coaching steers staff toward less calorie-dense eating."
+      },
+      {
+        "id": 86,
+        "reason": "Coaching improves the quality of what staff eat."
+      },
+      {
+        "id": 73,
+        "reason": "Works on eating habits over the 12 weeks."
+      },
+      {
+        "id": 46,
+        "reason": "Goal-setting and tracking help staff manage their own energy balance."
+      }
+    ]
   },
   {
     "id": "total-workplace-safety-and-health-programme",
@@ -816,30 +910,49 @@
     "status": "verify",
     "gate": [
       {
-        "life_stage": "working-adult"
+        "role": "working",
+        "work_type": "manual-industrial"
       }
     ],
-    "gateSource": "working adults (higher-risk industries)",
-    "addresses": [
-      "physical-activity",
-      "healthy-eating",
-      "mental-wellbeing",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Companies in higher-risk industries (e.g. construction, manufacturing) and their employees",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Workplace physical activities raise how much workers move."
+      },
+      {
+        "id": 49,
+        "reason": "The activity sessions are recreational exercise."
+      },
+      {
+        "id": 40,
+        "reason": "On-site sessions make exercise available at work."
+      },
+      {
+        "id": 41,
+        "reason": "Employer-provided sessions are free to the worker."
+      },
+      {
+        "id": 27,
+        "reason": "Sessions are run in groups."
+      },
+      {
+        "id": 11,
+        "reason": "Nutrition talks build workers' food knowledge."
+      },
+      {
+        "id": 22,
+        "reason": "Mental-wellbeing workshops directly target stress."
+      },
+      {
+        "id": 2,
+        "reason": "Mental-wellbeing workshops support confidence."
+      },
+      {
+        "id": 46,
+        "reason": "Chronic-disease health coaching helps workers manage their own health."
+      }
+    ]
   },
   {
     "id": "docmobile-school-health-service",
@@ -848,17 +961,14 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": [
-          "school-child",
-          "youth"
+        "role": [
+          "primary-student",
+          "secondary-student"
         ]
       }
     ],
-    "gateSource": "students",
-    "addresses": [
-      "sensory-oral-health",
-      "health-screening"
-    ]
+    "gateSource": "Students (in mainstream schools)",
+    "nodes": []
   },
   {
     "id": "roving-optical-shop",
@@ -867,20 +977,18 @@
     "status": "current",
     "gate": [
       {
-        "life_stage": [
-          "school-child",
-          "youth"
+        "role": [
+          "primary-student",
+          "secondary-student"
         ],
+        "ses": "lower-income",
         "conditions": [
           "myopic"
-        ],
-        "ses": "lower-income"
+        ]
       }
     ],
-    "gateSource": "students (myopic, lower-income)",
-    "addresses": [
-      "sensory-oral-health"
-    ]
+    "gateSource": "Myopic students from lower-income families",
+    "nodes": []
   },
   {
     "id": "screen-use-buddy",
@@ -892,35 +1000,43 @@
         "is_parent": true
       }
     ],
-    "gateSource": "parents (of children)",
-    "addresses": [
-      "sedentary-screen",
-      "health-literacy"
-    ],
-    "trim": {
-      "health-literacy": []
-    }
+    "gateSource": "Parents of children (managing children's digital habits)",
+    "nodes": [
+      {
+        "id": 1,
+        "reason": "Helps parents manage their children's screen time, reducing exposure to passive screen entertainment."
+      },
+      {
+        "id": 21,
+        "reason": "Gives parents ways to guide their children's screen choices."
+      }
+    ]
   },
   {
     "id": "parent-hub",
     "name": "Parent Hub",
     "source": "HPB web",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
         "is_parent": true
       }
     ],
-    "gateSource": "parents",
-    "addresses": [
-      "health-literacy"
-    ],
-    "trim": {
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Parents",
+    "nodes": [
+      {
+        "id": 11,
+        "reason": "Child-health resources build parents' knowledge of healthy feeding."
+      },
+      {
+        "id": 21,
+        "reason": "Guidance helps parents shape their children's health choices."
+      },
+      {
+        "id": 18,
+        "reason": "Encourages parents to model an active lifestyle for their children."
+      }
+    ]
   },
   {
     "id": "get-fit-for-haj",
@@ -934,169 +1050,265 @@
         ]
       }
     ],
-    "gateSource": "Haj pilgrims",
-    "addresses": [
-      "physical-activity",
-      "health-screening",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        83
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Haj pilgrims (Malay/Muslim community)",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Brisk walks and light exercises raise how much pilgrims move."
+      },
+      {
+        "id": 49,
+        "reason": "The walks and exercises are recreational activity."
+      },
+      {
+        "id": 83,
+        "reason": "Training builds the stamina needed for the physical demands of Haj."
+      },
+      {
+        "id": 11,
+        "reason": "Health talks help pilgrims learn about healthy living."
+      },
+      {
+        "id": 6,
+        "reason": "Sharing sessions with past pilgrims give peer support and connection."
+      },
+      {
+        "id": 27,
+        "reason": "Walks and exercises are done as a group."
+      }
+    ]
   },
   {
     "id": "lifestyle-improvement-for-families-transformation",
     "name": "Lifestyle Improvement for Families Transformation (LIFT)",
     "source": "HPB web",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
-        "ses": "lower-income"
+        "ses": "lower-income",
+        "is_parent": true
       }
     ],
-    "gateSource": "lower-income families",
-    "addresses": [
-      "healthy-eating",
-      "physical-activity",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86,
-        73
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Lower-income families",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Coaching sets physical-activity goals with the family."
+      },
+      {
+        "id": 49,
+        "reason": "Activity goals include recreational exercise."
+      },
+      {
+        "id": 81,
+        "reason": "Coaching steers the family toward less calorie-dense food."
+      },
+      {
+        "id": 86,
+        "reason": "Coaching improves the family's diet quality."
+      },
+      {
+        "id": 73,
+        "reason": "Motivational coaching works on ingrained eating habits."
+      },
+      {
+        "id": 46,
+        "reason": "Coaching builds the family's ability to manage their own health."
+      },
+      {
+        "id": 11,
+        "reason": "Coaching builds the family's food knowledge."
+      },
+      {
+        "id": 21,
+        "reason": "Coaching helps parents shape the household's food and activity choices."
+      }
+    ]
   },
   {
     "id": "digital-healthy-living",
     "name": "Digital Healthy Living (DHL)",
     "source": "HPB web",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
         "ses": "lower-income",
-        "life_stage": [
-          "young-child",
-          "school-child"
-        ]
+        "is_parent": true
       }
     ],
-    "gateSource": "lower-income families (children <=12)",
-    "addresses": [
-      "healthy-eating",
-      "physical-activity",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ],
-      "health-literacy": [
-        11,
-        46
-      ]
-    }
+    "gateSource": "Lower-income families with children aged 12 and under",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Its Active Family activities and app tracking raise how much the family moves."
+      },
+      {
+        "id": 49,
+        "reason": "The family activities are recreational exercise."
+      },
+      {
+        "id": 81,
+        "reason": "Supermarket tours steer families toward less calorie-dense groceries."
+      },
+      {
+        "id": 86,
+        "reason": "Supermarket tours improve the family's diet quality."
+      },
+      {
+        "id": 11,
+        "reason": "Supermarket tours teach families to spot healthier groceries."
+      },
+      {
+        "id": 46,
+        "reason": "The app health-journey helps the family track their own habits."
+      },
+      {
+        "id": 18,
+        "reason": "Active Family sessions have parents being active with their children, modelling activity."
+      },
+      {
+        "id": 21,
+        "reason": "The programme helps parents shape the household's food and activity choices."
+      }
+    ]
   },
   {
     "id": "h-u-n-c-l-e",
     "name": "H.U.N.C.L.E (Healthy Uncles who Network, drink Coffee, Learn and Exercise)",
     "source": "HPB web",
-    "status": "verify",
+    "status": "current",
     "gate": [
       {
-        "life_stage": "senior",
+        "age_band": [
+          "50-59",
+          "60-plus"
+        ],
         "sex": "male"
       }
     ],
-    "gateSource": "senior men",
-    "addresses": [
-      "physical-activity",
-      "social-connection",
-      "health-literacy"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        83
-      ],
-      "health-literacy": [
-        11,
-        46
-      ],
-      "social-connection": [
-        6,
-        27
-      ]
-    }
-  },
-  {
-    "id": "lumihealth",
-    "name": "LumiHealth",
-    "source": "HPB web",
-    "status": "ended",
-    "gate": "everyone",
-    "gateSource": "everyone (Apple users) [ENDED]",
-    "addresses": [
-      "physical-activity",
-      "sleep",
-      "healthy-eating",
-      "mental-wellbeing"
-    ],
-    "trim": {
-      "physical-activity": [
-        71,
-        49,
-        79
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
+    "gateSource": "Senior men",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Exercise sessions raise how much senior men move."
+      },
+      {
+        "id": 49,
+        "reason": "The sessions are recreational exercise."
+      },
+      {
+        "id": 83,
+        "reason": "Exercise supports strength and fitness in older men."
+      },
+      {
+        "id": 6,
+        "reason": "Meeting at coffee shops builds in-person social connection."
+      },
+      {
+        "id": 27,
+        "reason": "Exercise is done as a group."
+      },
+      {
+        "id": 11,
+        "reason": "Health talks build the men's health knowledge."
+      }
+    ]
   },
   {
     "id": "health-promoting-mall-the-wellness-collective",
     "name": "Health Promoting Mall / The Wellness Collective",
     "source": "HPB web / Annual Report",
-    "status": "verify",
+    "status": "current",
     "gate": "everyone",
-    "gateSource": "everyone (mall-goers)",
-    "addresses": [
-      "healthy-eating",
-      "physical-activity"
+    "gateSource": "Shoppers / mall-goers (general public); mall operators as partners",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Activity spaces and programming in malls raise how much shoppers move."
+      },
+      {
+        "id": 40,
+        "reason": "Creates accessible places to be active within malls."
+      },
+      {
+        "id": 49,
+        "reason": "Mall wellness programming is recreational activity."
+      },
+      {
+        "id": 81,
+        "reason": "Healthier food and drink options in malls lower the calorie density available."
+      },
+      {
+        "id": 86,
+        "reason": "Healthier options raise the nutritional quality available in malls."
+      }
+    ]
+  },
+  {
+    "id": "grow-well-sg-health-plan-childhood-health-behaviours-checklist",
+    "name": "Grow Well SG Health Plan / Childhood Health Behaviours Checklist (CHBC)",
+    "source": "MOH / HPB (Grow Well SG)",
+    "status": "verify",
+    "gate": [
+      {
+        "role": [
+          "preschooler",
+          "primary-student"
+        ]
+      }
     ],
-    "trim": {
-      "physical-activity": [
-        71,
-        40,
-        49
-      ],
-      "healthy-eating": [
-        81,
-        86
-      ]
-    }
+    "gateSource": "All Primary 1-3 students (expanded to K1-K2 preschoolers from 2026) + their parents",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "The lifestyle plan includes physical-activity recommendations."
+      },
+      {
+        "id": 49,
+        "reason": "Activity recommendations include recreational exercise."
+      },
+      {
+        "id": 1,
+        "reason": "Screen use is one of the areas the plan covers."
+      },
+      {
+        "id": 81,
+        "reason": "Nutrition advice steers children toward less calorie-dense food."
+      },
+      {
+        "id": 86,
+        "reason": "Nutrition advice improves children's diet quality."
+      },
+      {
+        "id": 21,
+        "reason": "The parent questionnaire and plan help parents shape the child's habits."
+      }
+    ]
+  },
+  {
+    "id": "active-youth-programme",
+    "name": "Active Youth Programme",
+    "source": "HPB web (tertiary school programmes)",
+    "status": "verify",
+    "gate": [
+      {
+        "role": "tertiary-student"
+      }
+    ],
+    "gateSource": "All tertiary students (polytechnics, ITEs, post-secondary institutions, universities)",
+    "nodes": [
+      {
+        "id": 71,
+        "reason": "Activity sessions get tertiary students moving regularly."
+      },
+      {
+        "id": 49,
+        "reason": "The mix of activities, such as Zumba and dodgeball, is recreational exercise."
+      },
+      {
+        "id": 27,
+        "reason": "Group sessions, including team games, give students the chance to be active together."
+      }
+    ]
   }
 ]

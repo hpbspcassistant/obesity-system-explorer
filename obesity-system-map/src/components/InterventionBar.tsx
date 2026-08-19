@@ -1,6 +1,17 @@
+import { useEffect, useRef, useState } from 'react'
+
 import { ExportPngButton } from './ExportPngButton'
-import type { Applicability, ReachSummary } from '../lib/reach'
+import type {
+  Applicability,
+  PersonaCharacteristics,
+  ReachSummary,
+} from '../lib/reach'
 import type { Profile } from '../lib/profile'
+import {
+  CONDITIONS_KEY,
+  conditionValues,
+  coreCharacteristics,
+} from '../data/intervention'
 
 /**
  * Intervention's chrome: which persona, and what it adds up to.
@@ -25,7 +36,11 @@ export interface InterventionBarProps {
   onOpenProgrammes: () => void
   programmePanelOpen: boolean
   onExportPng: () => void
+  onBulkExportPng: () => void
   exportState: 'idle' | 'working' | 'failed'
+  onExportCoverage: (profileIds: string[]) => void
+  quickCharacteristics: PersonaCharacteristics
+  onQuickCharacteristicsChange: (next: PersonaCharacteristics) => void
 }
 
 function Count({ n, label }: { n: number; label: string }) {
@@ -36,6 +51,475 @@ function Count({ n, label }: { n: number; label: string }) {
     </span>
   )
 }
+
+/* --------------------------------------------------------- shared menu parts */
+
+function Chevron() {
+  return (
+    <svg viewBox="0 0 10 6" className="h-2 w-2.5 text-gray-400" aria-hidden="true">
+      <path
+        d="M1 1l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  )
+}
+
+function Menu({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <div
+      role="menu"
+      aria-label={label}
+      className="absolute bottom-full left-0 mb-1.5 max-h-[60vh] w-56 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]"
+    >
+      {children}
+    </div>
+  )
+}
+
+function MenuItem({
+  children,
+  onClick,
+  selected = false,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  selected?: boolean
+}) {
+  return (
+    <button
+      type="button"
+      role="menuitem"
+      onClick={onClick}
+      className={[
+        'flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-gray-50',
+        selected ? 'font-medium text-gray-900' : 'text-gray-700',
+      ].join(' ')}
+    >
+      <span
+        aria-hidden="true"
+        className={selected ? 'text-gray-900' : 'text-transparent'}
+      >
+        ✓
+      </span>
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+    </button>
+  )
+}
+
+function Divider() {
+  return <div className="my-1 h-px bg-gray-100" />
+}
+
+/* -------------------------------------------------------- persona dropdown */
+
+function initialOf(name: string): string {
+  return name.trim().charAt(0).toUpperCase() || '?'
+}
+
+function PersonaDropdown({
+  profiles,
+  personaId,
+  onPersonaChange,
+}: {
+  profiles: readonly Profile[]
+  personaId: string | null
+  onPersonaChange: (id: string | null) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (event: PointerEvent) => {
+      if (!wrapRef.current?.contains(event.target as globalThis.Node))
+        setOpen(false)
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const activeProfile = profiles.find((p) => p.id === personaId)
+
+  return (
+    <div ref={wrapRef} className="relative shrink-0">
+      <button
+        type="button"
+        onClick={() => setOpen((c) => !c)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="flex items-center gap-2 rounded-md px-1.5 py-1 hover:bg-gray-100"
+      >
+        {activeProfile ? (
+          <>
+            <span
+              aria-hidden="true"
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-[11px] font-semibold text-gray-900"
+            >
+              {initialOf(activeProfile.name)}
+            </span>
+            <span className="max-w-[13rem] text-left">
+              <span className="block truncate text-[13px] font-medium leading-tight text-gray-900">
+                {activeProfile.name}
+              </span>
+              {activeProfile.details && (
+                <span className="block max-w-[13rem] truncate text-[10.5px] leading-tight text-gray-500">
+                  {activeProfile.details}
+                </span>
+              )}
+            </span>
+          </>
+        ) : (
+          <span className="text-[13px] text-gray-800">
+            Anyone — no persona
+          </span>
+        )}
+        <Chevron />
+      </button>
+
+      {open && (
+        <Menu label="Choose a persona">
+          <MenuItem
+            selected={personaId === null}
+            onClick={() => { onPersonaChange(null); setOpen(false) }}
+          >
+            Anyone — no persona
+          </MenuItem>
+          {profiles.length > 0 && <Divider />}
+          {profiles.map((p) => (
+            <MenuItem
+              key={p.id}
+              selected={p.id === personaId}
+              onClick={() => { onPersonaChange(p.id); setOpen(false) }}
+            >
+              {p.name}
+            </MenuItem>
+          ))}
+          {profiles.length === 0 && (
+            <p className="px-3 py-1.5 text-[12px] text-gray-400">
+              Add a persona in Profile mode
+            </p>
+          )}
+        </Menu>
+      )}
+    </div>
+  )
+}
+
+/* --------------------------------------------------- export coverage button */
+
+function ExportCoverageButton({
+  profiles,
+  onExport,
+}: {
+  profiles: readonly Profile[]
+  onExport: (profileIds: string[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<Set<string>>(
+    () => new Set(profiles.map((p) => p.id)),
+  )
+  const popoverRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    setSelected(new Set(profiles.map((p) => p.id)))
+  }, [profiles])
+
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: MouseEvent) => {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  const toggle = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+
+  if (profiles.length === 0) {
+    return (
+      <button
+        type="button"
+        onClick={() => onExport([])}
+        title="Download coverage data as JSON"
+        className="shrink-0 rounded-md border border-gray-300 px-2.5 py-1 text-[12px] text-gray-700 hover:bg-gray-50"
+      >
+        Export coverage
+      </button>
+    )
+  }
+
+  return (
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        title="Download coverage data as JSON"
+        className={[
+          'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          open
+            ? 'border-gray-900 bg-gray-900 text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+        ].join(' ')}
+      >
+        Export coverage
+      </button>
+
+      {open && (
+        <div
+          ref={popoverRef}
+          className="absolute bottom-full right-0 mb-2 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg"
+        >
+          <p className="mb-1.5 px-1 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
+            Export coverage for
+          </p>
+          <ul className="space-y-0.5">
+            {profiles.map((p) => (
+              <li key={p.id}>
+                <label className="flex cursor-pointer items-center gap-2 rounded px-1 py-1 text-[12px] text-gray-800 hover:bg-gray-50">
+                  <input
+                    type="checkbox"
+                    checked={selected.has(p.id)}
+                    onChange={() => toggle(p.id)}
+                    className="accent-gray-900"
+                  />
+                  {p.name}
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-1.5 flex items-center justify-between border-t border-gray-100 pt-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (selected.size === profiles.length)
+                  setSelected(new Set())
+                else
+                  setSelected(new Set(profiles.map((p) => p.id)))
+              }}
+              className="text-[11px] text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-800"
+            >
+              {selected.size === profiles.length ? 'Deselect all' : 'Select all'}
+            </button>
+            <button
+              type="button"
+              disabled={selected.size === 0}
+              onClick={() => {
+                onExport([...selected])
+                setOpen(false)
+              }}
+              className={[
+                'rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+                selected.size === 0
+                  ? 'cursor-not-allowed border-gray-200 text-gray-300'
+                  : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
+              ].join(' ')}
+            >
+              Download JSON
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ---------------------------------------------------- characteristic picker */
+
+function humanise(value: string | boolean): string {
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+  const words = value.replace(/[-_]/g, ' ')
+  return words.charAt(0).toUpperCase() + words.slice(1)
+}
+
+function encode(value: string | boolean): string {
+  return typeof value === 'boolean' ? `bool:${value}` : `str:${value}`
+}
+
+function decode(raw: string): string | boolean | null | undefined {
+  if (raw === '') return undefined
+  if (raw === 'n/a') return null
+  return raw.startsWith('bool:') ? raw === 'bool:true' : raw.slice(4)
+}
+
+function QuickCharacteristicPicker({
+  value,
+  onChange,
+}: {
+  value: PersonaCharacteristics
+  onChange: (next: PersonaCharacteristics) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (event: PointerEvent) => {
+      if (!wrapRef.current?.contains(event.target as globalThis.Node))
+        setOpen(false)
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const set = (key: string, next: string | boolean | null | undefined) => {
+    const characteristics = { ...value }
+    if (next === undefined) delete characteristics[key]
+    else characteristics[key] = next
+    onChange(characteristics)
+  }
+
+  const conditions = Array.isArray(value[CONDITIONS_KEY])
+    ? (value[CONDITIONS_KEY] as readonly string[])
+    : []
+
+  const toggleCondition = (condition: string) => {
+    const next = conditions.includes(condition)
+      ? conditions.filter((c) => c !== condition)
+      : [...conditions, condition]
+    onChange({ ...value, [CONDITIONS_KEY]: next })
+  }
+
+  const filledCount = Object.keys(value).filter(
+    (k) => k !== CONDITIONS_KEY || (Array.isArray(value[k]) && (value[k] as readonly string[]).length > 0),
+  ).length
+  const hasAny = filledCount > 0
+
+  return (
+    <div ref={wrapRef} className="relative shrink-0">
+      <button
+        type="button"
+        onClick={() => setOpen((c) => !c)}
+        className={[
+          'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          hasAny
+            ? 'border-gray-900 bg-gray-900 text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+        ].join(' ')}
+      >
+        {hasAny ? `Filter: ${filledCount} set` : 'Filter by characteristics'}
+        <Chevron />
+      </button>
+
+      {open && (
+        <div className="absolute bottom-full left-0 mb-1.5 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]">
+          <div className="mb-2 flex items-baseline justify-between">
+            <p className="text-[11px] font-medium text-gray-600">
+              Quick filter
+            </p>
+            {hasAny && (
+              <button
+                type="button"
+                onClick={() => onChange({})}
+                className="text-[10.5px] text-gray-400 underline decoration-gray-300 underline-offset-2 hover:text-gray-700"
+              >
+                Clear all
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-2 gap-y-1.5">
+            {Object.entries(coreCharacteristics).map(([key, values]) => {
+              const held = value[key]
+              const current =
+                held === undefined
+                  ? ''
+                  : held === null
+                    ? 'n/a'
+                    : encode(held as string | boolean)
+              return (
+                <label key={key} className="block">
+                  <span className="mb-0.5 block text-[10.5px] text-gray-500">
+                    {humanise(key)}
+                  </span>
+                  <select
+                    value={current}
+                    onChange={(event) => set(key, decode(event.target.value))}
+                    className="w-full rounded border border-gray-300 px-1.5 py-1 text-[12px] text-gray-800 focus:border-gray-800 focus:outline-none"
+                  >
+                    <option value="">Any</option>
+                    {values
+                      .filter((v): v is string | boolean => v !== null)
+                      .map((v) => (
+                        <option key={String(v)} value={encode(v)}>
+                          {humanise(v)}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              )
+            })}
+          </div>
+
+          <p className="mb-1 mt-2.5 text-[10.5px] text-gray-500">Conditions</p>
+          <div className="flex flex-wrap gap-1">
+            {conditionValues.map((condition) => {
+              const on = conditions.includes(condition)
+              return (
+                <button
+                  key={condition}
+                  type="button"
+                  role="checkbox"
+                  aria-checked={on}
+                  onClick={() => toggleCondition(condition)}
+                  className={[
+                    'rounded-full border px-2 py-0.5 text-[11px] transition-colors',
+                    on
+                      ? 'border-gray-900 bg-gray-900 text-white'
+                      : 'border-gray-300 text-gray-600 hover:bg-gray-50',
+                  ].join(' ')}
+                >
+                  {humanise(condition)}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* --------------------------------------------------------------- main bar */
 
 export function InterventionBar({
   profiles,
@@ -50,35 +534,29 @@ export function InterventionBar({
   onOpenProgrammes,
   programmePanelOpen,
   onExportPng,
+  onBulkExportPng,
   exportState,
+  onExportCoverage,
+  quickCharacteristics,
+  onQuickCharacteristicsChange,
 }: InterventionBarProps) {
   const withPersona = personaId !== null
   const filtering = selectedProgrammes !== null
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3">
-      <select
-        value={personaId ?? ''}
-        onChange={(e) => onPersonaChange(e.target.value || null)}
-        className="shrink-0 rounded-md border border-gray-300 px-2 py-1 text-[12px] text-gray-800"
-      >
-        {/* Named for what it shows, not for the persona it lacks. This is where
-            the mode starts and it works on its own: what the inventory reaches,
-            and what a chosen programme reaches. "Whitespace — no persona" read
-            as a prerequisite nobody had met, and sat next to a greyed-out line
-            apologising for it. */}
-        <option value="">Anyone — no persona</option>
-        {profiles.map((p) => (
-          <option key={p.id} value={p.id}>
-            For {p.name}
-          </option>
-        ))}
-        {profiles.length === 0 && (
-          <option value="" disabled>
-            Add a persona in Profile to see what they are missing
-          </option>
-        )}
-      </select>
+      <PersonaDropdown
+        profiles={profiles}
+        personaId={personaId}
+        onPersonaChange={onPersonaChange}
+      />
+
+      {!withPersona && (
+        <QuickCharacteristicPicker
+          value={quickCharacteristics}
+          onChange={onQuickCharacteristicsChange}
+        />
+      )}
 
       <span className="min-w-0 flex-1" />
 
@@ -87,7 +565,7 @@ export function InterventionBar({
           <>
             <Count n={summary.covered.length} label="covered" />
             <span className="text-gray-300">·</span>
-            <Count n={summary.gaps.length} label="gaps" />
+            <Count n={summary.gaps.length} label="opportunities" />
             <span className="text-gray-300">·</span>
             <Count n={summary.beyond.length} label="beyond" />
             <span className="text-gray-300">·</span>
@@ -95,9 +573,6 @@ export function InterventionBar({
           </>
         ) : (
           <>
-            {/* "not reached" rather than "whitespace": the term is defined in
-                the key, and a bare number beside a word only the key explains is
-                the worst place to introduce it. */}
             <Count n={summary.beyond.length} label="reached" />
             <span className="text-gray-300">·</span>
             <Count n={summary.untouched.length} label="not reached" />
@@ -123,11 +598,6 @@ export function InterventionBar({
         </p>
       )}
 
-      {/* Filled in when a filter is on, because every other number in this bar
-          then describes a smaller inventory than the reader may assume. The
-          counts above already move with it — a variable only an unticked
-          programme covered turns from covered to gap — so the state has to be
-          visible rather than inferable. */}
       <button
         type="button"
         onClick={onOpenProgrammes}
@@ -145,11 +615,6 @@ export function InterventionBar({
           : 'All programmes'}
       </button>
 
-      {/* Absent without a persona rather than present and disabled. A gap is
-          "matters to this person and nothing reaches it", so with nobody chosen
-          there is no such thing — and a greyed control advertising a state that
-          cannot occur reads as something withheld. It appears when a persona
-          does, which is also what tells you the persona brought it. */}
       {withPersona && (
         <button
           type="button"
@@ -159,8 +624,8 @@ export function InterventionBar({
           onClick={() => onGapsOnlyChange(!gapsOnly)}
           title={
             summary.gaps.length === 0
-              ? 'No gaps for this persona'
-              : 'Fade everything that is not a gap'
+              ? 'No opportunity areas for this persona'
+              : 'Fade everything except opportunity areas'
           }
           className={[
             'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
@@ -171,15 +636,30 @@ export function InterventionBar({
                 : 'border-gray-300 text-gray-700 hover:bg-gray-50',
           ].join(' ')}
         >
-          Gaps only
+          Opportunities only
         </button>
       )}
 
-      {/* Last, after everything that decides what the image will contain. A gap
-          map for one persona and a whitespace map are the two things this mode
-          produces that anyone wants to keep, and until now neither could leave
-          it. */}
+      <ExportCoverageButton profiles={profiles} onExport={onExportCoverage} />
+
       <ExportPngButton onExport={onExportPng} state={exportState} />
+
+      {profiles.length > 0 && (
+        <button
+          type="button"
+          disabled={exportState === 'working'}
+          onClick={onBulkExportPng}
+          title="Export one PNG for each persona, plus the Anyone view"
+          className={[
+            'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+            exportState === 'working'
+              ? 'cursor-wait border-gray-200 text-gray-400'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+          ].join(' ')}
+        >
+          Export all PNGs
+        </button>
+      )}
     </div>
   )
 }

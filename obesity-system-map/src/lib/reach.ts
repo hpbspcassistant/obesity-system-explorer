@@ -6,19 +6,13 @@
  *   persona -> programme   decided by the programme's gate, a rule over the
  *                          persona's characteristics. Computed every time and
  *                          never stored.
- *   programme -> map       via behaviours. A programme names behaviours, a
- *                          behaviour owns node ids. This is what lights up.
- *
- * The behaviour layer is the point and must not be collapsed. Several programmes
- * address the same behaviour, so defining its node set once is what makes every
- * programme that addresses it light the same nodes — and what makes the
- * whitespace view trustworthy rather than an artefact of how each programme
- * happened to be tagged.
+ *   programme -> map       direct. A programme names node ids and each carries a
+ *                          human-readable reason for the link.
  *
  * Everything here takes its data as arguments, and nothing in this module knows
- * a single behaviour id, programme name or node number. The inventory is
- * generated from a spreadsheet that is still being corrected, so it has to be
- * replaceable without touching a line of this file.
+ * a single programme name or node number. The inventory is generated from a
+ * spreadsheet that is still being corrected, so it has to be replaceable without
+ * touching a line of this file.
  */
 
 /**
@@ -60,10 +54,9 @@ export type GateClause = Readonly<
 >
 export type Gate = 'everyone' | GateClause | readonly GateClause[]
 
-export interface Behaviour {
-  id: string
-  label: string
-  nodes: readonly number[]
+export interface ProgrammeNode {
+  id: number
+  reason: string
 }
 
 export interface Programme {
@@ -71,31 +64,7 @@ export interface Programme {
   name: string
   source: string
   gate: Gate
-  addresses: readonly string[]
-  /**
-   * The escape hatch: node ids lit directly, on top of whatever the behaviours
-   * cover, for the rare programme that hits something no behaviour owns. Kept
-   * separate from `addresses` so a reader can always see which nodes were
-   * reasoned about and which were pinned by hand.
-   */
-  extraNodes?: readonly number[]
-  /**
-   * Per-behaviour node overrides — behaviour id -> the nodes THIS programme
-   * reaches through it. A behaviour absent from here contributes its whole set;
-   * an empty array contributes nothing.
-   *
-   * Needed because a behaviour is defined once for every programme that
-   * addresses it, which is the property that makes the overlay comparable — and
-   * also means the broad behaviours over-light. "Health literacy" owns five
-   * nodes about understanding food, and mindSG's health literacy is about
-   * mental health, so without a way to say "none of them" it would claim four
-   * dietary nodes it has nothing to do with.
-   *
-   * A trim only ever narrows. Reaching a node outside the behaviour's set is
-   * what `extraNodes` is for, and keeping the two apart is what stops a trim
-   * from quietly becoming a second, unreviewed mapping.
-   */
-  trim?: Readonly<Record<string, readonly number[]>>
+  nodes: readonly ProgrammeNode[]
   /**
    * Where the eligibility rule came from, in the words of the inventory. Carried
    * so the machine gate beside it can be checked rather than trusted: every one
@@ -211,43 +180,16 @@ export function classifyProgrammes(
 
 /* --------------------------------------------------------------- reach */
 
-/** Index of behaviours by id, so lookups do not rescan the list. */
-export function behavioursById(
-  behaviours: readonly Behaviour[],
-): Map<string, Behaviour> {
-  return new Map(behaviours.map((b) => [b.id, b]))
-}
-
-/**
- * Every node one programme reaches: the union of its behaviours' nodes, plus
- * anything pinned directly. A behaviour it names but which does not exist is
- * skipped rather than throwing — the inventory and the vocabulary are edited by
- * hand and will drift, and a typo should cost one behaviour, not the whole view.
- */
-export function nodesOfProgramme(
-  programme: Programme,
-  behaviours: Map<string, Behaviour>,
-): number[] {
-  const nodes = new Set<number>()
-  for (const id of programme.addresses) {
-    // `??` and not `||`: an empty trim means "this behaviour contributes
-    // nothing here", which is the whole point of trimming mindSG's literacy to
-    // none. `||` would read it as absent and hand back the full bundle.
-    const from = programme.trim?.[id] ?? behaviours.get(id)?.nodes ?? []
-    for (const node of from) nodes.add(node)
-  }
-  for (const node of programme.extraNodes ?? []) nodes.add(node)
-  return [...nodes]
+/** Every node one programme reaches. */
+export function nodesOfProgramme(programme: Programme): number[] {
+  return programme.nodes.map((n) => n.id)
 }
 
 /** The union across a set of programmes. */
-export function reachOf(
-  programmes: readonly Programme[],
-  behaviours: Map<string, Behaviour>,
-): Set<number> {
+export function reachOf(programmes: readonly Programme[]): Set<number> {
   const reached = new Set<number>()
   for (const programme of programmes) {
-    for (const node of nodesOfProgramme(programme, behaviours)) reached.add(node)
+    for (const n of programme.nodes) reached.add(n.id)
   }
   return reached
 }
@@ -263,9 +205,8 @@ export function reachOf(
 export function whitespaceOf(
   allNodeIds: readonly number[],
   programmes: readonly Programme[],
-  behaviours: Map<string, Behaviour>,
 ): Set<number> {
-  const reached = reachOf(programmes, behaviours)
+  const reached = reachOf(programmes)
   return new Set(allNodeIds.filter((id) => !reached.has(id)))
 }
 
@@ -281,20 +222,6 @@ export function whitespaceOf(
  * `gap` is the one the view is built around, and it means exactly what the grid
  * says — in this persona's map, and nothing that applies to them reaches it. No
  * further qualification.
- *
- * There was briefly a fifth standing splitting `gap` by whether ANY programme
- * could reach the node for anyone, drawn without colour on the grounds that
- * "nothing could act here" is not somewhere to act. It was removed because the
- * test it relied on does not exist in the data: "no behaviour covers this" was
- * standing in for "nothing could ever act on this", and those differ. Resting
- * metabolic rate is genuinely out of scope; peer pressure is simply not in HPB's
- * vocabulary yet. Treating every vocabulary gap as a law of nature emptied the
- * gap state almost entirely — four to seven real findings per persona rendered
- * identically to the eighty-five variables they had never marked.
- *
- * Should the deliberately out-of-scope variables ever be listed explicitly, the
- * split can come back and mean what it claimed. Until then the card carries the
- * nuance: click a gap and it names any programme covering it for other people.
  */
 export type NodeStanding = 'covered' | 'gap' | 'beyond' | 'untouched'
 
@@ -320,17 +247,16 @@ export interface ReachSummary {
  * The whole picture for one persona in a single pass.
  *
  * Reach is deliberately NOT intersected with the persona's own map: a programme
- * lights everything its behaviours address, so the overlay can show reach beyond
+ * lights everything its nodes address, so the overlay can show reach beyond
  * the life the persona currently describes.
  */
 export function summariseForPersona(
   persona: Pick<InterventionPersona, 'characteristics' | 'applicabilityNodes'>,
   programmes: readonly Programme[],
-  behaviours: Map<string, Behaviour>,
   allNodeIds: readonly number[],
 ): ReachSummary & { applicability: Applicability } {
   const applicability = classifyProgrammes(persona, programmes)
-  const reached = reachOf(applicability.applies, behaviours)
+  const reached = reachOf(applicability.applies)
   const inMap = new Set(persona.applicabilityNodes)
 
   const summary: ReachSummary = {
@@ -353,35 +279,21 @@ export function summariseForPersona(
 /* ------------------------------------------------------------ provenance */
 
 export interface NodeProvenance {
-  /** Programmes reaching this node, with the behaviour that carried them there. */
-  via: { programme: Programme; behaviour: Behaviour | null }[]
+  /** Programmes reaching this node, with the reason each maps to it. */
+  via: { programme: Programme; reason: string }[]
 }
 
 /**
- * Why a node is lit. `behaviour` is null where the programme pinned the node
- * directly, so the escape hatch stays visible rather than masquerading as a
- * behaviour mapping.
- *
- * Reads the trim, exactly as `nodesOfProgramme` does. Testing the behaviour's
- * own node set instead is the obvious shortcut and it is wrong: it named every
- * programme addressing the behaviour, including ones whose trim drops this very
- * node. The map and the counts were right and the card contradicted them —
- * Healthy 365 was listed under Functional Fitness while trimming it away.
+ * Why a node is lit: which programmes reach it, and why each one claims to.
  */
 export function provenanceOf(
   nodeId: number,
   programmes: readonly Programme[],
-  behaviours: Map<string, Behaviour>,
 ): NodeProvenance {
   const via: NodeProvenance['via'] = []
   for (const programme of programmes) {
-    for (const id of programme.addresses) {
-      const behaviour = behaviours.get(id)
-      if (!behaviour) continue
-      const reached = programme.trim?.[id] ?? behaviour.nodes
-      if (reached.includes(nodeId)) via.push({ programme, behaviour })
-    }
-    if (programme.extraNodes?.includes(nodeId)) via.push({ programme, behaviour: null })
+    const match = programme.nodes.find((n) => n.id === nodeId)
+    if (match) via.push({ programme, reason: match.reason })
   }
   return { via }
 }

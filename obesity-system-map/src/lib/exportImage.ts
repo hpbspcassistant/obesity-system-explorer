@@ -50,12 +50,31 @@ const BAKED = [
  */
 const WEB_EDGE_WIDTH = 0.85
 
+export interface LegendEntry {
+  fill: string
+  stroke: string
+  label: string
+}
+
+export interface InfluenceEntry {
+  kind: 'positive' | 'negative'
+  label: string
+}
+
+export interface ExportOverlay {
+  mode: string
+  persona: string | null
+  legend: LegendEntry[]
+  influence?: InfluenceEntry[]
+}
+
 export interface ExportOptions {
   /**
    * Output pixels per map unit. The map is 3370 units wide, so 3 gives a
    * 10111px image — A3 at 611dpi. See EXPORT_SCALES in App.
    */
   scale?: number
+  overlay?: ExportOverlay
 }
 
 /**
@@ -171,7 +190,7 @@ function bakeStyles(source: Element, target: Element): void {
  */
 export async function svgToPngBlob(
   svg: SVGSVGElement,
-  { scale = 1 }: ExportOptions,
+  { scale = 1, overlay }: ExportOptions,
 ): Promise<Blob> {
   const viewBox = svg.getAttribute('viewBox')
   const [, , widthUnits, heightUnits] = (viewBox ?? '0 0 0 0')
@@ -239,6 +258,8 @@ export async function svgToPngBlob(
     if (!context) throw new Error('exportImage: no 2d canvas available')
     context.drawImage(image, 0, 0, canvas.width, canvas.height)
 
+    if (overlay) drawOverlay(context, canvas.width, canvas.height, overlay)
+
     return await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob(
         (blob) =>
@@ -251,6 +272,198 @@ export async function svgToPngBlob(
   } finally {
     URL.revokeObjectURL(url)
   }
+}
+
+function drawOverlay(
+  ctx: CanvasRenderingContext2D,
+  canvasW: number,
+  canvasH: number,
+  overlay: ExportOverlay,
+): void {
+  // Scale all measurements relative to the image width so the overlay looks
+  // proportional at any export resolution (scale 1, 2 or 3).
+  const unit = canvasW / 200
+  const margin = unit * 3
+  const radius = unit * 0.8
+
+  // ── Title badge (top-left) ────────────────────────────────────────────
+  const titleFont = `600 ${unit * 2.2}px sans-serif`
+  const subtitleFont = `400 ${unit * 1.7}px sans-serif`
+  ctx.font = titleFont
+  const modeText = overlay.mode
+  const modeWidth = ctx.measureText(modeText).width
+  let badgeW = modeWidth
+  let badgeH = unit * 3
+  let subtitleText = ''
+  if (overlay.persona) {
+    subtitleText = overlay.persona
+    ctx.font = subtitleFont
+    const subWidth = ctx.measureText(subtitleText).width
+    badgeW = Math.max(badgeW, subWidth)
+    badgeH += unit * 2.4
+  }
+  badgeW += unit * 3
+  badgeH += unit * 1.5
+
+  const bx = margin
+  const by = margin
+  roundRect(ctx, bx, by, badgeW, badgeH, radius)
+  ctx.fillStyle = 'rgba(255,255,255,0.92)'
+  ctx.fill()
+  ctx.strokeStyle = '#d1d5db'
+  ctx.lineWidth = Math.max(1, unit * 0.12)
+  ctx.stroke()
+
+  ctx.fillStyle = '#111827'
+  ctx.font = titleFont
+  ctx.textBaseline = 'top'
+  ctx.fillText(modeText, bx + unit * 1.5, by + unit * 1)
+  if (subtitleText) {
+    ctx.fillStyle = '#4b5563'
+    ctx.font = subtitleFont
+    ctx.fillText(subtitleText, bx + unit * 1.5, by + unit * 3.6)
+  }
+
+  // ── Legend (bottom-right) ─────────────────────────────────────────────
+  const hasLegend = overlay.legend.length > 0
+  const influence = overlay.influence ?? []
+  const hasInfluence = influence.length > 0
+  if (!hasLegend && !hasInfluence) return
+
+  const legendFont = `400 ${unit * 1.4}px sans-serif`
+  ctx.font = legendFont
+  const swatchW = unit * 3.2
+  const swatchH = unit * 1.8
+  const rowH = unit * 2.6
+  const gap = unit * 1
+  const textLeft = swatchW + gap
+  const arrowW = unit * 4.5
+
+  let maxLabelW = 0
+  for (const entry of overlay.legend) {
+    maxLabelW = Math.max(maxLabelW, ctx.measureText(entry.label).width)
+  }
+  for (const entry of influence) {
+    maxLabelW = Math.max(maxLabelW, ctx.measureText(entry.label).width)
+  }
+  const iconTextLeft = arrowW + gap
+  const symbolCol = hasLegend && hasInfluence
+    ? Math.max(textLeft, iconTextLeft)
+    : hasLegend ? textLeft : iconTextLeft
+  const legendPad = unit * 1.5
+  const totalRows = overlay.legend.length + influence.length
+  const dividerH = hasLegend && hasInfluence ? unit * 1.2 : 0
+  const legendW = Math.max(
+    hasLegend ? textLeft + maxLabelW : 0,
+    hasInfluence ? iconTextLeft + maxLabelW : 0,
+  ) + legendPad * 2
+  const legendH = totalRows * rowH + dividerH + legendPad * 2
+
+  const lx = canvasW - margin - legendW
+  const ly = canvasH - margin - legendH
+  roundRect(ctx, lx, ly, legendW, legendH, radius)
+  ctx.fillStyle = 'rgba(255,255,255,0.92)'
+  ctx.fill()
+  ctx.strokeStyle = '#d1d5db'
+  ctx.lineWidth = Math.max(1, unit * 0.12)
+  ctx.stroke()
+
+  ctx.font = legendFont
+  ctx.textBaseline = 'middle'
+
+  // Swatch rows
+  for (let i = 0; i < overlay.legend.length; i++) {
+    const entry = overlay.legend[i]
+    const rowY = ly + legendPad + i * rowH
+    const sy = rowY + (rowH - swatchH) / 2
+
+    ctx.fillStyle = entry.fill
+    ctx.strokeStyle = entry.stroke
+    ctx.lineWidth = Math.max(1, unit * 0.2)
+    roundRect(ctx, lx + legendPad, sy, swatchW, swatchH, unit * 0.3)
+    ctx.fill()
+    ctx.stroke()
+
+    ctx.fillStyle = '#374151'
+    ctx.fillText(entry.label, lx + legendPad + symbolCol, rowY + rowH / 2)
+  }
+
+  // Influence rows
+  const influenceStart = ly + legendPad + overlay.legend.length * rowH + dividerH
+  if (hasLegend && hasInfluence) {
+    const divY = influenceStart - dividerH / 2
+    ctx.strokeStyle = '#e5e7eb'
+    ctx.lineWidth = Math.max(1, unit * 0.08)
+    ctx.beginPath()
+    ctx.moveTo(lx + legendPad, divY)
+    ctx.lineTo(lx + legendW - legendPad, divY)
+    ctx.stroke()
+  }
+
+  const inkColour = '#231f20'
+  for (let i = 0; i < influence.length; i++) {
+    const entry = influence[i]
+    const rowY = influenceStart + i * rowH
+    const iy = rowY + rowH / 2
+    const ix = lx + legendPad
+    const lineEnd = ix + arrowW
+
+    ctx.strokeStyle = inkColour
+    ctx.fillStyle = inkColour
+    ctx.lineWidth = Math.max(1, unit * 0.12)
+
+    if (entry.kind === 'positive') {
+      // Solid line with arrowhead
+      ctx.beginPath()
+      ctx.moveTo(ix, iy)
+      ctx.lineTo(lineEnd - unit * 0.8, iy)
+      ctx.stroke()
+      // Arrowhead
+      const tipX = lineEnd
+      const sz = unit * 0.6
+      ctx.beginPath()
+      ctx.moveTo(tipX - sz * 1.6, iy - sz)
+      ctx.lineTo(tipX, iy)
+      ctx.lineTo(tipX - sz * 1.6, iy + sz)
+      ctx.closePath()
+      ctx.fill()
+    } else {
+      // Dashed line with filled square
+      ctx.setLineDash([unit * 0.4, unit * 0.35])
+      ctx.beginPath()
+      ctx.moveTo(ix, iy)
+      ctx.lineTo(lineEnd - unit * 1.0, iy)
+      ctx.stroke()
+      ctx.setLineDash([])
+      // Filled square
+      const sq = unit * 0.7
+      ctx.fillRect(lineEnd - sq, iy - sq / 2, sq, sq)
+    }
+
+    ctx.fillStyle = '#374151'
+    ctx.fillText(entry.label, lx + legendPad + symbolCol, iy)
+  }
+}
+
+function roundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number,
+): void {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.arcTo(x + w, y, x + w, y + r, r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r)
+  ctx.lineTo(x + r, y + h)
+  ctx.arcTo(x, y + h, x, y + h - r, r)
+  ctx.lineTo(x, y + r)
+  ctx.arcTo(x, y, x + r, y, r)
+  ctx.closePath()
 }
 
 /** Hands a blob to the browser as a download. */

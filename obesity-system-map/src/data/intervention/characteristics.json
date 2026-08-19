@@ -1,20 +1,25 @@
 {
-  "_note": "Persona characteristics. A gate tests these fields; a persona passes a gate if it matches every field the gate names. Core fields are what all 12 personas carry. Conditions are optional flags most personas won't have.",
+  "_note": "Two orthogonal axes: age_band (pure age) + role (occupation/enrolment). A gate is a list of clauses OR'd together (any clause = eligible); each clause is {field:[values]} AND across fields; everyone = no clause. Values must match EXACTLY. work_type applies only to role=working (else n/a); general workplace programmes need a registered employer (employee OR manual-industrial), Total WSH needs manual-industrial, gig-self-employed reaches no workplace programme.",
   "core": {
-    "life_stage": [
-      "young-child",
-      "school-child",
-      "youth",
-      "working-adult",
-      "senior"
-    ],
     "age_band": [
-      "under-7",
-      "7-14",
-      "15-24",
-      "25-49",
+      "0-6",
+      "7-12",
+      "13-18",
+      "19-24",
+      "25-39",
+      "40-49",
       "50-59",
       "60-plus"
+    ],
+    "role": [
+      "preschooler",
+      "primary-student",
+      "secondary-student",
+      "tertiary-student",
+      "working",
+      "retired",
+      "homemaker",
+      "unemployed"
     ],
     "sex": [
       "female",
@@ -31,7 +36,13 @@
     ],
     "smoker_or_vaper": [
       true,
-      false
+      false,
+      null
+    ],
+    "work_type": [
+      "employee",
+      "manual-industrial",
+      "gig-self-employed"
     ]
   },
   "conditions": [

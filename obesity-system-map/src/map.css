@@ -515,8 +515,8 @@
   opacity: 0.3;
 }
 
-/* Behaviours own variables, not connections, so nothing here recolours an edge —
-   doing so would assert a claim the data does not make. */
+/* Programmes map to variables, not connections, so nothing here recolours an
+   edge — doing so would assert a claim the data does not make. */
 
 /* The persona's own marked connections, drawn exactly as Profile draws them.
    Without these the persona's map is a scatter of coloured boxes with nothing
@@ -547,10 +547,10 @@
   stroke: #16a34a;
 }
 
-/* Relevant, and nothing reaches it. The one to act on, so it is the loudest. */
+/* Relevant, and nothing reaches it — an opportunity area. */
 .map-svg.has-intervention g[data-node-id].is-gap > path {
-  fill: #fecaca;
-  stroke: #dc2626;
+  fill: #fef9c3;
+  stroke: #ca8a04;
 }
 
 /*
@@ -570,8 +570,8 @@
 .map-svg.has-intervention:not(.has-persona)
   g[data-node-id].is-beyond
   > path {
-  fill: #fed7aa;
-  stroke: #ea580c;
+  fill: #bbf7d0;
+  stroke: #16a34a;
 }
 
 /* Gaps are the actionable state and the rarest, so they can be asked for on
