@@ -1170,20 +1170,6 @@ export default function App() {
   const tracing = mode === 'trace'
   const loopMode = traceDirection === 'loops'
 
-  /**
-   * How far the legend has to sit in from the right to clear whatever panel is
-   * open. Trace's panel is always there; Explore's only once something is
-   * selected; Profile's card floats and moves, so it is left to overlap.
-   */
-  const legendRightInset =
-    mode === 'trace'
-      ? TRACE_PANEL_PX
-      : mode === 'explore' && selection !== null
-        ? DETAIL_PANEL_PX
-        : // Same width as Trace's panel, and the same reason for the offset.
-          mode === 'intervention' && programmePanelOpen
-          ? TRACE_PANEL_PX
-          : 0
   const profiling = mode === 'profile'
   /** Whether the persona naming/renaming dialog is on screen. */
   const personaDialogUp = profiling && (!activeProfile || personaForm !== null)
@@ -1718,7 +1704,6 @@ export default function App() {
           onCollapsedChange={setLegendCollapsed}
           filterOpen={filterOpen}
           onFilterOpenChange={setFilterOpen}
-          rightInset={legendRightInset}
           // Intervention carries a bar of its own, the same height as Profile's.
           // It was left out here, so the legend sat on top of the persona picker.
           // In that mode it also stacks above the status key, which sits in this
@@ -1772,7 +1757,6 @@ export default function App() {
           <InterventionKey
             personaName={interventionPersona ? (activeProfile?.name ?? null) : null}
             bottomInset={PROFILE_BAR_PX}
-            rightInset={legendRightInset}
             onHeightChange={setInterventionKeyHeight}
           />
         )}

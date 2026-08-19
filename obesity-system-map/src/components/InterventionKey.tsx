@@ -51,14 +51,12 @@ function Row({
 export function InterventionKey({
   personaName,
   bottomInset = 0,
-  rightInset = 0,
   onHeightChange,
 }: {
   /** Null in the whitespace view, where only two states can occur. */
   personaName: string | null
   bottomInset?: number
   /** Px of the right edge covered by a panel, so this sits beside it. */
-  rightInset?: number
   /**
    * Measured height, so the colour key can be stacked on top of this one rather
    * than guessing at an offset. It changes with the persona — two rows without
@@ -86,12 +84,13 @@ export function InterventionKey({
   return (
     <div
       ref={ref}
-      // Right-hand side, stacked under the colour key. It sat bottom-left until
-      // the two keys being in opposite corners meant reading the map involved
-      // looking in both. The minimap is what kept it there, and is why the old
-      // offset had to clear 145px of navigator that no longer applies.
+      // Bottom-left, stacked under the colour key. The pair belongs together —
+      // they explain the same boxes, and having them in opposite corners meant
+      // reading the map involved looking in both — and the left is where they
+      // can stay put. On the right they had to slide 352px sideways whenever a
+      // panel opened, which is most of what happens in this tool.
       className="absolute z-30 w-56 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg"
-      style={{ bottom: 16 + bottomInset, right: 16 + rightInset }}
+      style={{ bottom: 16 + bottomInset, left: 16 }}
     >
       <p className="mb-2 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
         What the boxes mean

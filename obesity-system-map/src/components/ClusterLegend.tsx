@@ -20,9 +20,7 @@ interface ClusterLegendProps {
    */
   filterOpen: boolean
   onFilterOpenChange: (open: boolean) => void
-  /** Px covered by a side panel, so the legend sits beside it, not under it. */
-  rightInset?: number
-  /** Px covered by a bottom bar, for the same reason. */
+  /** Px covered by a bottom bar, so the box sits above it rather than under. */
   bottomInset?: number
   /** Legend swatches follow the map's palette; see src/data/contrast.ts. */
   highContrast: boolean
@@ -111,7 +109,6 @@ export function ClusterLegend({
   onCollapsedChange,
   filterOpen,
   onFilterOpenChange,
-  rightInset = 0,
   bottomInset = 0,
   highContrast,
   showSwatches = true,
@@ -136,16 +133,17 @@ export function ClusterLegend({
   const hiddenCount = hiddenGroups.size
   const filtering = hiddenCount > 0
 
-  // Sits below the review sheet and the profile bar on purpose (z-10): those are
-  // deliberate full-attention surfaces, and a key that paints over them would be
-  // worse than one briefly covered. Panels are cleared by the insets instead.
+  // Bottom-left. It sat bottom-right, offset inward by whichever panel was
+  // open, which meant clicking a variable in Explore slid it 352px across the
+  // screen — on the commonest interaction in the tool. Every panel is on the
+  // right and the left is empty since the minimap went, so the box can simply
+  // stay where it is put and the whole inset calculation goes with it.
   //
-  // The offsets snap rather than ease. Transitioning `right` animates layout, and
-  // a half-finished slide leaves the box overlapping the very panel the offset
-  // exists to clear — a position that is merely correct beats one that is
-  // usually correct and prettier on the way.
+  // Still below the bars (z-10): those are deliberate full-attention surfaces,
+  // and their menus open upward into this corner. A key briefly under an open
+  // menu is better than a menu behind a key.
   const shell = 'absolute z-10 flex flex-col'
-  const position = { right: 16 + rightInset, bottom: 16 + bottomInset }
+  const position = { left: 16, bottom: 16 + bottomInset }
   /**
    * Never taller than the stage leaves room for. Percentages on an absolutely
    * positioned box resolve against its containing block, so this is the stage's
@@ -398,10 +396,10 @@ function GroupFilter({
           ref={popoverRef}
           role="dialog"
           aria-labelledby={headingId}
-          // Right-anchored, not left: the popover is wider than the button it
-          // hangs off, and the box already sits 16px from the window's right
-          // edge — growing rightward put 13px of it off screen.
-          className="absolute bottom-full right-0 z-30 mb-2 w-60 rounded-lg border border-gray-200 bg-white p-2 shadow-xl"
+          // Left-anchored, following the box to the left-hand side: it is wider
+          // than the button it hangs off, and there is open map to the right of
+          // it but only 16px to the left.
+          className="absolute bottom-full left-0 z-30 mb-2 w-60 rounded-lg border border-gray-200 bg-white p-2 shadow-xl"
         >
           <div className="mb-1.5 flex items-center justify-between gap-2 px-1">
             <h3
