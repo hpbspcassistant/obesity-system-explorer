@@ -194,11 +194,10 @@ export function ClusterLegend({
     <div className={shell} style={{ ...position, maxHeight }}>
       <div className="flex min-h-0 w-56 flex-col rounded-lg border border-gray-200 bg-white/95 p-3 shadow-lg">
         {/* Always rendered, swatches or not: without it Intervention had a box
-            it could not put away. The heading follows what is actually below. */}
-        <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-            {showSwatches ? 'Colour key' : 'Key'}
-          </h2>
+            it could not put away. No heading — a column of colour swatches
+            beside variable names does not need to be told it is a colour key,
+            and the words cost a line in a box whose whole point is restraint. */}
+        <div className="-mt-1 mb-1 flex shrink-0 items-center justify-end">
           <button
             type="button"
             onClick={() => onCollapsedChange(true)}
