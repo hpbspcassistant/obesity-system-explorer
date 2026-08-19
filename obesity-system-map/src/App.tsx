@@ -185,7 +185,6 @@ export default function App() {
   const [interventionWhitespace, setInterventionWhitespace] = useState(true)
   const [quickCharacteristics, setQuickCharacteristics] =
     useState<PersonaCharacteristics>({})
-  const [gapsOnly, setGapsOnly] = useState(false)
   /**
    * Programme ids the map is narrowed to, or null for "all of them".
    *
@@ -735,7 +734,7 @@ export default function App() {
       const who = forPersona ? slug(activeProfile.name) : 'anyone'
       const narrowed =
         programmeFilter === null ? '' : `-${programmeFilter.size}-programmes`
-      return `intervention-${who || 'persona'}${narrowed}${gapsOnly ? '-gaps' : ''}.png`
+      return `intervention-${who || 'persona'}${narrowed}.png`
     }
     return `profile-${slug(activeProfile?.name ?? 'map') || 'map'}${
       markedOnly ? '-marked' : ''
@@ -745,7 +744,6 @@ export default function App() {
     interventionWhitespace,
     activeProfile,
     programmeFilter,
-    gapsOnly,
     markedOnly,
   ])
 
@@ -1499,7 +1497,6 @@ export default function App() {
         // The reader may arrive with a persona already chosen from a previous
         // visit, and the step's whole subject is the view without one.
         setInterventionWhitespace(true)
-        setGapsOnly(false)
         setSelection(null)
         return
       }
@@ -1686,7 +1683,6 @@ export default function App() {
             mode === 'intervention' ? interventionStanding : undefined
           }
           interventionPersona={interventionPersona !== null}
-          gapsOnly={gapsOnly}
           highContrast={highContrast}
         />
 
@@ -1896,12 +1892,9 @@ export default function App() {
                 setQuickCharacteristics({})
               } else {
                 setInterventionWhitespace(true)
-                setGapsOnly(false)
               }
             }}
-            gapsOnly={gapsOnly}
-            onGapsOnlyChange={setGapsOnly}
-            summary={interventionSummary}
+              summary={interventionSummary}
             applicability={
               (interventionPersona || quickFilterPersona)
                 ? interventionSummary.applicability

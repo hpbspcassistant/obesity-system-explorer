@@ -604,13 +604,6 @@
   stroke: #16a34a;
 }
 
-/* Gaps are the actionable state and the rarest, so they can be asked for on
-   their own — the same idea as Profile's "Marked only". */
-.map-svg.has-intervention.gaps-only g[data-node-id]:not(.is-gap) {
-  opacity: 0.12;
-  pointer-events: none;
-}
-
 /* The programme filter needs no rule of its own. Unticking a programme takes it
    out of the set the four states are computed from, so a variable only it
    covered turns from green to red by the rules already above — which is the

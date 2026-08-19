@@ -316,8 +316,6 @@ export interface MapViewProps {
    * that can occur for a reached variable and carries the whole view.
    */
   interventionPersona?: boolean
-  /** Fades everything that is not a gap for the current persona. */
-  gapsOnly?: boolean
   ref?: Ref<MapViewHandle>
 }
 
@@ -371,7 +369,6 @@ export function MapView({
   markedOnly = false,
   intervention,
   interventionPersona = false,
-  gapsOnly = false,
   ref,
 }: MapViewProps) {
   const apiRef = useRef<ReactZoomPanPinchRef | null>(null)
@@ -1205,7 +1202,6 @@ export function MapView({
               mode === 'intervention' && interventionPersona
                 ? 'has-persona'
                 : '',
-              mode === 'intervention' && gapsOnly ? 'gaps-only' : '',
               highContrast ? 'high-contrast' : '',
               markedNodeIds.size || markedEdgeIds.size ? 'has-marks' : '',
               traceFocus?.nodeIds.length ? 'has-trace-focus' : '',

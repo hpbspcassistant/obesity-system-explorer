@@ -26,8 +26,6 @@ export interface InterventionBarProps {
   /** null means the persona-independent whitespace view. */
   personaId: string | null
   onPersonaChange: (id: string | null) => void
-  gapsOnly: boolean
-  onGapsOnlyChange: (on: boolean) => void
   summary: ReachSummary
   applicability: Applicability | null
   /** How many programmes the filter is down to, or null when it is off. */
@@ -392,8 +390,6 @@ export function InterventionBar({
   profiles,
   personaId,
   onPersonaChange,
-  gapsOnly,
-  onGapsOnlyChange,
   summary,
   applicability,
   selectedProgrammes,
@@ -525,30 +521,6 @@ export function InterventionBar({
           : 'All programmes'}
       </button>
 
-      {withPersona && (
-        <button
-          type="button"
-          role="switch"
-          aria-checked={gapsOnly}
-          disabled={summary.gaps.length === 0}
-          onClick={() => onGapsOnlyChange(!gapsOnly)}
-          title={
-            summary.gaps.length === 0
-              ? 'No opportunity areas for this persona'
-              : 'Fade everything except opportunity areas'
-          }
-          className={[
-            'shrink-0 rounded-md border px-2.5 py-1 text-xs transition-colors',
-            summary.gaps.length === 0
-              ? 'cursor-not-allowed border-gray-200 text-gray-300'
-              : gapsOnly
-                ? 'border-gray-900 bg-gray-900 text-white'
-                : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-          ].join(' ')}
-        >
-          Opportunities only
-        </button>
-      )}
 
       <ExportMenu state={exportState} choices={exportChoices} />
     </div>
