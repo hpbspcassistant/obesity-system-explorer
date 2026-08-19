@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * What the boxes mean, on the screen rather than in someone's head.
+ * What the colours mean, on the screen rather than in someone's head.
  *
  * The swatches are real node groups carrying the real classes inside a
  * `.map-svg.has-intervention` wrapper, so they are painted by the same
@@ -93,7 +93,7 @@ export function InterventionKey({
       style={{ bottom: 16 + bottomInset, left: 16 }}
     >
       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-        What the boxes mean
+        What the colours mean
       </p>
 
       {personaName === null ? (
