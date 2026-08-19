@@ -199,7 +199,7 @@ const TRACE: GuideSection = {
     {
       title: 'Pick a direction first',
       body: [
-        'The three buttons at the top decide what clicking a variable means: follow the arrows forward from a cause, follow them backward from an outcome, or look for loops that come back round to where they started.',
+        'The three buttons at the top of the panel decide what clicking a variable means: follow the arrows forward from a cause, follow them backward from an outcome, or look for loops that come back round to where they started.',
         'Choose before you click, because the same variable answers a different question in each.',
       ],
       action: { label: 'Show me forwards', id: 'traceForwards' },

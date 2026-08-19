@@ -214,7 +214,11 @@ export function SearchBar({
           <ul
             id="node-search-results"
             role="listbox"
-            className="absolute inset-x-0 top-full z-40 mt-1.5 max-h-80 overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl"
+            /* Min-width, because the field itself is flex-1 in the header and gets
+                 squeezed to about 136px on a 1152px laptop. The input survives that;
+                 a result list pinned to the same width does not, since the labels it
+                 exists to show are things like "Sociocultural Valuation of Activity". */
+              className="absolute inset-x-0 top-full z-40 mt-1.5 max-h-80 min-w-[22rem] max-w-[90vw] overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl"
           >
             {/* "variables" matches the placeholder above: the two sit in the same
                 control, so they cannot name the same thing differently. */}

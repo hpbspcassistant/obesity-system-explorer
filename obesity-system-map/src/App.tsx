@@ -1544,8 +1544,6 @@ export default function App() {
       <MapHeader
         mode={mode}
         onModeChange={changeMode}
-        traceDirection={traceDirection}
-        onTraceDirectionChange={setTraceDirection}
         onResetView={() => mapRef.current?.resetView()}
         onZoomBy={(factor) => mapRef.current?.zoomBy(factor)}
         onOpenGuide={openGuide}
@@ -1686,6 +1684,7 @@ export default function App() {
         {mode === 'trace' && (
           <TracePanel
             direction={traceDirection}
+            onDirectionChange={setTraceDirection}
             startId={traceStartId}
             paths={tracePaths}
             search={search}

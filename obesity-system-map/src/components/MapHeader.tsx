@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react'
 
 import { ModeSwitcher } from './ModeSwitcher'
-import { TraceDirectionToggle } from './TraceDirectionToggle'
-import type { MapMode, TraceDirection } from '../types'
+import type { MapMode } from '../types'
 
 interface MapHeaderProps {
   mode: MapMode
   onModeChange: (mode: MapMode) => void
-  traceDirection: TraceDirection
-  onTraceDirectionChange: (direction: TraceDirection) => void
   onResetView: () => void
   /** Multiplies the map scale — one notch per press. */
   onZoomBy: (factor: number) => void
@@ -32,12 +29,18 @@ const ZOOM_STEP = 1.4
  * Single header row: identity on the left, mode switcher beside it, search in
  * the middle, view controls on the right. Wraps rather than crushing the
  * search field on narrow viewports.
+ *
+ * Every mode renders exactly this, which is the point. Trace used to insert its
+ * direction toggle here — 433px of radio buttons, wider than the mode switcher
+ * itself — and the row could not hold it: at 1280 the header went from 59px to
+ * 105px, the search field collapsed to 122px, and the map lost 46px of height,
+ * all at the instant the reader pressed Trace. The control now lives at the top
+ * of the trace panel, where 368px of width lets the three options stack and
+ * carry their own explanations.
  */
 export function MapHeader({
   mode,
   onModeChange,
-  traceDirection,
-  onTraceDirectionChange,
   onResetView,
   onZoomBy,
   onOpenGuide,
@@ -61,13 +64,6 @@ export function MapHeader({
       </div>
 
       <ModeSwitcher mode={mode} onModeChange={onModeChange} />
-
-      {mode === 'trace' && (
-        <TraceDirectionToggle
-          direction={traceDirection}
-          onDirectionChange={onTraceDirectionChange}
-        />
-      )}
 
       <div className="flex min-w-0 flex-1 justify-center">{children}</div>
 

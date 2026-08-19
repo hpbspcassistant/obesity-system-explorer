@@ -1,3 +1,4 @@
+import { TraceDirectionToggle } from './TraceDirectionToggle'
 import { NO_DEFINITION, definitionOf, nodesById } from '../data/systemMap'
 import { MAX_LOOP_LENGTH, type LoopSearch } from '../lib/loops'
 import { LIST_MAX_HOPS, TOTAL_VARIABLES, isEnergyCore } from '../lib/trace'
@@ -6,6 +7,7 @@ import type { TraceDirection } from '../types'
 
 interface TracePanelProps {
   direction: TraceDirection
+  onDirectionChange: (direction: TraceDirection) => void
   startId: number | null
   paths: PathSet | null
   search: RouteSearch | null
@@ -170,6 +172,7 @@ function HopLine({
 
 export function TracePanel({
   direction,
+  onDirectionChange,
   startId,
   paths,
   search,
@@ -211,15 +214,16 @@ export function TracePanel({
 
   return (
     <aside className="absolute inset-y-0 right-0 z-10 flex w-[23rem] max-w-[85vw] flex-col border-l border-gray-200 bg-white shadow-xl">
+      {/* The direction picker carries its own descriptions, so the prose
+          subtitle that used to sit here would have said the same thing twice
+          within three centimetres. */}
       <header className="px-4 py-3">
-        <h2 className="text-base font-semibold text-gray-900">Trace</h2>
-        <p className="mt-0.5 text-[11px] text-gray-500">
-          {isLoops
-            ? 'Loops that leave a variable and come back to it, reinforcing on the way round'
-            : direction === 'downstream'
-              ? 'Following the arrows outward to the energy core'
-              : 'Following the arrows backward — what feeds into this variable'}
-        </p>
+        <h2 className="mb-2 text-base font-semibold text-gray-900">Trace</h2>
+        <TraceDirectionToggle
+          direction={direction}
+          onDirectionChange={onDirectionChange}
+          explainAll={startId === null || !paths}
+        />
       </header>
 
       {startId === null || !paths ? (
