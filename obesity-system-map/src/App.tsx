@@ -1670,6 +1670,9 @@ export default function App() {
             onCancel={
               activeProfile ? () => setPersonaForm(null) : undefined
             }
+            // The first visit has no profile to cancel back to, so the way out
+            // is out of the mode.
+            onLeave={() => changeMode('explore')}
           />
         )}
 

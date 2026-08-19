@@ -22,8 +22,14 @@ export interface ProfilePersonaDialogProps {
     characteristics: PersonaCharacteristics,
   ) => void
   onImport: (result: ParseResult) => void
-  /** Absent while there is no profile to fall back to, so there is no escape. */
+  /** Absent while there is no profile to fall back to. */
   onCancel?: () => void
+  /**
+   * Leaves Profile mode altogether. The way out on a first visit, when there is
+   * no profile behind the dialog to cancel back to — without it the dialog is a
+   * dead end, and the only escape is realising the mode switcher still works.
+   */
+  onLeave?: () => void
 }
 
 export function ProfilePersonaDialog({
@@ -31,6 +37,7 @@ export function ProfilePersonaDialog({
   onSave,
   onImport,
   onCancel,
+  onLeave,
 }: ProfilePersonaDialogProps) {
   const [name, setName] = useState(profile?.name ?? '')
   const [details, setDetails] = useState(profile?.details ?? '')
@@ -38,10 +45,29 @@ export function ProfilePersonaDialog({
     profile?.characteristics ?? {},
   )
   const nameRef = useRef<HTMLInputElement | null>(null)
+  /** Import is a rare route in, so it starts folded away. */
+  const [importOpen, setImportOpen] = useState(false)
 
   useEffect(() => {
     nameRef.current?.focus()
   }, [])
+
+  /**
+   * Escape leaves, by whichever exit exists. The app's own Escape handler knows
+   * about the guide, the card and the review sheet but never this, so a dialog
+   * that looks dismissable was not.
+   */
+  useEffect(() => {
+    const leave = onCancel ?? onLeave
+    if (!leave) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      event.stopPropagation()
+      leave()
+    }
+    document.addEventListener('keydown', onKey, true)
+    return () => document.removeEventListener('keydown', onKey, true)
+  }, [onCancel, onLeave])
 
   const editing = profile !== null
 
@@ -120,7 +146,9 @@ export function ProfilePersonaDialog({
             >
               {editing ? 'Save' : 'Start profile'}
             </button>
-            {onCancel && (
+            {/* Cancel where there is something to go back to, and otherwise a
+                way out of the mode entirely. One of the two is always present. */}
+            {onCancel ? (
               <button
                 type="button"
                 onClick={onCancel}
@@ -128,21 +156,37 @@ export function ProfilePersonaDialog({
               >
                 Cancel
               </button>
+            ) : (
+              onLeave && (
+                <button
+                  type="button"
+                  onClick={onLeave}
+                  className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+                >
+                  Back to Explore
+                </button>
+              )
             )}
           </div>
         </form>
 
+        {/* Folded away rather than offered as an equal alternative. Almost
+            everyone arrives here to start a profile; importing one is how a
+            colleague's file gets in, which is rare and worth a click. */}
         {!editing && (
-          <>
-            <div className="my-3 flex items-center gap-2">
-              <span className="h-px flex-1 bg-gray-200" />
-              <span className="text-xs uppercase tracking-wide text-gray-500">
-                or
-              </span>
-              <span className="h-px flex-1 bg-gray-200" />
-            </div>
-            <ImportButton onImport={onImport} />
-          </>
+          <div className="mt-3 border-t border-gray-200 pt-3">
+            {importOpen ? (
+              <ImportButton onImport={onImport} />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setImportOpen(true)}
+                className="text-xs text-gray-600 underline decoration-gray-300 underline-offset-2 hover:text-gray-900"
+              >
+                Import a profile someone sent you
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
