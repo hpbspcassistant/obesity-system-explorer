@@ -17,8 +17,8 @@ import type { MapMode } from '../types'
 /**
  * Sections run separately rather than as one queue.
  *
- * Covering the basics and all four modes properly takes twenty-four steps, and
- * nobody finishes a twenty-four-step tour. Split up, the longest run is six, and
+ * Covering the basics and all four modes properly takes more than twenty steps,
+ * and nobody finishes a tour that long. Split up, the longest run is six, and
  * somebody stuck on Profile in three months can open just that.
  */
 export type GuideSectionId =
@@ -41,7 +41,6 @@ export type GuideActionId =
   | 'traceForwards'
   | 'startDemoTrace'
   | 'widenTrace'
-  | 'exceedListCap'
   | 'playDemoRoute'
   | 'frameMarkedNeighbourhood'
   | 'openReview'
@@ -116,45 +115,45 @@ export const DEMO_QUERY = 'walkability'
 const BASICS: GuideSection = {
   id: 'basics',
   label: 'Getting started',
-  blurb: 'What the map is, and how to move around it.',
+  blurb: 'Learn what the map shows and how to move around.',
   endsAtContents: true,
   steps: [
     {
-      title: 'The Foresight obesity map',
+      title: 'What this map shows',
       body: [
-        '108 variables that influence obesity, joined by 296 arrows. Each arrow says that more of one thing leads to more — or less — of another.',
-        "It is adapted from the UK Government's Foresight programme, 2007.",
+        'This map shows 108 variables that can affect obesity.',
+        "Arrows show how one variable can change another. The map is adapted from the UK Government's Foresight programme, 2007.",
       ],
     },
     {
-      title: 'Getting around',
+      title: 'Move around the map',
       body: [
-        'The map opens with everything in view, which is far too small to read. Zoom in and the labels appear.',
-        'Scroll to zoom, drag to move around, or use the + and − buttons at the top right. Fit puts the whole map back in view.',
+        'Zoom in to read the labels. Scroll or use the + and − buttons.',
+        'Drag the map to move around. Select Fit to see the whole map again.',
       ],
       action: { label: 'Zoom in', id: 'frameOneVariable' },
     },
     {
       title: 'Finding a variable',
       body: [
-        'Type part of a name into the search box and pick it from the list. The map goes straight to that variable and opens what it says.',
+        'Type a name in the search box. Choose a result to go straight to that variable.',
       ],
       action: { label: 'Try the search', id: 'prefillSearch' },
     },
     {
-      title: 'Colours and filtering',
+      title: 'Use colours and filters',
       body: [
-        'Every variable belongs to one of ten colour groups. The key at the bottom right shows them, with how many variables each one holds.',
-        'Filter, underneath it, cuts the map down to the groups you care about — by type, or by the atlas’s own clusters. Anything you hide is reported beside the button, so a filter can never be left on by accident.',
+        'Colours put similar variables into groups. The key tells you what each colour means.',
+        'Use Filter to show only the groups you want. You can group variables by Type or Cluster.',
       ],
       action: { label: 'Hide a group', id: 'hideLargestGroup' },
     },
     {
-      title: 'Four ways to work',
+      title: 'Choose a mode',
       body: [
-        'Explore is for reading: click anything to find out what it is. Trace follows cause and effect from one variable. Profile marks up the variables that matter for one person.',
-        'Intervention is the only one that brings in something outside the map: it shows which variables HPB’s programmes reach, and which nothing reaches at all.',
-        'Switch between them with the buttons at the top. You can reopen this guide whenever you like with the question mark button.',
+        'Explore helps you read the map. Trace follows pathways between variables.',
+        'Profile lets you mark what matters to one person. Intervention shows what HPB programmes reach.',
+        'Use the buttons at the top to change mode. Select ? to open these guides again.',
       ],
     },
   ],
@@ -163,28 +162,28 @@ const BASICS: GuideSection = {
 const EXPLORE: GuideSection = {
   id: 'explore',
   label: 'Explore',
-  blurb: 'Reading variables and connections.',
+  blurb: 'Learn how to read variables and connections.',
   mode: 'explore',
   steps: [
     {
-      title: 'Reading a variable',
+      title: 'Open a variable',
       body: [
-        'Click any box on the map. A panel opens with what that variable means, the groups it belongs to, and every connection running into and out of it.',
-        'The rest of the map fades while it is open, so you are left looking at that variable and its immediate neighbours.',
+        'Select any variable. A panel shows what it means and which variables connect to it.',
+        'The rest of the map fades so you can focus on this part.',
       ],
       action: { label: 'Open one for me', id: 'openDemoVariable' },
     },
     {
-      title: 'Reading a connection',
+      title: 'Open a connection',
       body: [
-        'Click an arrow instead and you get the link itself: which variable affects which.',
+        'Select an arrow to see which variable affects the other one.',
       ],
       action: { label: 'Open a connection', id: 'openDemoConnection' },
     },
     {
       title: 'Following the connections',
       body: [
-        "The two lists in a variable's panel are clickable. Choosing one opens that connection, and from there you can open either end of it.",
+        "Select a connection in the variable's panel to open it. You can then open either variable at its ends.",
       ],
     },
   ],
@@ -193,48 +192,39 @@ const EXPLORE: GuideSection = {
 const TRACE: GuideSection = {
   id: 'trace',
   label: 'Trace',
-  blurb: 'Following cause and effect from one variable.',
+  blurb: 'Follow pathways from one variable.',
   mode: 'trace',
   steps: [
     {
-      title: 'Pick a direction first',
-      body: [
-        'The three buttons at the top of the panel decide what clicking a variable means: follow the arrows forward from a cause, follow them backward from an outcome, or look for loops that come back round to where they started.',
-        'Choose before you click, because the same variable answers a different question in each.',
-      ],
-      action: { label: 'Show me forwards', id: 'traceForwards' },
-    },
-    {
       title: 'Choose a starting variable',
       body: [
-        'Click a variable on the map, or search for one. It takes a teal ring, and the panel says how much of the map lies downstream of it.',
-        'Clicking it again, or clicking empty space, clears the trace.',
+        'Select a variable on the map, or find one with search. A teal ring marks where the trace starts.',
       ],
-      action: { label: 'Start a trace for me', id: 'startDemoTrace' },
+      action: { label: 'Choose one for me', id: 'startDemoTrace' },
+    },
+    {
+      title: 'Ask a question',
+      body: [
+        'Affects shows what this variable can change. Affected by shows what can change it.',
+        'Loops shows reinforcing paths that return to the same variable.',
+      ],
+      action: { label: 'Show what it affects', id: 'traceForwards' },
     },
     {
       title: 'How far to follow',
       body: [
-        'A step is one arrow. The slider limits how long a chain may be.',
-        'The counts underneath say how many variables and arrows are lit.',
+        'Direct shows short paths. Nearby and Wider show more of the system.',
+        'One step means one arrow. Use More distance options for a longer path.',
       ],
       action: { label: 'Widen the trace', id: 'widenTrace' },
     },
     {
-      title: 'Why the list stops short',
+      title: 'Follow a pathway',
       body: [
-        'The map draws every path within the limit you set. The list cannot: past six steps there are tens of thousands of routes, more than anyone could read.',
-        'So the list sticks to routes of six steps or fewer, and says how many lit variables it has left out.',
+        'Select a pathway to highlight it on the map. Select Show more to see more pathways.',
+        'Select Play path to follow it one arrow at a time.',
       ],
-      action: { label: 'Go past six steps', id: 'exceedListCap' },
-    },
-    {
-      title: 'Follow one path',
-      body: [
-        'Hover a route in the list to preview it on the map, and click it to keep it there.',
-        'Then press Trace on that route to walk it one arrow at a time. Each line says whether that link pushes its target up or down, and orange marks arrival at the energy core.',
-      ],
-      action: { label: 'Walk a route', id: 'playDemoRoute' },
+      action: { label: 'Play a pathway', id: 'playDemoRoute' },
     },
   ],
 }
@@ -252,38 +242,38 @@ const TRACE: GuideSection = {
 const PROFILE: GuideSection = {
   id: 'profile',
   label: 'Profile',
-  blurb: 'Marking up the variables that matter for one person.',
+  blurb: 'Build a map of what matters to one person.',
   mode: 'profile',
   steps: [
     {
       title: 'What a profile is',
       body: [
-        'A profile is one point of view on the map: you mark the variables and connections you judge to matter for a single person.',
-        "Marked or not — there is no scoring. And it is your judgement, not the map's.",
+        'A profile is a smaller map for one person. You choose which variables and connections matter to them.',
+        'There are no scores or right answers.',
       ],
       awaits: {
         id: 'hasProfile',
-        prompt: 'Name a persona in the box on the map to begin.',
-        done: 'Ready.',
+        prompt: 'Give the profile a name to begin.',
+        done: 'Your profile is ready.',
       },
     },
     {
       title: 'Marking a variable',
       body: [
-        'Click any variable to open its card, then press "Mark this variable".',
-        'Opening a variable never marks it. That is deliberate: you can read your way around the map without changing anything.',
+        'Select a variable to open its card. Then select Mark this variable.',
+        'Opening a variable does not mark it. You can read it without changing your profile.',
       ],
       awaits: {
         id: 'markedVariable',
-        prompt: 'Mark any variable to carry on.',
-        done: 'Marked — and it has its colour back.',
+        prompt: 'Mark one variable to continue.',
+        done: 'It is now coloured to show that it is marked.',
       },
     },
     {
-      title: 'Grey, colour, and rings',
+      title: 'What the colours mean',
       body: [
-        'In this mode the whole map drains to grey, and marking a variable gives it its colour back. So colour means you chose it.',
-        'A white box with a coloured ring is a suggestion: a variable one step away from something you have already marked.',
+        'Grey variables are not in the profile. Coloured variables are marked.',
+        'A white variable with a coloured ring is a suggestion. It connects to something you already marked.',
       ],
       action: {
         label: 'Show me the suggestions',
@@ -291,33 +281,33 @@ const PROFILE: GuideSection = {
       },
     },
     {
-      title: 'Follow a suggestion',
+      title: 'Add another variable',
       body: [
-        'The rings answer "where next?". Marking one extends the profile a step at a time, which is how a profile is meant to grow — by hand, not by asking the map to fill it in.',
+        'Choose a ringed variable and mark it. This grows the profile one connection at a time.',
       ],
       awaits: {
         id: 'markedVariable',
         prompt: 'Mark one of the ringed variables.',
-        done: 'Two connected variables are marked now. Look at the line between them.',
+        done: 'Two connected variables are now marked. Look at the line between them.',
       },
     },
     {
-      title: 'The dot on a line',
+      title: 'Mark a connection',
       body: [
-        'When both ends of a connection are marked but the connection itself is not, a small dot appears in the middle of that line. Clicking the dot marks the connection.',
-        'It is the map noticing you probably meant to include the link. You can also tick connections directly in a variable’s card.',
+        'A dot appears when both variables are marked but the connection between them is not.',
+        'Select the dot to mark the connection. You can also mark it in a variable card.',
       ],
       awaits: {
         id: 'markedConnection',
-        prompt: 'Click a dot on the map, or tick a connection in a card.',
-        done: 'Marked — that line is now solid black.',
+        prompt: 'Select a dot on the map, or mark a connection in a card.',
+        done: 'The connection is now marked with a solid black line.',
       },
     },
     {
-      title: 'Review, and keeping your work',
+      title: 'Check your work',
       body: [
-        'Review lists everything you have marked — variables, connections, and any links still waiting, with "Mark all" to accept them together. Anything can be unticked from there.',
-        'Profiles save in this browser as you work. Export JSON keeps a copy to share or reimport, and the three-dot menu renames and deletes.',
+        'Review shows all marked variables and connections. You can remove marks or add missing connections there.',
+        'Your profile saves automatically. Use Export to download a copy.',
       ],
       action: { label: 'Open Review', id: 'openReview' },
       // The sheet fills the bottom of the stage, so the card moves out of its way.
@@ -343,46 +333,46 @@ const PROFILE: GuideSection = {
 const INTERVENTION: GuideSection = {
   id: 'intervention',
   label: 'Intervention',
-  blurb: 'Where HPB’s programmes reach, and where they do not.',
+  blurb: 'See what HPB programmes cover and where gaps remain.',
   mode: 'intervention',
   steps: [
     {
-      title: 'What HPB reaches',
+      title: 'See what programmes cover',
       body: [
-        'Every HPB programme is mapped to the variables it addresses. Colour here means a programme reaches that variable — it says nothing about how well, or how much.',
-        'This is where the mode starts, and it needs nobody in particular: what does the inventory touch at all? Everything left empty is whitespace.',
+        'This mode compares HPB programmes with variables on the map.',
+        'A coloured variable is reached by a programme. An empty variable is not reached.',
       ],
       action: { label: 'Show me', id: 'showWhitespace' },
     },
     {
-      title: 'Then narrow it to one person',
+      title: 'Choose a profile',
       body: [
-        'Everything so far works with nobody in mind. Add a persona and the same map answers a sharper question: of what we reach, what reaches them — and what matters to them that nothing reaches.',
-        'The map splits four ways, and the fourth colour is the one to look for. The list is the same profiles you make in Profile mode; this mode keeps none of its own.',
+        'Choose a profile to see which programmes are relevant to that person.',
+        'The map then shows what is covered and where there may be an opportunity.',
       ],
       action: { label: 'Use a persona', id: 'showGuidePersona' },
     },
     {
-      title: 'Which programmes reach a variable',
+      title: 'Check a variable',
       body: [
-        'Click any box. The card names every programme that reaches it, together with the reason each one is mapped there.',
-        'That reason is the working. A programme "reaching" a variable is a claim someone made when tagging the inventory, and the reason is how you check it.',
+        'Select any variable to see which programmes reach it.',
+        'The card also explains why each programme is linked to that variable.',
       ],
       action: { label: 'Open a reached one', id: 'openReachedVariable' },
     },
     {
-      title: 'The gaps',
+      title: 'Find opportunity areas',
       body: [
-        'The opportunity areas are the point of the mode: something that matters for this person, that nothing reaching them addresses. Expect a handful per persona, not one or two.',
-        'Two quite different things produce it, and the card tells you which. Either a programme covers that variable but this person is not eligible — an argument about the gate — or nothing in the inventory covers it for anyone, which is an argument about what HPB runs. Some of the second kind are correct: nothing acts directly on resting metabolic rate.',
+        "An opportunity area is a variable in the person's profile that no relevant programme reaches.",
+        'Open it to see whether a programme covers it for other people, or no programme covers it at all.',
       ],
-      action: { label: 'Open a gap', id: 'openUnreachedVariable' },
+      action: { label: 'Open an opportunity area', id: 'openUnreachedVariable' },
     },
     {
       title: 'Who a programme is for',
       body: [
-        "Each programme carries a rule about who it is for — an age band, a role, being a parent or a smoker. The persona’s characteristics decide which ones count, and the bar says how many of the inventory applied.",
-        'Leave a characteristic unset and any programme testing it is reported as undetermined rather than dropped, so an unfinished persona never quietly shrinks the map. Fill them in under Edit persona in Profile mode.',
+        'Some programmes are only for certain people, such as an age group, a parent, or a smoker.',
+        'Profile details help the tool decide which programmes apply. If a detail is missing, the programme is marked Undetermined instead of being removed.',
       ],
     },
   ],
@@ -396,7 +386,7 @@ export const GUIDE_SECTIONS: Record<GuideSectionId, GuideSection> = {
   intervention: INTERVENTION,
 }
 
-/** Contents order. The mode you are in is floated to the top by the card. */
+/** Fixed contents order, regardless of which mode is currently open. */
 export const GUIDE_ORDER: readonly GuideSectionId[] = [
   'basics',
   'explore',

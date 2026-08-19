@@ -62,7 +62,7 @@ describe('profiles', () => {
 
   it('exports a re-importable JSON representation', () => {
     const source = {
-      ...createProfile('Persona A', 'De-identified context'),
+      ...createProfile('Persona A', 'Optional context'),
       characteristics: { age_band: '40-49', conditions: ['myopic'] },
       nodeIds: new Set([nodes[0].id]),
     }

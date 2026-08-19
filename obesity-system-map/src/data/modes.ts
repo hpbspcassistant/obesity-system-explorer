@@ -13,7 +13,6 @@ export const MODES: readonly ModeMeta[] = [
   { id: 'explore', label: 'Explore' },
   { id: 'trace', label: 'Trace' },
   { id: 'profile', label: 'Profile' },
-  // What HPB's programmes reach, and where they do not.
   { id: 'intervention', label: 'Intervention' },
 ]
 
@@ -27,24 +26,24 @@ export interface TraceDirectionMeta {
 }
 
 /**
- * Direction is chosen before tracing, because it decides what the click means:
- * picking a cause and looking outward is a different question from picking an
- * outcome and looking back at what feeds it.
+ * Each direction asks a different question of the same starting variable. The
+ * panel defaults to downstream, then offers all three together after a variable
+ * is chosen.
  */
 export const TRACE_DIRECTIONS: readonly TraceDirectionMeta[] = [
   {
     id: 'downstream',
-    label: 'This affects what →',
+    label: 'Affects →',
     description: 'Follow the arrows outward from a cause to what it influences.',
   },
   {
     id: 'upstream',
-    label: '← This is affected by what',
+    label: '← Affected by',
     description: 'Follow the arrows backward from an outcome to what feeds into it.',
   },
   {
     id: 'loops',
-    label: '↻ Reinforcing loops',
+    label: '↻ Loops',
     description:
       'Find loops that leave a variable and come back to it, strengthening themselves on the way round.',
   },

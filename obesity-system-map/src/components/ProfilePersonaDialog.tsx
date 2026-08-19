@@ -113,21 +113,6 @@ export function ProfilePersonaDialog({
           </p>
         )}
 
-        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-          <strong className="font-semibold">Use de-identified personas only.</strong>{' '}
-          Profiles remain on this device until deleted and exported files contain
-          the profile details. Do not enter a real name, contact information, or
-          identifiable health information.{' '}
-          <a
-            href={`${import.meta.env.BASE_URL}privacy.html`}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium underline underline-offset-2"
-          >
-            Data handling details
-          </a>
-        </div>
-
         <form
           className="mt-3"
           onSubmit={(event) => {
@@ -161,7 +146,7 @@ export function ProfilePersonaDialog({
             value={details}
             onChange={(event) => setDetails(event.target.value)}
             rows={3}
-            placeholder="De-identified context only"
+            placeholder="Add any useful context"
             className="mb-3 w-full resize-none rounded border border-gray-300 px-2 py-1.5 text-sm focus:border-gray-800 focus:outline-none"
           />
 

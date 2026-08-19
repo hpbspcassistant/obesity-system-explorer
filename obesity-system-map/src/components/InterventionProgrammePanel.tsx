@@ -133,11 +133,6 @@ export function InterventionProgrammePanel({
             </svg>
           </button>
         </div>
-        <p className="mt-0.5 text-xs leading-relaxed text-gray-500">
-          Untick a programme to see the map without it. What only it covered
-          turns red.
-        </p>
-
         <input
           ref={searchRef}
           value={query}

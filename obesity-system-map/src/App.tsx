@@ -96,11 +96,12 @@ const NO_MARKS: ReadonlySet<number> = Object.freeze(new Set<number>())
 const NO_EDGE_MARKS: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_LINKS: readonly string[] = Object.freeze([])
 
-function readPreference(key: string): boolean {
+function readPreference(key: string, fallback = false): boolean {
   try {
-    return localStorage.getItem(key) === '1'
+    const stored = localStorage.getItem(key)
+    return stored === null ? fallback : stored === '1'
   } catch {
-    return false
+    return fallback
   }
 }
 
@@ -226,7 +227,7 @@ export default function App() {
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
-    () => readPreference(CONTRAST_KEY),
+    () => readPreference(CONTRAST_KEY, true),
   )
   const [hiddenByTaxonomy, setHiddenByTaxonomy] = useState<
     Record<Taxonomy, ReadonlySet<string>>
@@ -256,8 +257,7 @@ export default function App() {
   const [traceStartId, setTraceStartId] = useState<number | null>(null)
   const [maxSteps, setMaxSteps] = useState(DEFAULT_MAX_STEPS)
   const [focusedRouteKey, setFocusedRouteKey] = useState<string | null>(null)
-  const [hoveredRouteKey, setHoveredRouteKey] = useState<string | null>(null)
-  /** Non-null only while the Trace button is walking a route. */
+  /** Non-null only while Play path is walking a route. */
   const [animatedHops, setAnimatedHops] = useState<number | null>(null)
   // A preference rather than work in progress, so it is deliberately kept when
   // leaving Trace — only the trace itself resets.
@@ -277,7 +277,6 @@ export default function App() {
       if (current === 'trace' && next !== 'trace') {
         setTraceStartId(null)
         setFocusedRouteKey(null)
-        setHoveredRouteKey(null)
         setAnimatedHops(null)
       }
       return next
@@ -517,7 +516,6 @@ export default function App() {
         if (!next) {
           setTraceStartId(null)
           setFocusedRouteKey(null)
-          setHoveredRouteKey(null)
           setAnimatedHops(null)
         }
         return
@@ -1324,11 +1322,9 @@ export default function App() {
     )
   }, [tracing, loopMode, traceStartId, maxSteps, traceDirection])
 
-  // Hovering previews a route without committing to it.
-  const activeRouteKey = hoveredRouteKey ?? focusedRouteKey
   const activeRoute = useMemo(
-    () => search?.routes.find((r) => r.key === activeRouteKey) ?? null,
-    [search, activeRouteKey],
+    () => search?.routes.find((r) => r.key === focusedRouteKey) ?? null,
+    [search, focusedRouteKey],
   )
 
   const traceFocus = useMemo(
@@ -1366,7 +1362,9 @@ export default function App() {
    * would light a third of the map on the next.
    */
   useEffect(() => {
-    setMaxSteps(loopMode ? DEFAULT_LOOP_LENGTH : DEFAULT_MAX_STEPS)
+    // Six is the widest plain-language preset. Longer traces remain available
+    // under the panel's advanced distance control.
+    setMaxSteps(loopMode ? Math.min(DEFAULT_LOOP_LENGTH, 6) : DEFAULT_MAX_STEPS)
     setFocusedRouteKey(null)
     setAnimatedHops(null)
   }, [traceStartId, traceDirection, loopMode])
@@ -1389,7 +1387,6 @@ export default function App() {
   const clearTrace = useCallback(() => {
     setTraceStartId(null)
     setFocusedRouteKey(null)
-    setHoveredRouteKey(null)
     setAnimatedHops(null)
   }, [])
 
@@ -1465,14 +1462,6 @@ export default function App() {
         // is never pushed past its own end.
         setMaxSteps((current) =>
           Math.min(current + 2, tracePaths?.stepsForAll ?? current),
-        )
-        return
-      }
-      if (id === 'exceedListCap') {
-        // Just past the point the list gives up, which is the whole subject of
-        // the step: the map keeps drawing, the list stops writing.
-        setMaxSteps(
-          Math.min(LIST_MAX_HOPS + 2, tracePaths?.stepsForAll ?? LIST_MAX_HOPS),
         )
         return
       }
@@ -1805,7 +1794,6 @@ export default function App() {
             onMaxStepsChange={setMaxSteps}
             focusedRouteKey={focusedRouteKey}
             onFocusRoute={focusRoute}
-            onHoverRoute={setHoveredRouteKey}
             animatedHops={animatedHops}
             onPlay={playRoute}
             onStop={stopRoute}

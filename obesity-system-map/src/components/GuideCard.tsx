@@ -116,7 +116,7 @@ function GuideShell({
 }
 
 export interface GuideContentsProps {
-  /** Floated to the top of the list, since it is what you are looking at. */
+  /** Used only to mark the guide for the mode currently being viewed. */
   mode: MapMode
   onStart: (id: GuideSectionId) => void
   onClose: () => void
@@ -138,12 +138,6 @@ export function GuideContents({
   bottomInset = 0,
   onHeightChange,
 }: GuideContentsProps) {
-  const order = [...GUIDE_ORDER].sort((a, b) => {
-    const rank = (id: GuideSectionId) =>
-      GUIDE_SECTIONS[id].mode === mode ? 0 : 1
-    return rank(a) - rank(b)
-  })
-
   return (
     <GuideShell
       label="Guides"
@@ -157,7 +151,7 @@ export function GuideContents({
       </h2>
 
       <ul className="mt-2 space-y-1">
-        {order.map((id) => {
+        {GUIDE_ORDER.map((id) => {
           const section = GUIDE_SECTIONS[id]
           const leavingTrace =
             warnLosingTrace && section.mode !== undefined && section.mode !== 'trace'

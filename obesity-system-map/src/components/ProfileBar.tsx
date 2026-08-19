@@ -175,26 +175,6 @@ export function ProfileBar({
         )}
       </div>
 
-      {/* Where the work actually lives. It was small print at the foot of an
-          actions menu, which is the wrong home for a fact about safety: you go
-          looking for it only once you are already worried. Beside the name it
-          answers the question before it is asked. Stands down below 1024, where
-          the bar has better uses for the width, and the Export menu still says
-          the same thing beside the button that acts on it. */}
-      <span className="flex shrink-0 items-center gap-1 text-xs text-gray-500 max-lg:hidden">
-        <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
-          <path
-            d="M3 8.5 6.5 12 13 4.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Saved locally — de-identified data only
-      </span>
-
       <span className="h-5 w-px shrink-0 bg-gray-200" />
 
       {/* Counts. The bare numbers, without the "of 108" denominator the old
@@ -256,7 +236,6 @@ export function ProfileBar({
       <ExportMenu
         state={exportState}
         choices={exportChoices}
-        footnote="Profiles stay on this device until deleted. Exported JSON contains the persona details."
       />
 
       <button

@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
+
 import { TraceDirectionToggle } from './TraceDirectionToggle'
 import { NO_DEFINITION, definitionOf, nodesById } from '../data/systemMap'
-import { MAX_LOOP_LENGTH, type LoopSearch } from '../lib/loops'
-import { LIST_MAX_HOPS, TOTAL_VARIABLES, isEnergyCore } from '../lib/trace'
+import type { LoopSearch } from '../lib/loops'
+import { LIST_MAX_HOPS, isEnergyCore } from '../lib/trace'
 import type { PathSet, Route, RouteSearch } from '../lib/trace'
 import type { TraceDirection } from '../types'
 
@@ -15,12 +17,15 @@ interface TracePanelProps {
   onMaxStepsChange: (maxSteps: number) => void
   focusedRouteKey: string | null
   onFocusRoute: (key: string | null) => void
-  onHoverRoute: (key: string | null) => void
   animatedHops: number | null
   onPlay: () => void
   onStop: () => void
   onClear: () => void
 }
+
+const INITIAL_ROUTE_COUNT = 5
+const ROUTE_PAGE_SIZE = 20
+const NO_ROUTES: Route[] = []
 
 function Section({
   title,
@@ -36,6 +41,95 @@ function Section({
       </h3>
       {children}
     </section>
+  )
+}
+
+/**
+ * Replaces a graph-depth slider with three plain-language choices. Values above
+ * six remain available, but stay behind an advanced disclosure because they are
+ * rarely useful and can make the map much denser.
+ */
+function DistancePicker({
+  loop,
+  value,
+  maximum,
+  onChange,
+}: {
+  loop: boolean
+  value: number
+  maximum: number
+  onChange: (value: number) => void
+}) {
+  const floor = loop ? 2 : 1
+  const ceiling = Math.max(floor, maximum)
+  const rawChoices = loop
+    ? [
+        { label: 'Short', value: Math.min(3, ceiling) },
+        { label: 'Medium', value: Math.min(5, ceiling) },
+        { label: 'Wider', value: Math.min(6, ceiling) },
+      ]
+    : [
+        { label: 'Direct', value: Math.min(2, ceiling) },
+        { label: 'Nearby', value: Math.min(4, ceiling) },
+        { label: 'Wider', value: Math.min(6, ceiling) },
+      ]
+  const choices = rawChoices.filter(
+    (choice, index) =>
+      rawChoices.findIndex((other) => other.value === choice.value) === index,
+  )
+  const custom = !choices.some((choice) => choice.value === value)
+
+  return (
+    <div>
+      <div className="flex gap-1">
+        {choices.map((choice) => {
+          const active = choice.value === value
+          return (
+            <button
+              key={choice.label}
+              type="button"
+              onClick={() => onChange(choice.value)}
+              aria-pressed={active}
+              className={[
+                'min-w-0 flex-1 rounded-md border px-2 py-2 text-center transition-colors',
+                active
+                  ? 'border-teal-700 bg-teal-50 text-teal-800'
+                  : 'border-gray-200 text-gray-700 hover:bg-gray-50',
+              ].join(' ')}
+            >
+              <span className="block text-xs font-medium">{choice.label}</span>
+              <span className="mt-0.5 block text-[11px] text-gray-500">
+                {choice.value} {loop ? 'variables' : 'steps'}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
+      {ceiling > 6 && (
+        <details className="mt-2" open={custom || undefined}>
+          <summary className="cursor-pointer text-xs text-gray-500 hover:text-gray-800">
+            More distance options{custom ? ` · ${value} ${loop ? 'variables' : 'steps'}` : ''}
+          </summary>
+          <div className="mt-2 rounded-md bg-gray-50 px-2.5 py-2">
+            <input
+              type="range"
+              data-testid="step-slider"
+              min={floor}
+              max={ceiling}
+              step={1}
+              value={value}
+              onChange={(event) => onChange(Number(event.target.value))}
+              className="w-full accent-teal-600"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Up to <strong className="font-medium text-gray-700">{value}</strong>{' '}
+              {loop ? 'variables per loop' : 'steps per pathway'}
+            </p>
+          </div>
+        </details>
+      )}
+    </div>
   )
 }
 
@@ -180,7 +274,6 @@ export function TracePanel({
   onMaxStepsChange,
   focusedRouteKey,
   onFocusRoute,
-  onHoverRoute,
   animatedHops,
   onPlay,
   onStop,
@@ -191,114 +284,85 @@ export function TracePanel({
   // loop-only counts out of the route path.
   const loops = isLoops ? (search as LoopSearch | null) : null
   const totalLoops = loops?.totalLoops ?? 0
-  const routes = search?.routes ?? []
+  const routes = search?.routes ?? NO_ROUTES
   const focused = routes.find((r) => r.key === focusedRouteKey) ?? null
   const animating = animatedHops !== null
   const finished =
     focused !== null && animatedHops !== null && animatedHops >= focused.length
   const running = animating && !finished
-
-  const showingAll = paths !== null && maxSteps >= paths.stepsForAll
-  // How much of what the map is showing these listed routes actually account
-  // for. Past the list's step cap the map keeps growing and the list cannot,
-  // and without this number that gap looks like a glitch.
-  const coveredByRoutes = new Set(routes.flatMap((r) => r.nodeIds))
-  const litCount = paths ? paths.nodeIds.length : 0
-  const coveredCount = paths
-    ? paths.nodeIds.filter((id) => coveredByRoutes.has(id)).length
-    : 0
   const listCap = Math.min(maxSteps, LIST_MAX_HOPS)
-  const listIsBehindMap = paths !== null && maxSteps > LIST_MAX_HOPS
-
   const startNode = startId === null ? null : (nodesById.get(startId) ?? null)
+  const [visibleRouteCount, setVisibleRouteCount] = useState(INITIAL_ROUTE_COUNT)
+
+  useEffect(() => {
+    setVisibleRouteCount(INITIAL_ROUTE_COUNT)
+  }, [startId, direction, maxSteps])
+
+  // A guide action may select a route below the initial five. Keep the selected
+  // row visible rather than highlighting something on the map with no row in
+  // the panel to explain it.
+  useEffect(() => {
+    const index = routes.findIndex((route) => route.key === focusedRouteKey)
+    if (index >= 0) {
+      setVisibleRouteCount((current) => Math.max(current, index + 1))
+    }
+  }, [routes, focusedRouteKey])
+
+  const shownRoutes = routes.slice(0, visibleRouteCount)
+  const routesRemaining = Math.max(0, routes.length - shownRoutes.length)
+  const canSize = paths !== null && (isLoops ? totalLoops > 0 : paths.stepsForAll > 0)
+  const emptyMessage = isLoops
+    ? 'No reinforcing loops found for this variable.'
+    : direction === 'upstream'
+      ? 'No variables feed into this one.'
+      : 'No pathway from this variable reaches the energy core.'
+  const resultHeadline = isLoops
+    ? `${routes.length} reinforcing loop${routes.length === 1 ? '' : 's'} found`
+    : direction === 'upstream'
+      ? `${routes.length} contributing variable${routes.length === 1 ? '' : 's'} found`
+      : `${routes.length} pathway${routes.length === 1 ? '' : 's'} found`
 
   return (
     <aside className="absolute inset-y-0 right-0 z-10 flex w-[23rem] max-w-[85vw] flex-col border-l border-gray-200 bg-white shadow-xl">
-      {/* The direction picker carries its own descriptions, so the prose
-          subtitle that used to sit here would have said the same thing twice
-          within three centimetres. */}
-      <header className="px-4 py-3">
-        <h2 className="mb-2 text-base font-semibold text-gray-900">Trace</h2>
-        <TraceDirectionToggle
-          direction={direction}
-          onDirectionChange={onDirectionChange}
-          explainAll={startId === null || !paths}
-        />
+      <header className="flex items-center justify-between gap-3 border-b border-gray-200 px-4 py-3">
+        <h2 className="text-base font-semibold text-gray-900">Trace</h2>
+        {startId !== null && (
+          <button
+            type="button"
+            data-testid="clear-start"
+            onClick={onClear}
+            className="rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+          >
+            Start over
+          </button>
+        )}
       </header>
 
       {startId === null || !paths ? (
-        <div className="px-4 py-3 text-sm text-gray-500">
-          Click a variable on the map, or search for one, to start tracing.
+        <div className="px-4 py-5">
+          <p className="text-sm font-medium text-gray-900">
+            Select a starting variable
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-gray-500">
+            Trace follows causal pathways through the system. Choose a variable
+            to explore what it affects, what affects it, or the reinforcing loops
+            that return to it.
+          </p>
         </div>
       ) : (
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <Section title="Starting from">
-            <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-medium text-gray-900">
-                {startNode?.label}
-              </p>
-              <button
-                type="button"
-                data-testid="clear-start"
-                aria-label="Clear starting variable"
-                title="Clear starting variable"
-                onClick={onClear}
-                className="-mr-1 shrink-0 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              >
-                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
-                  <path
-                    d="M4 4l8 8M12 4l-8 8"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </button>
-            </div>
-            {/* Not "reaches": a journey ends on arrival, so this counts the
-                variables that lie on a route TO the core, which is narrower than
-                everything the start eventually influences. */}
-            <p data-testid="reach-headline" className="mt-1 text-sm">
-              {isLoops ? (
-                totalLoops === 0 ? (
-                  <span className="text-gray-500">
-                    Not part of any reinforcing loop up to {MAX_LOOP_LENGTH}{' '}
-                    variables long.
-                  </span>
-                ) : (
-                  <span className="font-medium text-teal-700">
-                    Sits in {totalLoops} reinforcing loop
-                    {totalLoops === 1 ? '' : 's'} — the shortest closes in{' '}
-                    {loops?.shortest} steps
-                  </span>
-                )
-              ) : (
-                <span className="text-gray-500">
-                  {direction === 'downstream'
-                    ? `${paths.totalNodes} of ${TOTAL_VARIABLES} variables lie on a route to ${isEnergyCore(startId) ? 'the rest of the energy core' : 'the energy core'}`
-                    : `${paths.totalNodes} of ${TOTAL_VARIABLES} variables feed into this, directly or indirectly`}
-                </span>
-              )}
+          <div className="px-4 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Starting variable
             </p>
-
-            {/*
-             * What the variable actually means, so Trace is self-contained.
-             *
-             * Trace deliberately does not open a detail panel — a click here
-             * picks a starting variable and nothing else — which left "what does
-             * this variable mean?" answerable only in Explore. Switching modes to
-             * find out cleared the trace on the way, so reading a definition
-             * cost you the work that prompted the question.
-             *
-             * Below the reach line rather than above it: the reach is the answer
-             * the mode exists to give, and this is the supporting detail.
-             */}
+            <p className="mt-1 text-sm font-medium text-gray-900">
+              {startNode?.label}
+            </p>
             {startNode && (
               <p
                 data-testid="start-definition"
                 className={[
-                  'mt-2 border-t border-gray-100 pt-2 text-xs leading-relaxed',
+                  'mt-1.5 text-xs leading-relaxed',
                   definitionOf(startNode)
                     ? 'text-gray-600'
                     : 'italic text-gray-500',
@@ -307,104 +371,58 @@ export function TracePanel({
                 {definitionOf(startNode) ?? NO_DEFINITION}
               </p>
             )}
+          </div>
+
+          <Section title="Question">
+            <TraceDirectionToggle
+              direction={direction}
+              onDirectionChange={onDirectionChange}
+            />
           </Section>
 
           {direction === 'downstream' && isEnergyCore(startId) && (
-            <p className="px-4 pb-1 text-xs text-gray-500">
+            <p className="border-t border-gray-100 px-4 py-2 text-xs text-gray-500">
               This variable is part of the energy core, so the trace follows it on
               to the other core variables.
             </p>
           )}
 
-          {/* Nothing to size when the variable sits in no loop. */}
-          {(!isLoops || totalLoops > 0) && (
+          {!canSize ? (
+            <div className="border-t border-gray-200 px-4 py-4 text-sm text-gray-500">
+              {emptyMessage}
+            </div>
+          ) : (
             <>
-              <Section title={isLoops ? 'Loop length' : 'Path length'}>
-                <input
-                  type="range"
-                  data-testid="step-slider"
-                  min={2}
-                  max={paths.stepsForAll}
-                  step={1}
+              <Section title={isLoops ? 'Loop size' : 'Distance'}>
+                <DistancePicker
+                  loop={isLoops}
                   value={maxSteps}
-                  onChange={(e) => onMaxStepsChange(Number(e.target.value))}
-                  className="w-full accent-teal-600"
+                  maximum={paths.stepsForAll}
+                  onChange={onMaxStepsChange}
                 />
-                {/* A path is just a chain of arrows, so drawing every arrow on
-                    any route is the same as showing every path. No hedging. */}
-                <div className="mt-1 text-xs">
-                  {showingAll ? (
-                    <span className="font-medium text-teal-700">
-                      {isLoops
-                        ? `Every loop up to ${MAX_LOOP_LENGTH} variables is shown`
-                        : 'Any length — every path is shown'}
-                    </span>
-                  ) : (
-                    <span className="text-gray-600">
-                      Up to <span className="font-medium">{maxSteps}</span>{' '}
-                      {isLoops ? 'variables' : 'steps'}
-                    </span>
-                  )}
-                </div>
-
-                <p data-testid="path-counts" className="mt-1.5 text-xs text-gray-500">
-                  {paths.nodeIds.length} of {paths.totalNodes} variables ·{' '}
-                  {paths.connectionIds.length} of {paths.totalConnections} arrows
+                <p data-testid="path-counts" className="mt-2.5 text-sm font-medium text-gray-800">
+                  {paths.nodeIds.length + 1} variables · {paths.connectionIds.length}{' '}
+                  connections highlighted
                 </p>
               </Section>
 
-              <Section
-                title={
-                  isLoops
-                    ? 'Reinforcing loops'
-                    : direction === 'downstream'
-                      ? 'Routes written out'
-                      : 'Affected by'
-                }
-              >
+              <Section title={isLoops ? 'Reinforcing loops' : 'Pathways'}>
                 <p data-testid="route-headline" className="mb-2 text-xs text-gray-500">
-                  {isLoops
-                    ? routes.length === 0
-                      ? `No reinforcing loop closes within ${maxSteps} variables. The shortest through this variable needs ${loops?.shortest}.`
-                      : routes.length === totalLoops
-                        ? `All ${totalLoops} reinforcing loop${totalLoops === 1 ? '' : 's'} through this variable, listed in full.`
-                        : `${routes.length} of this variable's ${totalLoops} reinforcing loops — those closing within ${maxSteps} variables.`
-                    : direction === 'upstream'
-                    ? routes.length === 0
-                      ? `Nothing feeds into this variable within ${listCap} steps.`
-                      : `${routes.length} variable${routes.length === 1 ? '' : 's'} feed in within ${listCap} steps, each shown by its shortest chain.`
-                    : routes.length === 0
-                      ? `No complete routes within ${listCap} steps.`
-                      : `${routes.length} route${routes.length === 1 ? '' : 's'} up to ${listCap} steps, covering ${coveredCount} of the ${litCount} variables on the map.`}
-                  {listIsBehindMap && direction === 'downstream' && (
-                    // The map is complete; only this list is a sample.
-                    <span className="text-gray-500">
-                      {' '}
-                      The other {litCount - coveredCount} are reached only by
-                      routes longer than {LIST_MAX_HOPS} steps — drawn, but far
-                      too many to write out.
-                    </span>
-                  )}
-                  {search?.truncated && ' (list truncated)'}
-                  {isLoops && (
-                    // The cap is a limit on what is known, not on what is drawn.
-                    <span className="block pt-1 text-gray-500">
-                      Loops longer than {MAX_LOOP_LENGTH} variables are not
-                      included — there are thousands, and they cannot be
-                      summarised without listing them.
-                    </span>
-                  )}
+                  {routes.length === 0
+                    ? isLoops
+                      ? 'No reinforcing loops found at this size. Try a wider loop size.'
+                      : `No pathway is available within ${listCap} steps.`
+                    : resultHeadline}
                 </p>
 
-                <ul className="space-y-0.5" onMouseLeave={() => onHoverRoute(null)}>
-                  {routes.map((route, index) => {
+                <ul className="space-y-0.5">
+                  {shownRoutes.map((route, index) => {
                     const active = route.key === focusedRouteKey
                     return (
                       <li key={route.key}>
                         <button
                           type="button"
                           data-route-key={route.key}
-                          onMouseEnter={() => onHoverRoute(route.key)}
                           onClick={() => onFocusRoute(active ? null : route.key)}
                           className={[
                             'flex w-full items-baseline gap-2 rounded-md px-2 py-1.5 text-left text-sm',
@@ -420,7 +438,7 @@ export function TracePanel({
                             <RouteChain route={route} loop={isLoops} />
                           </span>
                           <span className="shrink-0 text-xs text-gray-500">
-                            {route.length}
+                            {route.length} {route.length === 1 ? 'step' : 'steps'}
                           </span>
                         </button>
 
@@ -436,7 +454,11 @@ export function TracePanel({
                                 onClick={running ? onStop : onPlay}
                                 className="rounded-full bg-teal-600 px-3 py-1 text-xs font-medium text-white hover:bg-teal-700"
                               >
-                                {running ? 'Stop' : finished ? 'Replay' : 'Trace'}
+                                {running
+                                  ? 'Stop'
+                                  : finished
+                                    ? 'Replay path'
+                                    : 'Play path'}
                               </button>
                               <span className="text-xs text-gray-500">
                                 {animating
@@ -472,23 +494,42 @@ export function TracePanel({
                     )
                   })}
                 </ul>
-              </Section>
 
+                {routes.length > INITIAL_ROUTE_COUNT && (
+                  <div className="mt-2 flex items-center gap-2 border-t border-gray-100 pt-2">
+                    {routesRemaining > 0 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setVisibleRouteCount((current) => current + ROUTE_PAGE_SIZE)
+                        }
+                        className="text-xs font-medium text-teal-700 hover:text-teal-900"
+                      >
+                        Show {Math.min(ROUTE_PAGE_SIZE, routesRemaining)} more
+                      </button>
+                    )}
+                    {visibleRouteCount > INITIAL_ROUTE_COUNT && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const focusedIndex = routes.findIndex(
+                            (route) => route.key === focusedRouteKey,
+                          )
+                          if (focusedIndex >= INITIAL_ROUTE_COUNT) onFocusRoute(null)
+                          setVisibleRouteCount(INITIAL_ROUTE_COUNT)
+                        }}
+                        className="text-xs text-gray-500 hover:text-gray-800"
+                      >
+                        Show fewer
+                      </button>
+                    )}
+                  </div>
+                )}
+
+              </Section>
             </>
           )}
         </div>
-      )}
-
-      {startId !== null && (
-        <footer className="border-t border-gray-200 px-4 py-2.5">
-          <button
-            type="button"
-            onClick={onClear}
-            className="w-full rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
-          >
-            Clear trace
-          </button>
-        </footer>
       )}
     </aside>
   )
