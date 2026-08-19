@@ -19,6 +19,7 @@ import { ProfileCard } from './components/ProfileCard'
 import { ProfilePersonaDialog } from './components/ProfilePersonaDialog'
 import { ProfileReviewSheet } from './components/ProfileReviewSheet'
 import { TracePanel } from './components/TracePanel'
+import { UndoToast, type UndoAction } from './components/UndoToast'
 import {
   DEMO_QUERY,
   DEMO_VARIABLE_LABEL,
@@ -280,25 +281,61 @@ export default function App() {
     [activeProfileId],
   )
 
+  /**
+   * The last change to the profile, offered back. Cleared on a timer, on undo,
+   * and on leaving the mode — see the effects below.
+   */
+  const [undoAction, setUndoAction] = useState<UndoAction | null>(null)
+
   const toggleMark = useCallback(
-    (nodeId: number) => editActive((p) => toggleNodeIn(p, nodeId)),
-    [editActive],
+    (nodeId: number) => {
+      // Read before the edit: afterwards the toggle has already happened and
+      // there is no way to say which direction it went.
+      const wasMarked = activeProfile?.nodeIds.has(nodeId) ?? false
+      editActive((p) => toggleNodeIn(p, nodeId))
+      setUndoAction({
+        text: `${wasMarked ? 'Unmarked' : 'Marked'} ${
+          nodesById.get(nodeId)?.label ?? 'a variable'
+        }`,
+        undo: () => editActive((p) => toggleNodeIn(p, nodeId)),
+      })
+    },
+    [activeProfile, editActive],
   )
   const toggleEdgeMark = useCallback(
-    (connectionId: string) => editActive((p) => toggleEdgeIn(p, connectionId)),
-    [editActive],
+    (connectionId: string) => {
+      const wasMarked = activeProfile?.edgeIds.has(connectionId) ?? false
+      editActive((p) => toggleEdgeIn(p, connectionId))
+      setUndoAction({
+        text: `${wasMarked ? 'Unmarked' : 'Marked'} a connection`,
+        undo: () => editActive((p) => toggleEdgeIn(p, connectionId)),
+      })
+    },
+    [activeProfile, editActive],
   )
 
   /** Accepts every link whose two ends are already marked, in one go. */
-  const markAllLinks = useCallback(
-    () =>
-      editActive((p) => {
-        const edgeIds = new Set(p.edgeIds)
-        for (const id of missingLinks(p)) edgeIds.add(id)
-        return { ...p, edgeIds }
-      }),
-    [editActive],
-  )
+  const markAllLinks = useCallback(() => {
+    if (!activeProfile) return
+    // Captured before the edit, so undo removes exactly what this added rather
+    // than everything that happens to be marked when it is pressed.
+    const added = missingLinks(activeProfile)
+    if (added.length === 0) return
+    editActive((p) => {
+      const edgeIds = new Set(p.edgeIds)
+      for (const id of added) edgeIds.add(id)
+      return { ...p, edgeIds }
+    })
+    setUndoAction({
+      text: `Marked ${added.length} connection${added.length === 1 ? '' : 's'}`,
+      undo: () =>
+        editActive((p) => {
+          const edgeIds = new Set(p.edgeIds)
+          for (const id of added) edgeIds.delete(id)
+          return { ...p, edgeIds }
+        }),
+    })
+  }, [activeProfile, editActive])
 
   const renameActive = useCallback(
     (name: string, details: string, characteristics: PersonaCharacteristics) =>
@@ -957,6 +994,22 @@ export default function App() {
     if (awaits.id === 'markedVariable') return counts.nodes > guideBaseline.nodes
     return counts.edges > guideBaseline.edges
   }, [guideStep, activeProfile, guideBaseline])
+
+  /**
+   * The toast is a receipt, not a decision, so ignoring it has to mean the same
+   * as accepting it. Keyed on the action itself, so a second mark restarts the
+   * clock rather than inheriting the first one's remaining time.
+   */
+  useEffect(() => {
+    if (!undoAction) return
+    const timer = window.setTimeout(() => setUndoAction(null), 7000)
+    return () => window.clearTimeout(timer)
+  }, [undoAction])
+
+  /** Nothing to take back once you have left the mode that did it. */
+  useEffect(() => {
+    if (mode !== 'profile') setUndoAction(null)
+  }, [mode])
 
   useEffect(() => {
     try {
@@ -1729,6 +1782,18 @@ export default function App() {
             // The first visit has no profile to cancel back to, so the way out
             // is out of the mode.
             onLeave={() => changeMode('explore')}
+          />
+        )}
+
+        {profiling && activeProfile && undoAction && (
+          <UndoToast
+            action={undoAction}
+            onUndo={() => {
+              undoAction.undo()
+              setUndoAction(null)
+            }}
+            onDismiss={() => setUndoAction(null)}
+            bottomInset={PROFILE_BAR_PX}
           />
         )}
 
