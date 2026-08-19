@@ -80,12 +80,12 @@ export function PersonaCharacteristicsForm({
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between gap-2">
-        <p className="text-[11px] font-medium text-gray-600">
+        <p className="text-xs font-medium text-gray-600">
           Characteristics{' '}
-          <span className="text-gray-400">(who programmes are aimed at)</span>
+          <span className="text-gray-500">(who programmes are aimed at)</span>
         </p>
         {unset > 0 && (
-          <span className="text-[10.5px] text-amber-700">{unset} not set</span>
+          <span className="text-xs text-amber-700">{unset} not set</span>
         )}
       </div>
 
@@ -100,13 +100,13 @@ export function PersonaCharacteristicsForm({
                 : encode(held as string | boolean)
           return (
             <label key={key} className="block">
-              <span className="mb-0.5 block text-[10.5px] text-gray-500">
+              <span className="mb-0.5 block text-xs text-gray-500">
                 {humanise(key)}
               </span>
               <select
                 value={current}
                 onChange={(event) => set(key, decode(event.target.value))}
-                className="w-full rounded border border-gray-300 px-1.5 py-1 text-[12px] text-gray-800 focus:border-gray-800 focus:outline-none"
+                className="w-full rounded border border-gray-300 px-1.5 py-1 text-xs text-gray-800 focus:border-gray-800 focus:outline-none"
               >
                 <option value="">Not set yet</option>
                 {values.filter((v): v is string | boolean => v !== null).map((v) => (
@@ -121,8 +121,8 @@ export function PersonaCharacteristicsForm({
         })}
       </div>
 
-      <p className="mb-1 mt-2.5 text-[10.5px] text-gray-500">
-        Conditions <span className="text-gray-400">(tick any that apply)</span>
+      <p className="mb-1 mt-2.5 text-xs text-gray-500">
+        Conditions <span className="text-gray-500">(tick any that apply)</span>
       </p>
       <div className="flex flex-wrap gap-1">
         {conditionValues.map((condition) => {
@@ -135,7 +135,7 @@ export function PersonaCharacteristicsForm({
               aria-checked={on}
               onClick={() => toggleCondition(condition)}
               className={[
-                'rounded-full border px-2 py-0.5 text-[11px] transition-colors',
+                'rounded-full border px-2 py-0.5 text-xs transition-colors',
                 on
                   ? 'border-gray-900 bg-gray-900 text-white'
                   : 'border-gray-300 text-gray-600 hover:bg-gray-50',

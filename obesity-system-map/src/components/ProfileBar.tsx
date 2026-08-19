@@ -129,16 +129,16 @@ export function ProfileBar({
         >
           <span
             aria-hidden="true"
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-[11px] font-semibold text-gray-900"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold text-gray-900"
           >
             {initialOf(profile.name)}
           </span>
           <span className="max-w-[13rem] text-left">
-            <span className="block truncate text-[13px] font-medium leading-tight text-gray-900">
+            <span className="block truncate text-sm font-medium leading-tight text-gray-900">
               {profile.name}
             </span>
             {profile.details && (
-              <span className="block max-w-[13rem] truncate text-[10.5px] leading-tight text-gray-500">
+              <span className="block max-w-[13rem] truncate text-xs leading-tight text-gray-500">
                 {profile.details}
               </span>
             )}
@@ -178,7 +178,7 @@ export function ProfileBar({
       {/* Counts. The bare numbers, without the "of 108" denominator the old
           panel showed: a profile is a deliberately small curated set, and
           framing 12 variables as 11% of the map made a correct one feel unfinished. */}
-      <p className="shrink-0 text-[12px] text-gray-600">
+      <p className="shrink-0 text-xs text-gray-600">
         <strong className="font-semibold tabular-nums text-gray-900">
           {markedNodes}
         </strong>{' '}
@@ -210,7 +210,7 @@ export function ProfileBar({
               : 'Hide everything that is not marked'
         }
         className={[
-          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
           markedNodes === 0
             ? 'cursor-not-allowed border-gray-200 text-gray-300'
             : markedOnly
@@ -242,7 +242,7 @@ export function ProfileBar({
         onClick={onToggleReview}
         aria-expanded={reviewOpen}
         className={[
-          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
           reviewOpen
             ? 'border-gray-400 bg-gray-100 text-gray-900'
             : 'border-gray-300 text-gray-700 hover:bg-gray-50',
@@ -252,7 +252,7 @@ export function ProfileBar({
         {unmarkedLinks > 0 && (
           <span
             title={`${unmarkedLinks} connection${unmarkedLinks === 1 ? '' : 's'} between two marked variables are not marked`}
-            className="rounded-full bg-gray-900 px-1.5 text-[10px] font-medium tabular-nums text-white"
+            className="rounded-full bg-gray-900 px-1.5 text-xs font-medium tabular-nums text-white"
           >
             {unmarkedLinks}
           </span>
@@ -306,7 +306,7 @@ export function ProfileBar({
 
 function Chevron() {
   return (
-    <svg viewBox="0 0 10 6" className="h-2 w-2.5 text-gray-400" aria-hidden="true">
+    <svg viewBox="0 0 10 6" className="h-2 w-2.5 text-gray-500" aria-hidden="true">
       <path
         d="M1 1l4 4 4-4"
         stroke="currentColor"
@@ -357,7 +357,7 @@ function MenuItem({
       role="menuitem"
       onClick={onClick}
       className={[
-        'flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-gray-50',
+        'flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-gray-50',
         selected ? 'font-medium text-gray-900' : 'text-gray-700',
       ].join(' ')}
     >
@@ -395,7 +395,7 @@ function DeleteItem({
         type="button"
         role="menuitem"
         onClick={() => setArmed(true)}
-        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] text-rose-700 hover:bg-rose-50"
+        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-rose-700 hover:bg-rose-50"
       >
         <span aria-hidden="true" className="text-transparent">
           ✓
@@ -407,7 +407,7 @@ function DeleteItem({
 
   return (
     <div className="px-3 py-2">
-      <p className="mb-1.5 text-[12px] leading-snug text-gray-700">
+      <p className="mb-1.5 text-xs leading-snug text-gray-700">
         Delete <strong className="font-semibold">{name}</strong> and every mark
         in it? This cannot be undone.
       </p>
@@ -415,14 +415,14 @@ function DeleteItem({
         <button
           type="button"
           onClick={onConfirm}
-          className="rounded bg-rose-600 px-2 py-1 text-[12px] font-medium text-white hover:bg-rose-700"
+          className="rounded bg-rose-600 px-2 py-1 text-xs font-medium text-white hover:bg-rose-700"
         >
           Delete
         </button>
         <button
           type="button"
           onClick={() => setArmed(false)}
-          className="rounded border border-gray-300 px-2 py-1 text-[12px] text-gray-600 hover:bg-gray-50"
+          className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50"
         >
           Cancel
         </button>

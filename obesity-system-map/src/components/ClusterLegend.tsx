@@ -179,7 +179,7 @@ export function ClusterLegend({
           {/* Only when something is hidden: otherwise the badge would imply a
               filter is active when nothing is filtered. */}
           {filtering && (
-            <span className="rounded-full bg-gray-900 px-1.5 text-[11px] tabular-nums text-white">
+            <span className="rounded-full bg-gray-900 px-1.5 text-xs tabular-nums text-white">
               {hiddenCount} hidden
             </span>
           )}

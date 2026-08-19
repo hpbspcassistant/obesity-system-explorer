@@ -58,7 +58,7 @@ export function MapHeader({
             Obesity System Map
           </span>
         </h1>
-        <p className="mt-0.5 truncate text-[11px] leading-tight text-gray-500">
+        <p className="mt-0.5 truncate text-xs leading-tight text-gray-500">
           Adapted from UK Government Foresight Programme, 2007
         </p>
       </div>

@@ -32,9 +32,9 @@ function Section({
   return (
     <section className="min-w-0 flex-1 border-l border-gray-100 px-4 py-3 first:border-l-0">
       <div className="mb-2 flex items-baseline justify-between gap-2">
-        <h3 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
           {title}{' '}
-          <span className="font-normal tabular-nums text-gray-400">{count}</span>
+          <span className="font-normal tabular-nums text-gray-500">{count}</span>
         </h3>
         {action}
       </div>
@@ -45,7 +45,7 @@ function Section({
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[12px] leading-relaxed text-gray-400">{children}</p>
+    <p className="text-sm leading-relaxed text-gray-500">{children}</p>
   )
 }
 
@@ -92,7 +92,7 @@ export function ProfileReviewSheet({
             <div className="space-y-2">
               {groups.map((group) => (
                 <div key={group.name}>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {group.name} ({group.nodeIds.length})
                   </p>
                   <ul className="mt-0.5">
@@ -109,7 +109,7 @@ export function ProfileReviewSheet({
                         <button
                           type="button"
                           onClick={() => onSelectNode(id)}
-                          className="flex-1 truncate text-left text-[12px] text-gray-700 hover:text-gray-900 hover:underline"
+                          className="flex-1 truncate text-left text-xs text-gray-700 hover:text-gray-900 hover:underline"
                         >
                           {nodesById.get(id)?.label ?? id}
                         </button>
@@ -120,7 +120,7 @@ export function ProfileReviewSheet({
               ))}
             </div>
           )}
-          <p className="mt-2 border-t border-gray-100 pt-1.5 text-[11px] text-gray-400">
+          <p className="mt-2 border-t border-gray-100 pt-1.5 text-xs text-gray-500">
             {profile.nodeIds.size} of {TOTAL_NODES} variables · {groups.length} of{' '}
             {variableTypes.length} clusters
           </p>
@@ -146,7 +146,7 @@ export function ProfileReviewSheet({
                   <button
                     type="button"
                     onClick={() => onSelectConnection(connection.id)}
-                    className="flex-1 truncate text-left text-[12px] text-gray-700 hover:text-gray-900 hover:underline"
+                    className="flex-1 truncate text-left text-xs text-gray-700 hover:text-gray-900 hover:underline"
                   >
                     {connectionLabel(connection)}
                   </button>
@@ -155,7 +155,7 @@ export function ProfileReviewSheet({
               ))}
             </ul>
           )}
-          <p className="mt-2 border-t border-gray-100 pt-1.5 text-[11px] text-gray-400">
+          <p className="mt-2 border-t border-gray-100 pt-1.5 text-xs text-gray-500">
             {profile.edgeIds.size} of {TOTAL_CONNECTIONS} connections
           </p>
         </Section>
@@ -168,7 +168,7 @@ export function ProfileReviewSheet({
               <button
                 type="button"
                 onClick={onMarkAllLinks}
-                className="text-[11px] font-medium text-gray-900 hover:underline"
+                className="text-xs font-medium text-gray-900 hover:underline"
               >
                 Mark all
               </button>
@@ -182,7 +182,7 @@ export function ProfileReviewSheet({
             </Empty>
           ) : (
             <>
-              <p className="mb-1.5 text-[11px] leading-relaxed text-gray-500">
+              <p className="mb-1.5 text-sm leading-relaxed text-gray-500">
                 Both ends are marked but the link is not. Each one is drawn on
                 the map with a dot on it — click the dot to accept, or leave it.
               </p>
@@ -203,7 +203,7 @@ export function ProfileReviewSheet({
                       <button
                         type="button"
                         onClick={() => onSelectConnection(id)}
-                        className="flex-1 truncate text-left text-[12px] text-gray-700 hover:text-gray-900 hover:underline"
+                        className="flex-1 truncate text-left text-xs text-gray-700 hover:text-gray-900 hover:underline"
                       >
                         {connectionLabel(connection)}
                       </button>
@@ -222,7 +222,7 @@ export function ProfileReviewSheet({
         onClick={onClose}
         aria-label="Close review"
         title="Close review"
-        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
       >
         <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
           <path

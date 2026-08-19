@@ -42,7 +42,7 @@ export function DetailPanel({
               type="button"
               onClick={onClose}
               aria-label="Close details"
-              className="-mr-1 shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              className="-mr-1 shrink-0 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
             >
               <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
                 <path

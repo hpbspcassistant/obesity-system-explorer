@@ -56,7 +56,7 @@ function Count({ n, label }: { n: number; label: string }) {
 
 function Chevron() {
   return (
-    <svg viewBox="0 0 10 6" className="h-2 w-2.5 text-gray-400" aria-hidden="true">
+    <svg viewBox="0 0 10 6" className="h-2 w-2.5 text-gray-500" aria-hidden="true">
       <path
         d="M1 1l4 4 4-4"
         stroke="currentColor"
@@ -102,7 +102,7 @@ function MenuItem({
       role="menuitem"
       onClick={onClick}
       className={[
-        'flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-gray-50',
+        'flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-gray-50',
         selected ? 'font-medium text-gray-900' : 'text-gray-700',
       ].join(' ')}
     >
@@ -171,23 +171,23 @@ function PersonaDropdown({
           <>
             <span
               aria-hidden="true"
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-[11px] font-semibold text-gray-900"
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold text-gray-900"
             >
               {initialOf(activeProfile.name)}
             </span>
             <span className="max-w-[13rem] text-left">
-              <span className="block truncate text-[13px] font-medium leading-tight text-gray-900">
+              <span className="block truncate text-sm font-medium leading-tight text-gray-900">
                 {activeProfile.name}
               </span>
               {activeProfile.details && (
-                <span className="block max-w-[13rem] truncate text-[10.5px] leading-tight text-gray-500">
+                <span className="block max-w-[13rem] truncate text-xs leading-tight text-gray-500">
                   {activeProfile.details}
                 </span>
               )}
             </span>
           </>
         ) : (
-          <span className="text-[13px] text-gray-800">
+          <span className="text-sm text-gray-800">
             Anyone — no persona
           </span>
         )}
@@ -213,7 +213,7 @@ function PersonaDropdown({
             </MenuItem>
           ))}
           {profiles.length === 0 && (
-            <p className="px-3 py-1.5 text-[12px] text-gray-400">
+            <p className="px-3 py-1.5 text-xs text-gray-500">
               Add a persona in Profile mode
             </p>
           )}
@@ -297,7 +297,7 @@ function QuickCharacteristicPicker({
         type="button"
         onClick={() => setOpen((c) => !c)}
         className={[
-          'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
           hasAny
             ? 'border-gray-900 bg-gray-900 text-white'
             : 'border-gray-300 text-gray-700 hover:bg-gray-50',
@@ -310,14 +310,14 @@ function QuickCharacteristicPicker({
       {open && (
         <div className="absolute bottom-full left-0 mb-1.5 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]">
           <div className="mb-2 flex items-baseline justify-between">
-            <p className="text-[11px] font-medium text-gray-600">
+            <p className="text-xs font-medium text-gray-600">
               Quick filter
             </p>
             {hasAny && (
               <button
                 type="button"
                 onClick={() => onChange({})}
-                className="text-[10.5px] text-gray-400 underline decoration-gray-300 underline-offset-2 hover:text-gray-700"
+                className="text-xs text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-700"
               >
                 Clear all
               </button>
@@ -335,13 +335,13 @@ function QuickCharacteristicPicker({
                     : encode(held as string | boolean)
               return (
                 <label key={key} className="block">
-                  <span className="mb-0.5 block text-[10.5px] text-gray-500">
+                  <span className="mb-0.5 block text-xs text-gray-500">
                     {humanise(key)}
                   </span>
                   <select
                     value={current}
                     onChange={(event) => set(key, decode(event.target.value))}
-                    className="w-full rounded border border-gray-300 px-1.5 py-1 text-[12px] text-gray-800 focus:border-gray-800 focus:outline-none"
+                    className="w-full rounded border border-gray-300 px-1.5 py-1 text-xs text-gray-800 focus:border-gray-800 focus:outline-none"
                   >
                     <option value="">Any</option>
                     {values
@@ -357,7 +357,7 @@ function QuickCharacteristicPicker({
             })}
           </div>
 
-          <p className="mb-1 mt-2.5 text-[10.5px] text-gray-500">Conditions</p>
+          <p className="mb-1 mt-2.5 text-xs text-gray-500">Conditions</p>
           <div className="flex flex-wrap gap-1">
             {conditionValues.map((condition) => {
               const on = conditions.includes(condition)
@@ -369,7 +369,7 @@ function QuickCharacteristicPicker({
                   aria-checked={on}
                   onClick={() => toggleCondition(condition)}
                   className={[
-                    'rounded-full border px-2 py-0.5 text-[11px] transition-colors',
+                    'rounded-full border px-2 py-0.5 text-xs transition-colors',
                     on
                       ? 'border-gray-900 bg-gray-900 text-white'
                       : 'border-gray-300 text-gray-600 hover:bg-gray-50',
@@ -461,7 +461,7 @@ export function InterventionBar({
 
       <span className="min-w-0 flex-1" />
 
-      <p className="flex shrink-0 items-center gap-2 text-[12px] text-gray-600">
+      <p className="flex shrink-0 items-center gap-2 text-xs text-gray-600">
         {withPersona ? (
           <>
             <Count n={summary.covered.length} label="covered" />
@@ -483,7 +483,7 @@ export function InterventionBar({
 
       {applicability && (
         <p
-          className="shrink-0 text-[11.5px] text-gray-500"
+          className="shrink-0 text-xs text-gray-500"
           title={applicability.applies.map((p) => p.name).join('\n')}
         >
           {applicability.applies.length} of{' '}
@@ -505,7 +505,7 @@ export function InterventionBar({
         aria-expanded={programmePanelOpen}
         title="Choose which programmes to count"
         className={[
-          'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+          'shrink-0 rounded-md border px-2.5 py-1 text-xs transition-colors',
           filtering
             ? 'border-gray-900 bg-gray-900 text-white'
             : 'border-gray-300 text-gray-700 hover:bg-gray-50',
@@ -529,7 +529,7 @@ export function InterventionBar({
               : 'Fade everything except opportunity areas'
           }
           className={[
-            'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
+            'shrink-0 rounded-md border px-2.5 py-1 text-xs transition-colors',
             summary.gaps.length === 0
               ? 'cursor-not-allowed border-gray-200 text-gray-300'
               : gapsOnly

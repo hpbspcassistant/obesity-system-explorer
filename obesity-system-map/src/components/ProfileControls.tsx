@@ -63,7 +63,7 @@ export function InfluenceTag({ connection }: { connection: Connection }) {
     <span
       title={positive ? 'Increases' : 'Decreases'}
       className={[
-        'ml-1 shrink-0 rounded px-1 text-[10px] font-medium leading-4',
+        'ml-1 shrink-0 rounded px-1 text-xs font-medium leading-4',
         positive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700',
       ].join(' ')}
     >
@@ -104,14 +104,14 @@ export function ConnectionRow({
         onChange={onToggle}
         label={`Mark the connection to ${label}`}
       />
-      <span aria-hidden="true" className="shrink-0 text-[11px] text-gray-400">
+      <span aria-hidden="true" className="shrink-0 text-xs text-gray-500">
         {direction === 'out' ? '→' : '←'}
       </span>
       <button
         type="button"
         onClick={() => onSelectNode(otherId)}
         title={`Open ${label}`}
-        className="flex-1 truncate text-left text-[12px] text-gray-700 hover:text-gray-900 hover:underline"
+        className="flex-1 truncate text-left text-xs text-gray-700 hover:text-gray-900 hover:underline"
       >
         {label}
       </button>

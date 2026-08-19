@@ -43,7 +43,7 @@ function Row({
   return (
     <li className="flex items-center gap-2">
       <Swatch standing={standing} />
-      <span className="text-[11px] leading-snug text-gray-700">{children}</span>
+      <span className="text-xs leading-snug text-gray-700">{children}</span>
     </li>
   )
 }
@@ -92,7 +92,7 @@ export function InterventionKey({
       className="absolute z-30 w-56 rounded-lg border border-gray-200 bg-white/97 p-3 shadow-lg"
       style={{ bottom: 16 + bottomInset, left: 16 }}
     >
-      <p className="mb-2 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
         What the boxes mean
       </p>
 
@@ -131,7 +131,7 @@ export function InterventionKey({
           walkthrough, nothing announced it. A legend is the right place to say
           so: it is already the surface a reader consults to work out what they
           are looking at, and one quiet line costs no new chrome. */}
-      <p className="mt-2 border-t border-gray-100 pt-2 text-[10.5px] leading-snug text-gray-500">
+      <p className="mt-2 border-t border-gray-100 pt-2 text-xs leading-snug text-gray-500">
         Click any variable to see which programmes reach it.
       </p>
     </div>

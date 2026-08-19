@@ -31,7 +31,7 @@ function Section({
 }) {
   return (
     <section className="border-t border-gray-200 px-4 py-3">
-      <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
         {title}
       </h3>
       {children}
@@ -106,10 +106,10 @@ function ArrivalDefinition({
   const definition = definitionOf(node)
 
   return (
-    <p className="mb-1.5 border-t border-gray-100 pt-1.5 text-[11px] leading-relaxed">
+    <p className="mb-1.5 border-t border-gray-100 pt-1.5 text-sm leading-relaxed">
       {/* Named, because which variable this describes changes as you walk. */}
       <span className="font-medium text-gray-700">{node.label}</span>{' '}
-      <span className={definition ? 'text-gray-600' : 'italic text-gray-400'}>
+      <span className={definition ? 'text-gray-600' : 'italic text-gray-500'}>
         {definition ?? NO_DEFINITION}
       </span>
     </p>
@@ -132,7 +132,7 @@ function HopLine({
     return (
       <li
         className={[
-          'flex items-baseline gap-1.5 rounded px-1.5 py-1 text-[11px] leading-snug',
+          'flex items-baseline gap-1.5 rounded px-1.5 py-1 text-sm leading-snug',
           crossed ? 'bg-teal-50 text-gray-800' : 'text-gray-500',
         ].join(' ')}
       >
@@ -144,7 +144,7 @@ function HopLine({
   return (
     <li
       className={[
-        'flex items-baseline gap-1.5 rounded px-1.5 py-1 text-[11px] leading-snug',
+        'flex items-baseline gap-1.5 rounded px-1.5 py-1 text-sm leading-snug',
         crossed ? 'bg-teal-50 text-gray-800' : 'text-gray-500',
       ].join(' ')}
     >
@@ -158,7 +158,7 @@ function HopLine({
       </span>
       <span>
         {nodesById.get(fromId)?.label}{' '}
-        <span className="text-gray-400">
+        <span className="text-gray-500">
           {positive ? 'positively influences' : 'negatively influences'}
         </span>{' '}
         {nodesById.get(hop.toNodeId)?.label}
@@ -227,7 +227,7 @@ export function TracePanel({
       </header>
 
       {startId === null || !paths ? (
-        <div className="px-4 py-3 text-sm text-gray-400">
+        <div className="px-4 py-3 text-sm text-gray-500">
           Click a variable on the map, or search for one, to start tracing.
         </div>
       ) : (
@@ -243,7 +243,7 @@ export function TracePanel({
                 aria-label="Clear starting variable"
                 title="Clear starting variable"
                 onClick={onClear}
-                className="-mr-1 shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="-mr-1 shrink-0 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
                   <path
@@ -259,7 +259,7 @@ export function TracePanel({
             {/* Not "reaches": a journey ends on arrival, so this counts the
                 variables that lie on a route TO the core, which is narrower than
                 everything the start eventually influences. */}
-            <p data-testid="reach-headline" className="mt-1 text-[11px]">
+            <p data-testid="reach-headline" className="mt-1 text-sm">
               {isLoops ? (
                 totalLoops === 0 ? (
                   <span className="text-gray-500">
@@ -298,10 +298,10 @@ export function TracePanel({
               <p
                 data-testid="start-definition"
                 className={[
-                  'mt-2 border-t border-gray-100 pt-2 text-[11px] leading-relaxed',
+                  'mt-2 border-t border-gray-100 pt-2 text-xs leading-relaxed',
                   definitionOf(startNode)
                     ? 'text-gray-600'
-                    : 'italic text-gray-400',
+                    : 'italic text-gray-500',
                 ].join(' ')}
               >
                 {definitionOf(startNode) ?? NO_DEFINITION}
@@ -310,7 +310,7 @@ export function TracePanel({
           </Section>
 
           {direction === 'downstream' && isEnergyCore(startId) && (
-            <p className="px-4 pb-1 text-[11px] text-gray-500">
+            <p className="px-4 pb-1 text-xs text-gray-500">
               This variable is part of the energy core, so the trace follows it on
               to the other core variables.
             </p>
@@ -332,7 +332,7 @@ export function TracePanel({
                 />
                 {/* A path is just a chain of arrows, so drawing every arrow on
                     any route is the same as showing every path. No hedging. */}
-                <div className="mt-1 text-[11px]">
+                <div className="mt-1 text-xs">
                   {showingAll ? (
                     <span className="font-medium text-teal-700">
                       {isLoops
@@ -347,7 +347,7 @@ export function TracePanel({
                   )}
                 </div>
 
-                <p data-testid="path-counts" className="mt-1.5 text-[11px] text-gray-500">
+                <p data-testid="path-counts" className="mt-1.5 text-xs text-gray-500">
                   {paths.nodeIds.length} of {paths.totalNodes} variables ·{' '}
                   {paths.connectionIds.length} of {paths.totalConnections} arrows
                 </p>
@@ -362,7 +362,7 @@ export function TracePanel({
                       : 'Affected by'
                 }
               >
-                <p data-testid="route-headline" className="mb-2 text-[11px] text-gray-500">
+                <p data-testid="route-headline" className="mb-2 text-xs text-gray-500">
                   {isLoops
                     ? routes.length === 0
                       ? `No reinforcing loop closes within ${maxSteps} variables. The shortest through this variable needs ${loops?.shortest}.`
@@ -388,7 +388,7 @@ export function TracePanel({
                   {search?.truncated && ' (list truncated)'}
                   {isLoops && (
                     // The cap is a limit on what is known, not on what is drawn.
-                    <span className="block pt-1 text-gray-400">
+                    <span className="block pt-1 text-gray-500">
                       Loops longer than {MAX_LOOP_LENGTH} variables are not
                       included — there are thousands, and they cannot be
                       summarised without listing them.
@@ -407,19 +407,19 @@ export function TracePanel({
                           onMouseEnter={() => onHoverRoute(route.key)}
                           onClick={() => onFocusRoute(active ? null : route.key)}
                           className={[
-                            'flex w-full items-baseline gap-2 rounded-md px-2 py-1.5 text-left text-[11px]',
+                            'flex w-full items-baseline gap-2 rounded-md px-2 py-1.5 text-left text-sm',
                             active
                               ? 'bg-teal-50 ring-1 ring-teal-200'
                               : 'hover:bg-gray-50',
                           ].join(' ')}
                         >
-                          <span className="w-4 shrink-0 tabular-nums text-gray-400">
+                          <span className="w-4 shrink-0 tabular-nums text-gray-500">
                             {index + 1}
                           </span>
                           <span className="flex-1 text-gray-700">
                             <RouteChain route={route} loop={isLoops} />
                           </span>
-                          <span className="shrink-0 text-[10px] text-gray-400">
+                          <span className="shrink-0 text-xs text-gray-500">
                             {route.length}
                           </span>
                         </button>
@@ -434,11 +434,11 @@ export function TracePanel({
                                 type="button"
                                 data-testid="trace-play"
                                 onClick={running ? onStop : onPlay}
-                                className="rounded-full bg-teal-600 px-3 py-1 text-[11px] font-medium text-white hover:bg-teal-700"
+                                className="rounded-full bg-teal-600 px-3 py-1 text-xs font-medium text-white hover:bg-teal-700"
                               >
                                 {running ? 'Stop' : finished ? 'Replay' : 'Trace'}
                               </button>
-                              <span className="text-[11px] text-gray-500">
+                              <span className="text-xs text-gray-500">
                                 {animating
                                   ? `Step ${animatedHops} of ${route.length}`
                                   : isLoops

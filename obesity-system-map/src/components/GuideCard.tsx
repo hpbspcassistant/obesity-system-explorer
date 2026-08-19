@@ -87,7 +87,7 @@ function GuideShell({
       className="absolute left-1/2 z-40 max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-xl border border-gray-300 bg-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.3)] outline-none"
     >
       <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
           {label}
         </p>
         <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ function GuideShell({
             onClick={onClose}
             aria-label="Close the guide"
             title="Close the guide (Esc)"
-            className="-mr-1 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+            className="-mr-1 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           >
             <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
               <path
@@ -152,7 +152,7 @@ export function GuideContents({
       onClose={onClose}
       onHeightChange={onHeightChange}
     >
-      <h2 className="text-[15px] font-semibold leading-snug text-gray-900">
+      <h2 className="text-base font-semibold leading-snug text-gray-900">
         What would you like to know?
       </h2>
 
@@ -169,23 +169,23 @@ export function GuideContents({
                 className="w-full rounded-md border border-gray-200 px-3 py-2 text-left hover:border-gray-300 hover:bg-gray-50"
               >
                 <span className="flex items-baseline gap-2">
-                  <span className="text-[13px] font-medium text-gray-900">
+                  <span className="text-sm font-medium text-gray-900">
                     {section.label}
                   </span>
-                  <span className="text-[10.5px] tabular-nums text-gray-400">
+                  <span className="text-xs tabular-nums text-gray-500">
                     {section.steps.length} steps
                   </span>
                   {section.mode === mode && (
-                    <span className="rounded-full bg-gray-100 px-1.5 text-[10px] font-medium text-gray-600">
+                    <span className="rounded-full bg-gray-100 px-1.5 text-xs font-medium text-gray-600">
                       you are here
                     </span>
                   )}
                 </span>
-                <span className="mt-0.5 block text-[11.5px] leading-snug text-gray-500">
+                <span className="mt-0.5 block text-xs leading-snug text-gray-500">
                   {section.blurb}
                 </span>
                 {leavingTrace && (
-                  <span className="mt-1 block text-[10.5px] leading-snug text-amber-700">
+                  <span className="mt-1 block text-xs leading-snug text-amber-700">
                     Starting this will clear the trace you have open.
                   </span>
                 )}
@@ -199,7 +199,7 @@ export function GuideContents({
         <button
           type="button"
           onClick={onClose}
-          className="text-[12px] font-medium text-gray-500 hover:text-gray-800"
+          className="text-xs font-medium text-gray-500 hover:text-gray-800"
         >
           I&rsquo;ll look around myself
         </button>
@@ -265,13 +265,13 @@ export function GuideCard({
         </span>
       }
     >
-      <h2 className="text-[15px] font-semibold leading-snug text-gray-900">
+      <h2 className="text-base font-semibold leading-snug text-gray-900">
         {step.title}
       </h2>
 
       <div className="mt-1.5 space-y-1.5">
         {step.body.map((paragraph) => (
-          <p key={paragraph} className="text-[12.5px] leading-relaxed text-gray-600">
+          <p key={paragraph} className="text-sm leading-relaxed text-gray-600">
             {paragraph}
           </p>
         ))}
@@ -281,7 +281,7 @@ export function GuideCard({
         <button
           type="button"
           onClick={() => onAction(step.action!.id)}
-          className="mt-3 rounded-md border border-gray-800 bg-gray-900 px-3 py-2 text-[12.5px] font-medium text-white hover:bg-gray-700"
+          className="mt-3 rounded-md border border-gray-800 bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:bg-gray-700"
         >
           {step.action.label}
         </button>
@@ -293,7 +293,7 @@ export function GuideCard({
         <div
           role="status"
           className={[
-            'mt-3 flex items-start gap-2 rounded-md border px-2.5 py-2 text-[12px] leading-snug',
+            'mt-3 flex items-start gap-2 rounded-md border px-2.5 py-2 text-xs leading-snug',
             awaitMet
               ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
               : 'border-gray-300 bg-gray-50 text-gray-700',
@@ -333,7 +333,7 @@ export function GuideCard({
         <button
           type="button"
           onClick={onClose}
-          className="text-[12px] font-medium text-gray-500 hover:text-gray-800"
+          className="text-xs font-medium text-gray-500 hover:text-gray-800"
         >
           {last ? 'Close' : 'Skip'}
         </button>
@@ -342,7 +342,7 @@ export function GuideCard({
           <button
             type="button"
             onClick={() => onIndexChange(index - 1)}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-[12.5px] font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
           >
             Back
           </button>
@@ -357,7 +357,7 @@ export function GuideCard({
             else if (section.endsAtContents) onFinish()
             else onClose()
           }}
-          className="rounded-md bg-gray-900 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-gray-700"
+          className="rounded-md bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-700"
         >
           {last ? (section.endsAtContents ? 'Choose a guide' : 'Done') : 'Next'}
         </button>

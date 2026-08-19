@@ -107,7 +107,7 @@ export function ExportMenu({ choices, state, footnote }: ExportMenuProps) {
           state === 'failed'
             ? 'border-rose-300 bg-rose-50 text-rose-700'
             : working
-              ? 'cursor-wait border-gray-200 text-gray-400'
+              ? 'cursor-wait border-gray-200 text-gray-500'
               : open
                 ? 'border-gray-900 bg-gray-900 text-white'
                 : 'border-gray-300 text-gray-700 hover:bg-gray-50',
@@ -153,7 +153,7 @@ export function ExportMenu({ choices, state, footnote }: ExportMenuProps) {
               {choices.map((choice, index) => (
                 <div key={choice.label}>
                   {choice.group !== choices[index - 1]?.group && (
-                    <p className="px-2 pb-0.5 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                    <p className="px-2 pb-0.5 pt-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
                       {choice.group}
                     </p>
                   )}
@@ -266,7 +266,7 @@ function Chooser({
           className={[
             'rounded-md border px-2.5 py-1 text-xs transition-colors',
             chosen.size === 0
-              ? 'cursor-not-allowed border-gray-200 text-gray-400'
+              ? 'cursor-not-allowed border-gray-200 text-gray-500'
               : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
           ].join(' ')}
         >
@@ -298,7 +298,7 @@ function Item({
       className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-gray-50"
     >
       <span className="min-w-0 flex-1">
-        <span className="block text-[13px] text-gray-900">{children}</span>
+        <span className="block text-sm text-gray-900">{children}</span>
         <span className="mt-0.5 block text-xs leading-snug text-gray-500">
           {note}
         </span>
@@ -306,7 +306,7 @@ function Item({
       {more && (
         <svg
           viewBox="0 0 10 10"
-          className="h-2.5 w-2.5 shrink-0 text-gray-400"
+          className="h-2.5 w-2.5 shrink-0 text-gray-500"
           aria-hidden="true"
         >
           <path

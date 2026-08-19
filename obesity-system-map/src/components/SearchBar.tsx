@@ -155,7 +155,7 @@ export function SearchBar({
           <svg
             viewBox="0 0 20 20"
             aria-hidden="true"
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
           >
             <circle
               cx="9"
@@ -186,7 +186,7 @@ export function SearchBar({
             onFocus={() => setOpen(query.trim().length > 0)}
             onBlur={() => setOpen(false)}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-full border border-gray-200 bg-gray-50 py-1.5 pl-9 pr-9 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-200"
+            className="w-full rounded-full border border-gray-200 bg-gray-50 py-1.5 pl-9 pr-9 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-200"
           />
 
           {query && (
@@ -195,7 +195,7 @@ export function SearchBar({
               aria-label="Clear search"
               onMouseDown={(e) => e.preventDefault()}
               onClick={reset}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
             >
               <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" aria-hidden="true">
                 <path
@@ -223,7 +223,7 @@ export function SearchBar({
             {/* "variables" matches the placeholder above: the two sit in the same
                 control, so they cannot name the same thing differently. */}
             {results.length === 0 ? (
-              <li className="px-3 py-2 text-sm text-gray-400">
+              <li className="px-3 py-2 text-sm text-gray-500">
                 No variables match “{query.trim()}”
               </li>
             ) : (
@@ -246,7 +246,7 @@ export function SearchBar({
                       <span className="flex-1 text-gray-700">
                         <HighlightedLabel label={node.label} indices={result.indices} />
                       </span>
-                      <span className="shrink-0 text-[10px] uppercase tracking-wide text-gray-400">
+                      <span className="shrink-0 text-xs uppercase tracking-wide text-gray-500">
                         {node.mapCluster}
                         {hidden && ' · hidden'}
                       </span>

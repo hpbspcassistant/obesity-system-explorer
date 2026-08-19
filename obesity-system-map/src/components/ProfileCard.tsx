@@ -109,7 +109,7 @@ export function ProfileCard({
         onClick={onClose}
         aria-label="Close"
         title="Close (Esc)"
-        className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+        className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
       >
         <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
           <path
@@ -140,7 +140,7 @@ function MarkButton({
       onClick={onClick}
       aria-pressed={marked}
       className={[
-        'flex w-full items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors',
+        'flex w-full items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
         marked
           ? 'bg-gray-900 text-white hover:bg-gray-700'
           : 'border border-gray-400 bg-white text-gray-900 hover:bg-gray-100',
@@ -169,7 +169,7 @@ function MarkButton({
 
 function Heading({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1 mt-3 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+    <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
       {children}
     </p>
   )
@@ -196,10 +196,10 @@ function NodeBody({
 }) {
   return (
     <div className="px-3 pb-3 pt-2.5">
-      <h3 className="pr-6 text-[13.5px] font-semibold leading-tight text-gray-900">
+      <h3 className="pr-6 text-sm font-semibold leading-tight text-gray-900">
         {node.label}
       </h3>
-      <p className="mb-2 mt-0.5 text-[10.5px] uppercase tracking-wide text-gray-400">
+      <p className="mb-2 mt-0.5 text-xs uppercase tracking-wide text-gray-500">
         {node.mapCluster}
       </p>
 
@@ -210,11 +210,11 @@ function NodeBody({
       />
 
       {definitionOf(node) ? (
-        <p className="mt-2 text-[11.5px] leading-relaxed text-gray-600">
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">
           {definitionOf(node)}
         </p>
       ) : (
-        <p className="mt-2 text-[11.5px] italic leading-relaxed text-gray-400">
+        <p className="mt-2 text-sm italic leading-relaxed text-gray-500">
           {NO_DEFINITION}
         </p>
       )}
@@ -290,10 +290,10 @@ function EdgeBody({
           ].join(' ')}
         />
         <span className="min-w-0 flex-1">
-          <span className="block text-[9.5px] uppercase tracking-wide text-gray-400">
+          <span className="block text-xs uppercase tracking-wide text-gray-500">
             {role}
           </span>
-          <span className="block truncate text-[12px] text-gray-700">
+          <span className="block truncate text-xs text-gray-700">
             {node.label}
           </span>
         </span>
@@ -303,12 +303,12 @@ function EdgeBody({
   return (
     <div className="px-3 pb-3 pt-2.5">
       <div className="flex items-baseline gap-1.5 pr-6">
-        <h3 className="text-[13.5px] font-semibold leading-tight text-gray-900">
+        <h3 className="text-sm font-semibold leading-tight text-gray-900">
           Connection
         </h3>
         <InfluenceTag connection={connection} />
       </div>
-      <p className="mb-2 mt-0.5 text-[10.5px] text-gray-400">
+      <p className="mb-2 mt-0.5 text-xs text-gray-500">
         {connection.influence === 'positive'
           ? 'More of one, more of the other'
           : 'More of one, less of the other'}
@@ -328,7 +328,7 @@ function EdgeBody({
       {/* A single drawn line can carry several connections, so a click here
           resolved to one of them. Say so rather than implying it was exact. */}
       {edge.sharesLineWith.length > 0 && (
-        <p className="mt-1.5 text-[10.5px] leading-snug text-amber-700">
+        <p className="mt-1.5 text-xs leading-snug text-amber-700">
           This line also carries {edge.sharesLineWith.length} other connection
           {edge.sharesLineWith.length === 1 ? '' : 's'}.
         </p>

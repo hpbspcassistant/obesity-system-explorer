@@ -16,7 +16,7 @@ function InfluenceTag({ connection }: { connection: Connection }) {
   return (
     <span
       className={[
-        'ml-2 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide',
+        'ml-2 shrink-0 rounded px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide',
         positive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700',
       ].join(' ')}
     >
@@ -39,7 +39,7 @@ function ConnectionList({
   return (
     <PanelSection title={title} count={connections.length}>
       {connections.length === 0 ? (
-        <p className="text-sm text-gray-400">None</p>
+        <p className="text-sm text-gray-500">None</p>
       ) : (
         <ul className="space-y-1">
           {connections.map((connection) => {
@@ -55,7 +55,7 @@ function ConnectionList({
                   onClick={() => onSelectConnection(connection.id)}
                   className="flex w-full items-start rounded px-1.5 py-1 text-left text-sm text-gray-700 hover:bg-gray-100"
                 >
-                  <span className="mr-1.5 shrink-0 text-gray-400">
+                  <span className="mr-1.5 shrink-0 text-gray-500">
                     {direction === 'out' ? '→' : '←'}
                   </span>
                   <span className="flex-1">
@@ -88,13 +88,13 @@ export function NodeDetailPanel({
           // Two distinct taxonomies, so both are named rather than one being
           // shown bare as "the cluster": mapCluster is the artwork's colour
           // grouping, atlasCluster is the Foresight atlas's own classification.
-          <dl className="flex flex-wrap gap-x-4 gap-y-0.5 text-[11px]">
+          <dl className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs">
             <div className="flex gap-1">
-              <dt className="text-gray-400">Cluster</dt>
+              <dt className="text-gray-500">Cluster</dt>
               <dd className="font-medium text-gray-700">{node.atlasCluster}</dd>
             </div>
             <div className="flex gap-1">
-              <dt className="text-gray-400">Type</dt>
+              <dt className="text-gray-500">Type</dt>
               <dd className="font-medium text-gray-700">{node.mapCluster}</dd>
             </div>
           </dl>
@@ -112,7 +112,7 @@ export function NodeDetailPanel({
             ) : (
               // Named as a gap in the source rather than shown as a bare dash,
               // which read as a rendering fault.
-              <p className="text-sm italic leading-relaxed text-gray-400">
+              <p className="text-sm italic leading-relaxed text-gray-500">
                 {NO_DEFINITION}
               </p>
             )}

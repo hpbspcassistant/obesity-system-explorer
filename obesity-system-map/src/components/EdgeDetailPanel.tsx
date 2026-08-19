@@ -13,7 +13,7 @@ function DirectionBadge({ positive }: { positive: boolean }) {
   return (
     <span
       className={[
-        'inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium',
+        'inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium',
         positive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700',
       ].join(' ')}
     >
@@ -65,12 +65,12 @@ function NodeButton({
       onClick={onClick}
       className="w-full rounded border border-gray-200 px-2.5 py-2 text-left hover:bg-gray-50"
     >
-      <span className="block text-[10px] uppercase tracking-wide text-gray-400">
+      <span className="block text-xs uppercase tracking-wide text-gray-500">
         {role}
       </span>
       <span className="mt-0.5 block text-sm text-gray-800">{label}</span>
       {cluster && (
-        <span className="mt-0.5 block text-[11px] text-gray-500">{cluster}</span>
+        <span className="mt-0.5 block text-xs text-gray-500">{cluster}</span>
       )}
     </button>
   )
@@ -112,7 +112,7 @@ export function EdgeDetailPanel({
               />
               <div className="flex items-center gap-2 pl-1 text-gray-500">
                 <InfluenceGlyph positive={positive} />
-                <span className="text-[11px]">
+                <span className="text-xs">
                   {positive ? 'positively influences' : 'negatively influences'}
                 </span>
               </div>
@@ -149,7 +149,7 @@ export function EdgeDetailPanel({
                         onClick={() => onSelectConnection(id)}
                         className="flex w-full items-baseline gap-2 rounded px-1.5 py-1 text-left text-sm hover:bg-gray-100"
                       >
-                        <span className="font-mono text-[11px] text-gray-400">
+                        <span className="font-mono text-xs text-gray-500">
                           {id}
                         </span>
                         <span className="flex-1 text-gray-700">

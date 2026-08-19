@@ -121,16 +121,16 @@ export function InterventionCard({
     >
       <div key={node.id} className="min-h-0 flex-1 overflow-y-auto">
         <div className="border-b border-gray-100 px-3 pb-2.5 pt-3">
-          <p className="pr-6 text-[13.5px] font-semibold leading-snug text-gray-900">
+          <p className="pr-6 text-sm font-semibold leading-snug text-gray-900">
             {node.label}
           </p>
           <span
-            className="mt-2 inline-flex items-center gap-1.5 rounded border px-1.5 py-0.5 text-[11.5px] font-medium text-gray-800"
+            className="mt-2 inline-flex items-center gap-1.5 rounded border px-1.5 py-0.5 text-xs font-medium text-gray-800"
             style={{ backgroundColor: tone.dot, borderColor: tone.ring }}
           >
             {label}
           </span>
-          <p className="mt-1.5 text-[11.5px] leading-relaxed text-gray-600">
+          <p className="mt-1.5 text-sm leading-relaxed text-gray-600">
             {note}
           </p>
         </div>
@@ -164,7 +164,7 @@ export function InterventionCard({
         onClick={onClose}
         aria-label="Close"
         title="Close (Esc)"
-        className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+        className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
       >
         <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
           <path
@@ -197,7 +197,7 @@ function Programmes({
 
   return (
     <div className="border-b border-gray-100 px-3 py-2 last:border-b-0">
-      <p className="text-[10.5px] uppercase tracking-wide text-gray-400">
+      <p className="text-xs uppercase tracking-wide text-gray-500">
         {heading}
       </p>
       <ul
@@ -207,9 +207,9 @@ function Programmes({
         ].join(' ')}
       >
         {shown.map((entry, i) => (
-          <li key={`${entry.programme.id}-${i}`} className="text-[12px] leading-[1.45]">
+          <li key={`${entry.programme.id}-${i}`} className="text-sm leading-[1.45]">
             <span className="font-medium">{entry.programme.name}</span>
-            <p className="mt-0.5 text-[11px] leading-snug text-gray-500">
+            <p className="mt-0.5 text-xs leading-snug text-gray-500">
               {entry.reason}
             </p>
           </li>
@@ -219,7 +219,7 @@ function Programmes({
         <button
           type="button"
           onClick={() => setOpen((current) => !current)}
-          className="mt-0.5 text-[11px] text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-800"
+          className="mt-0.5 text-xs text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-800"
         >
           {open ? 'Show fewer' : `${hidden} more`}
         </button>

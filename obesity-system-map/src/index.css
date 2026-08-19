@@ -13,3 +13,24 @@ body,
   background: #ffffff;
   color: #111827;
 }
+
+/*
+ * A focus ring the design chooses, rather than whatever the browser draws.
+ *
+ * The app was relying on the UA default, which is thin, differs per browser and
+ * all but disappears against the dark buttons in the header and the bars. This
+ * is one ring, drawn outside the element so it reads on a white pill and a
+ * gray-900 one alike, and only on `:focus-visible` — so it never appears for a
+ * mouse click, which is the reason people remove focus rings in the first place.
+ */
+:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* The search field draws its own focus state — a ring plus a background change
+   — so a second one outside it would be two rings on one control. */
+input:focus-visible {
+  outline: none;
+}

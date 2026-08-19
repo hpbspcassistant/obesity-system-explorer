@@ -53,11 +53,11 @@ export function ProfilePersonaDialog({
         aria-label={editing ? 'Rename persona' : 'New profile'}
         className="max-h-[88vh] w-[26rem] max-w-[92vw] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]"
       >
-        <h2 className="text-[14px] font-semibold text-gray-900">
+        <h2 className="text-base font-semibold text-gray-900">
           {editing ? 'Edit persona' : 'New profile'}
         </h2>
         {!editing && (
-          <p className="mt-1 text-[12px] leading-relaxed text-gray-600">
+          <p className="mt-1 text-xs leading-relaxed text-gray-600">
             A profile is a point of view: mark the variables and connections you
             judge to be significant for one person. It is your judgement, not
             the map's.
@@ -74,7 +74,7 @@ export function ProfilePersonaDialog({
         >
           <label
             htmlFor="persona-name"
-            className="mb-1 block text-[11px] font-medium text-gray-600"
+            className="mb-1 block text-xs font-medium text-gray-600"
           >
             Persona name
           </label>
@@ -88,9 +88,9 @@ export function ProfilePersonaDialog({
           />
           <label
             htmlFor="persona-details"
-            className="mb-1 block text-[11px] font-medium text-gray-600"
+            className="mb-1 block text-xs font-medium text-gray-600"
           >
-            Details <span className="text-gray-400">(optional)</span>
+            Details <span className="text-gray-500">(optional)</span>
           </label>
           <textarea
             id="persona-details"
@@ -136,7 +136,7 @@ export function ProfilePersonaDialog({
           <>
             <div className="my-3 flex items-center gap-2">
               <span className="h-px flex-1 bg-gray-200" />
-              <span className="text-[10px] uppercase tracking-wide text-gray-400">
+              <span className="text-xs uppercase tracking-wide text-gray-500">
                 or
               </span>
               <span className="h-px flex-1 bg-gray-200" />
@@ -211,7 +211,7 @@ export function ImportButton({
             onChange={(e) => { setPasteText(e.target.value); setNote(null) }}
             placeholder='Paste profile JSON here…'
             rows={4}
-            className="w-full rounded border border-gray-300 px-2 py-1.5 font-mono text-[11px] text-gray-800 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none"
+            className="w-full rounded border border-gray-300 px-2 py-1.5 font-mono text-xs text-gray-800 placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
           />
           <button
             type="button"
@@ -231,7 +231,7 @@ export function ImportButton({
       {note && (
         <p
           role="status"
-          className={`mt-1 text-[11px] ${note.ok ? 'text-emerald-700' : 'text-rose-600'}`}
+          className={`mt-1 text-xs ${note.ok ? 'text-emerald-700' : 'text-rose-600'}`}
         >
           {note.text}
         </p>

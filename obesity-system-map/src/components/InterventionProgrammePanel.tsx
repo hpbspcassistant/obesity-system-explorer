@@ -113,7 +113,7 @@ export function InterventionProgrammePanel({
     >
       <div className="shrink-0 border-b border-gray-200 px-3 pb-2.5 pt-3">
         <div className="flex items-baseline justify-between gap-2">
-          <h2 className="text-[13px] font-semibold text-gray-900">
+          <h2 className="text-sm font-semibold text-gray-900">
             Filter by programme
           </h2>
           <button
@@ -121,7 +121,7 @@ export function InterventionProgrammePanel({
             onClick={onClose}
             aria-label="Close"
             title="Close (Esc)"
-            className="-mr-1 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+            className="-mr-1 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           >
             <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
               <path
@@ -133,7 +133,7 @@ export function InterventionProgrammePanel({
             </svg>
           </button>
         </div>
-        <p className="mt-0.5 text-[11px] leading-relaxed text-gray-500">
+        <p className="mt-0.5 text-xs leading-relaxed text-gray-500">
           Untick a programme to see the map without it. What only it covered
           turns red.
         </p>
@@ -143,7 +143,7 @@ export function InterventionProgrammePanel({
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search programmes…"
-          className="mt-2 w-full rounded border border-gray-300 px-2 py-1.5 text-[12.5px] focus:border-gray-800 focus:outline-none"
+          className="mt-2 w-full rounded border border-gray-300 px-2 py-1.5 text-xs focus:border-gray-800 focus:outline-none"
         />
 
         <div className="mt-2 flex items-center gap-1.5">
@@ -151,7 +151,7 @@ export function InterventionProgrammePanel({
             type="button"
             onClick={() => onSelectedChange(null)}
             disabled={selected === null}
-            className="flex-1 rounded border border-gray-200 px-2 py-1 text-[11.5px] font-medium text-gray-600 hover:bg-gray-50 disabled:text-gray-300 disabled:hover:bg-transparent"
+            className="flex-1 rounded border border-gray-200 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:text-gray-300 disabled:hover:bg-transparent"
           >
             All programmes
           </button>
@@ -159,11 +159,11 @@ export function InterventionProgrammePanel({
             type="button"
             onClick={() => onSelectedChange(new Set())}
             disabled={selected !== null && selected.size === 0}
-            className="flex-1 rounded border border-gray-200 px-2 py-1 text-[11.5px] font-medium text-gray-600 hover:bg-gray-50 disabled:text-gray-300 disabled:hover:bg-transparent"
+            className="flex-1 rounded border border-gray-200 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:text-gray-300 disabled:hover:bg-transparent"
           >
             None
           </button>
-          <span className="shrink-0 text-[11px] tabular-nums text-gray-400">
+          <span className="shrink-0 text-xs tabular-nums text-gray-500">
             {selectedCount}/{rows.length}
           </span>
         </div>
@@ -171,7 +171,7 @@ export function InterventionProgrammePanel({
 
       <ul className="min-h-0 flex-1 overflow-y-auto py-1">
         {shown.length === 0 && (
-          <li className="px-3 py-3 text-[12px] text-gray-500">
+          <li className="px-3 py-3 text-xs text-gray-500">
             Nothing matches “{query.trim()}”.
           </li>
         )}
@@ -204,10 +204,10 @@ export function InterventionProgrammePanel({
                   title={`Count only ${programme.name}`}
                   className="min-w-0 flex-1 text-left"
                 >
-                  <span className="block text-[12.5px] leading-snug text-gray-800">
+                  <span className="block text-xs leading-snug text-gray-800">
                     {programme.name}
                   </span>
-                  <span className="mt-0.5 block text-[11px] leading-snug text-gray-400">
+                  <span className="mt-0.5 block text-xs leading-snug text-gray-500">
                     {reach === 0 ? (
                       // Four programmes in the inventory reach nothing at all.
                       // Selecting one lights an empty map, so the row says so
@@ -216,7 +216,7 @@ export function InterventionProgrammePanel({
                     ) : (
                       `${reach} variable${reach === 1 ? '' : 's'}`
                     )}
-                    {note && <span className="text-gray-400"> · {note}</span>}
+                    {note && <span className="text-gray-500"> · {note}</span>}
                   </span>
                 </button>
               </div>
