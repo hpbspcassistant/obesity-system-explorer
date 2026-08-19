@@ -174,6 +174,36 @@
     drop-shadow(0 0 7px var(--node-accent, #64748b));
 }
 
+/* Boxes answer to the mouse, in every mode. A box is clickable in all four —
+   Explore opens it, Trace starts from it, Profile marks it, Intervention names
+   what reaches it — so the hover belonged to the node, not to one mode.
+   `cursor: pointer` has always been on them and is not enough on its own: it
+   asks you to already be over a box and watching the cursor.
+ *
+ * A shadow, not a thicker border. The border was the obvious choice and does not
+ * work: an empty box outlines at 0.9px but a coloured one already sits at 2.2px,
+ * so one width cannot be a visible change from both bases. Taking it far enough
+ * to register on a coloured box would have looked clumsy on the small ones and
+ * bled into their neighbours at this density.
+ *
+ * A shadow is additive, so it reads the same from every state, and it leaves the
+ * encoding alone — fill is the state and must not move under the pointer, and
+ * the border carries the state's own colour.
+ *
+ * On the path rather than the group. It keeps the label inside crisp instead of
+ * giving it a halo of its own, and it is also what lets this coexist with the
+ * accent glows Explore and Trace already apply: those are on the group, so a
+ * hovered neighbour keeps its glow and gains this rather than losing one.
+ *
+ * Scoped to the nodes layer so the intervention key's own swatches, which carry
+ * the same classes on purpose, do not react to being pointed at. Boxes ruled out
+ * of interaction — filtered out, or not a gap under "Gaps only" — take
+ * `pointer-events: none` elsewhere and so never reach this.
+ */
+.map-svg [data-layer='nodes'] g[data-node-id]:hover > path {
+  filter: drop-shadow(0 0 3px rgba(15, 23, 42, 0.55));
+}
+
 /* The selected node's outline ring, thickened in its own accent colour. */
 .map-svg g[data-node-id].is-selected > path:last-of-type {
   stroke: var(--node-accent, #64748b);
@@ -579,31 +609,6 @@
 .map-svg.has-intervention.gaps-only g[data-node-id]:not(.is-gap) {
   opacity: 0.12;
   pointer-events: none;
-}
-
-/* Boxes answer to the mouse, because the card is the best thing in this mode and
-   nothing outside the walkthrough said it existed. `cursor: pointer` has always
-   been on them and is not enough on its own — it asks you to already be over a
-   box and watching the cursor.
- *
- * A shadow, not a thicker border. The border was the obvious choice and does not
- * work: an empty box outlines at 0.9px but a coloured one already sits at 2.2px,
- * so one width cannot be a visible change from both bases. Taking it far enough
- * to register on a coloured box would have looked clumsy on the small ones and
- * bled into their neighbours at this density.
- *
- * A shadow is additive, so it reads the same from every state, and it leaves the
- * encoding alone — fill is the state and must not move under the pointer, and
- * the border carries the state's own colour.
- *
- * On the path rather than the group, so the label inside stays crisp instead of
- * picking up a halo of its own.
- *
- * Scoped to the nodes layer so the key's own swatches, which carry the same
- * classes on purpose, do not react to being pointed at.
- */
-.map-svg.has-intervention [data-layer='nodes'] g[data-node-id]:hover > path {
-  filter: drop-shadow(0 0 3px rgba(15, 23, 42, 0.55));
 }
 
 /* The programme filter needs no rule of its own. Unticking a programme takes it
