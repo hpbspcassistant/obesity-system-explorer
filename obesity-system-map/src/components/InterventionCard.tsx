@@ -164,7 +164,7 @@ export function InterventionCard({
         onClick={onClose}
         aria-label="Close"
         title="Close (Esc)"
-        className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        className="absolute right-1 top-1 flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
       >
         <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
           <path

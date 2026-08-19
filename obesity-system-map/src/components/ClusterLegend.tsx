@@ -202,7 +202,7 @@ export function ClusterLegend({
             aria-expanded
             aria-label="Hide the key"
             title="Hide the key"
-            className="-mr-1 rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+            className="-mr-1.5 flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-800"
           >
             <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" aria-hidden="true">
               <path

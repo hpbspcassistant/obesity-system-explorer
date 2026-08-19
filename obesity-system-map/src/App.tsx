@@ -89,6 +89,7 @@ import type {
 const EMPTY: readonly Connection[] = Object.freeze([])
 const CONTRAST_KEY = 'obesity-system-map.highContrast'
 const GUIDE_KEY = 'obesity-system-map.guideSeen'
+const LEGEND_KEY = 'obesity-system-map.legendCollapsed'
 const NONE_HIDDEN: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_MARKS: ReadonlySet<number> = Object.freeze(new Set<number>())
 const NO_EDGE_MARKS: ReadonlySet<string> = Object.freeze(new Set<string>())
@@ -138,8 +139,13 @@ export default function App() {
   const [taxonomy, setTaxonomy] = useState<Taxonomy>('type')
   // Whether the colour key is shrunk to a pill. A preference about the screen
   // rather than about the work, so it is kept across modes like High contrast.
+  // Kept across sessions like High contrast: shrinking the key is a decision
+  // about your screen, and having it spring back open every morning ignores it.
+  //
+  // Read from storage alone. The narrow-window nudge below also sets this, but
+  // must never be mistaken for the choice — see `collapseLegend`.
   const [legendCollapsed, setLegendCollapsed] = useState(
-    () => window.innerWidth < NARROW_PX,
+    () => localStorage.getItem(LEGEND_KEY) === '1',
   )
   // The group filter's popover. Held here rather than in the legend because the
   // walkthrough demonstrates a filter, and a demonstration inside a closed
@@ -960,6 +966,7 @@ export default function App() {
     }
   }, [highContrast])
 
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return
@@ -1178,6 +1185,24 @@ export default function App() {
   const loopMode = traceDirection === 'loops'
 
   /**
+   * The user's own decision about the key, which is the only one worth keeping.
+   *
+   * Stored here rather than in an effect on the state. An effect cannot tell a
+   * press apart from the resize nudge below, so it wrote the nudge through to
+   * storage — meaning one narrow moment, or a window reporting zero width before
+   * it has been laid out, would silently overwrite a preference the reader had
+   * set on a large screen and leave the key collapsed for good.
+   */
+  const collapseLegend = useCallback((next: boolean) => {
+    setLegendCollapsed(next)
+    try {
+      localStorage.setItem(LEGEND_KEY, next ? '1' : '0')
+    } catch {
+      // Private browsing: the setting just will not survive the session.
+    }
+  }, [])
+
+  /**
    * Shrink the key to its pill on a narrow window.
    *
    * The key is 224px and a panel is 368px. At 768 that leaves 160px of map
@@ -1191,8 +1216,12 @@ export default function App() {
    */
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth < NARROW_PX) setLegendCollapsed(true)
+      // Zero means the window has not been laid out — a hidden tab or pane —
+      // and is not a statement about how much room there is.
+      const width = window.innerWidth
+      if (width > 0 && width < NARROW_PX) setLegendCollapsed(true)
     }
+    onResize()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
@@ -1731,7 +1760,7 @@ export default function App() {
           onShowAll={showAllGroups}
           onHideAll={hideAllGroups}
           collapsed={legendCollapsed}
-          onCollapsedChange={setLegendCollapsed}
+          onCollapsedChange={collapseLegend}
           filterOpen={filterOpen}
           onFilterOpenChange={setFilterOpen}
           // Intervention carries a bar of its own, the same height as Profile's.

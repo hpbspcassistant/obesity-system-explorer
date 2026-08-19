@@ -135,7 +135,7 @@ export function PersonaCharacteristicsForm({
               aria-checked={on}
               onClick={() => toggleCondition(condition)}
               className={[
-                'rounded-full border px-2 py-0.5 text-xs transition-colors',
+                'rounded-full border px-2.5 py-1 text-xs transition-colors',
                 on
                   ? 'border-gray-900 bg-gray-900 text-white'
                   : 'border-gray-300 text-gray-600 hover:bg-gray-50',
