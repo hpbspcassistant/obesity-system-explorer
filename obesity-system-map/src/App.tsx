@@ -183,8 +183,6 @@ export default function App() {
   // whether the persona is being applied at all — the whitespace view asks what
   // HPB touches in general, which is nobody's question in particular.
   const [interventionWhitespace, setInterventionWhitespace] = useState(true)
-  const [quickCharacteristics, setQuickCharacteristics] =
-    useState<PersonaCharacteristics>({})
   /**
    * Programme ids the map is narrowed to, or null for "all of them".
    *
@@ -1067,8 +1065,6 @@ export default function App() {
    * person; its characteristics decide which programmes reach them. Two inputs
    * to two different questions, which is why neither is derived from the other.
    */
-  const hasQuickFilter = Object.keys(quickCharacteristics).length > 0
-
   const interventionPersona = useMemo(
     () =>
       interventionWhitespace || !activeProfile
@@ -1078,14 +1074,6 @@ export default function App() {
             applicabilityNodes: [...activeProfile.nodeIds],
           },
     [interventionWhitespace, activeProfile],
-  )
-
-  const quickFilterPersona = useMemo(
-    () =>
-      interventionWhitespace && hasQuickFilter
-        ? { characteristics: quickCharacteristics, applicabilityNodes: [] as number[] }
-        : null,
-    [interventionWhitespace, hasQuickFilter, quickCharacteristics],
   )
 
   /**
@@ -1116,18 +1104,6 @@ export default function App() {
         allNodeIds,
       )
     }
-    if (quickFilterPersona) {
-      const applicability = classifyProgrammes(quickFilterPersona, activeProgrammes)
-      const reached = reachOf(applicability.applies)
-      return {
-        reached,
-        covered: [],
-        gaps: [],
-        beyond: allNodeIds.filter((id) => reached.has(id)),
-        untouched: allNodeIds.filter((id) => !reached.has(id)),
-        applicability,
-      }
-    }
     const reached = reachOf(activeProgrammes)
     return {
       reached,
@@ -1141,7 +1117,7 @@ export default function App() {
         undetermined: [],
       },
     }
-  }, [interventionPersona, quickFilterPersona, activeProgrammes])
+  }, [interventionPersona, activeProgrammes])
 
   const interventionStanding = useMemo(() => {
     const byNode = new Map<number, NodeStanding>()
@@ -1172,9 +1148,8 @@ export default function App() {
     // Gates re-tested against the WHOLE inventory, so "would apply" can be told
     // apart from "was unticked". Without this the two collapse and the card
     // cannot say which of them is keeping a programme off the map.
-    const effectivePersona = interventionPersona ?? quickFilterPersona
-    const wouldApply = effectivePersona
-      ? classifyProgrammes(effectivePersona, programmes).applies
+    const wouldApply = interventionPersona
+      ? classifyProgrammes(interventionPersona, programmes).applies
       : [...programmes]
 
     const unticked = wouldApply.filter((p) => !counted.includes(p))
@@ -1889,16 +1864,13 @@ export default function App() {
               if (id) {
                 setActiveProfileId(id)
                 setInterventionWhitespace(false)
-                setQuickCharacteristics({})
               } else {
                 setInterventionWhitespace(true)
               }
             }}
               summary={interventionSummary}
             applicability={
-              (interventionPersona || quickFilterPersona)
-                ? interventionSummary.applicability
-                : null
+              interventionPersona ? interventionSummary.applicability : null
             }
             selectedProgrammes={programmeFilter?.size ?? null}
             totalProgrammes={programmes.length}
@@ -1908,8 +1880,6 @@ export default function App() {
             onBulkExportPng={bulkExportPng}
             exportState={exportState}
             onExportCoverage={exportCoverage}
-            quickCharacteristics={quickCharacteristics}
-            onQuickCharacteristicsChange={setQuickCharacteristics}
           />
         )}
 
@@ -1919,11 +1889,8 @@ export default function App() {
             // filtered set the map is using. A panel listing only what is ticked
             // could never offer anything back.
             applicability={
-              (interventionPersona || quickFilterPersona)
-                ? classifyProgrammes(
-                    (interventionPersona ?? quickFilterPersona)!,
-                    programmes,
-                  )
+              interventionPersona
+                ? classifyProgrammes(interventionPersona, programmes)
                 : { applies: [...programmes], excluded: [], undetermined: [] }
             }
             reachSize={(programme) =>
@@ -1932,7 +1899,7 @@ export default function App() {
             selected={programmeFilter}
             onSelectedChange={setProgrammeFilter}
             onClose={() => setProgrammePanelOpen(false)}
-            withoutPersona={!interventionPersona && !quickFilterPersona}
+            withoutPersona={interventionPersona === null}
           />
         )}
 

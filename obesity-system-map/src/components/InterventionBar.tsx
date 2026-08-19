@@ -1,17 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { ExportMenu, type ExportChoice } from './ExportMenu'
-import type {
-  Applicability,
-  PersonaCharacteristics,
-  ReachSummary,
-} from '../lib/reach'
+import type { Applicability, ReachSummary } from '../lib/reach'
 import type { Profile } from '../lib/profile'
-import {
-  CONDITIONS_KEY,
-  conditionValues,
-  coreCharacteristics,
-} from '../data/intervention'
 
 /**
  * Intervention's chrome: which persona, and what it adds up to.
@@ -37,8 +28,6 @@ export interface InterventionBarProps {
   onBulkExportPng: () => void
   exportState: 'idle' | 'working' | 'failed'
   onExportCoverage: (profileIds: string[]) => void
-  quickCharacteristics: PersonaCharacteristics
-  onQuickCharacteristicsChange: (next: PersonaCharacteristics) => void
 }
 
 function Count({ n, label }: { n: number; label: string }) {
@@ -221,169 +210,6 @@ function PersonaDropdown({
   )
 }
 
-/* ---------------------------------------------------- characteristic picker */
-
-function humanise(value: string | boolean): string {
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
-  const words = value.replace(/[-_]/g, ' ')
-  return words.charAt(0).toUpperCase() + words.slice(1)
-}
-
-function encode(value: string | boolean): string {
-  return typeof value === 'boolean' ? `bool:${value}` : `str:${value}`
-}
-
-function decode(raw: string): string | boolean | null | undefined {
-  if (raw === '') return undefined
-  if (raw === 'n/a') return null
-  return raw.startsWith('bool:') ? raw === 'bool:true' : raw.slice(4)
-}
-
-function QuickCharacteristicPicker({
-  value,
-  onChange,
-}: {
-  value: PersonaCharacteristics
-  onChange: (next: PersonaCharacteristics) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const wrapRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDown = (event: PointerEvent) => {
-      if (!wrapRef.current?.contains(event.target as globalThis.Node))
-        setOpen(false)
-    }
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('pointerdown', onDown)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('pointerdown', onDown)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
-  const set = (key: string, next: string | boolean | null | undefined) => {
-    const characteristics = { ...value }
-    if (next === undefined) delete characteristics[key]
-    else characteristics[key] = next
-    onChange(characteristics)
-  }
-
-  const conditions = Array.isArray(value[CONDITIONS_KEY])
-    ? (value[CONDITIONS_KEY] as readonly string[])
-    : []
-
-  const toggleCondition = (condition: string) => {
-    const next = conditions.includes(condition)
-      ? conditions.filter((c) => c !== condition)
-      : [...conditions, condition]
-    onChange({ ...value, [CONDITIONS_KEY]: next })
-  }
-
-  const filledCount = Object.keys(value).filter(
-    (k) => k !== CONDITIONS_KEY || (Array.isArray(value[k]) && (value[k] as readonly string[]).length > 0),
-  ).length
-  const hasAny = filledCount > 0
-
-  return (
-    <div ref={wrapRef} className="relative shrink-0">
-      <button
-        type="button"
-        onClick={() => setOpen((c) => !c)}
-        className={[
-          'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
-          hasAny
-            ? 'border-gray-900 bg-gray-900 text-white'
-            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-        ].join(' ')}
-      >
-        {hasAny ? `Filter: ${filledCount} set` : 'Filter by characteristics'}
-        <Chevron />
-      </button>
-
-      {open && (
-        <div className="absolute bottom-full left-0 mb-1.5 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]">
-          <div className="mb-2 flex items-baseline justify-between">
-            <p className="text-xs font-medium text-gray-600">
-              Quick filter
-            </p>
-            {hasAny && (
-              <button
-                type="button"
-                onClick={() => onChange({})}
-                className="text-xs text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-700"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-2 gap-y-1.5">
-            {Object.entries(coreCharacteristics).map(([key, values]) => {
-              const held = value[key]
-              const current =
-                held === undefined
-                  ? ''
-                  : held === null
-                    ? 'n/a'
-                    : encode(held as string | boolean)
-              return (
-                <label key={key} className="block">
-                  <span className="mb-0.5 block text-xs text-gray-500">
-                    {humanise(key)}
-                  </span>
-                  <select
-                    value={current}
-                    onChange={(event) => set(key, decode(event.target.value))}
-                    className="w-full rounded border border-gray-300 px-1.5 py-1 text-xs text-gray-800 focus:border-gray-800 focus:outline-none"
-                  >
-                    <option value="">Any</option>
-                    {values
-                      .filter((v): v is string | boolean => v !== null)
-                      .map((v) => (
-                        <option key={String(v)} value={encode(v)}>
-                          {humanise(v)}
-                        </option>
-                      ))}
-                  </select>
-                </label>
-              )
-            })}
-          </div>
-
-          <p className="mb-1 mt-2.5 text-xs text-gray-500">Conditions</p>
-          <div className="flex flex-wrap gap-1">
-            {conditionValues.map((condition) => {
-              const on = conditions.includes(condition)
-              return (
-                <button
-                  key={condition}
-                  type="button"
-                  role="checkbox"
-                  aria-checked={on}
-                  onClick={() => toggleCondition(condition)}
-                  className={[
-                    'rounded-full border px-2 py-0.5 text-xs transition-colors',
-                    on
-                      ? 'border-gray-900 bg-gray-900 text-white'
-                      : 'border-gray-300 text-gray-600 hover:bg-gray-50',
-                  ].join(' ')}
-                >
-                  {humanise(condition)}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
 /* --------------------------------------------------------------- main bar */
 
 export function InterventionBar({
@@ -400,8 +226,6 @@ export function InterventionBar({
   onBulkExportPng,
   exportState,
   onExportCoverage,
-  quickCharacteristics,
-  onQuickCharacteristicsChange,
 }: InterventionBarProps) {
   const withPersona = personaId !== null
   const filtering = selectedProgrammes !== null
@@ -447,13 +271,6 @@ export function InterventionBar({
         personaId={personaId}
         onPersonaChange={onPersonaChange}
       />
-
-      {!withPersona && (
-        <QuickCharacteristicPicker
-          value={quickCharacteristics}
-          onChange={onQuickCharacteristicsChange}
-        />
-      )}
 
       <span className="min-w-0 flex-1" />
 
