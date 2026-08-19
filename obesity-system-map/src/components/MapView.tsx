@@ -8,7 +8,6 @@ import {
   type Ref,
 } from 'react'
 import {
-  MiniMap,
   TransformComponent,
   TransformWrapper,
   type ReactZoomPanPinchRef,
@@ -210,26 +209,6 @@ const NodeLayer = memo(function NodeLayer() {
 })
 
 /**
- * The minimap re-draws the node boxes only — edges would double the DOM for no
- * legibility at thumbnail size. Element ids are stripped so the copy cannot
- * collide with the real layer's ids.
- */
-const miniInner = nodesInner.replace(/\sid="[^"]*"/g, '')
-
-const MiniMapContent = memo(function MiniMapContent() {
-  return (
-    <svg
-      viewBox={MAP_VIEW_BOX}
-      width={MAP_WIDTH}
-      height={MAP_HEIGHT}
-      aria-hidden="true"
-      className="block bg-white"
-      dangerouslySetInnerHTML={{ __html: miniInner }}
-    />
-  )
-})
-
-/**
  * A ring around the variable a trace starts from. The node's own outline carries a
  * crisp non-scaling stroke, but at fit zoom a node box is only ~8px across, so a
  * ring alone is easy to lose among 108 of them. A wide translucent stroke
@@ -339,13 +318,6 @@ export interface MapViewProps {
   interventionPersona?: boolean
   /** Fades everything that is not a gap for the current persona. */
   gapsOnly?: boolean
-  /** Whether to draw the navigator thumbnail. */
-  showMiniMap?: boolean
-  /**
-   * Px of the bottom edge covered by a bar the map does not own, so the
-   * navigator can sit above it rather than half underneath.
-   */
-  bottomInset?: number
   ref?: Ref<MapViewHandle>
 }
 
@@ -400,8 +372,6 @@ export function MapView({
   intervention,
   interventionPersona = false,
   gapsOnly = false,
-  showMiniMap = true,
-  bottomInset = 0,
   ref,
 }: MapViewProps) {
   const apiRef = useRef<ReactZoomPanPinchRef | null>(null)
@@ -1284,30 +1254,6 @@ export function MapView({
             <g ref={linkBadgeRef} data-layer="profile-link-badges" />
           </svg>
         </TransformComponent>
-
-        {showMiniMap && (
-          // Lifted clear of any bar the map does not own — Profile's strip used
-          // to cover the bottom quarter of the navigator, including the corner of
-          // the viewport rectangle you drag to move around.
-          <div
-            className="pointer-events-none absolute left-4 z-20"
-            style={{ bottom: 16 + bottomInset }}
-          >
-            <div className="pointer-events-auto overflow-hidden rounded-lg border border-gray-200 bg-white/95 p-1 shadow-lg">
-              <MiniMap
-                width={168}
-                height={119}
-                borderColor="#9ca3af"
-                previewStyle={{
-                  border: '1.5px solid #2563eb',
-                  background: 'rgba(37, 99, 235, 0.08)',
-                }}
-              >
-                <MiniMapContent />
-              </MiniMap>
-            </div>
-          </div>
-        )}
       </TransformWrapper>
     </div>
   )

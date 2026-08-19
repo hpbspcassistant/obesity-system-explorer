@@ -144,8 +144,8 @@ const BASICS: GuideSection = {
     {
       title: 'Colours and filtering',
       body: [
-        "Every variable belongs to one of ten colour groups. The key at the bottom right shows them, and can switch between the map's own grouping and the atlas's.",
-        'Click a group in the key to hide it — the quickest way to cut the map down to what you care about.',
+        'Every variable belongs to one of ten colour groups. The key at the bottom right shows them, with how many variables each one holds.',
+        'Filter, underneath it, cuts the map down to the groups you care about — by type, or by the atlas’s own clusters. Anything you hide is reported beside the button, so a filter can never be left on by accident.',
       ],
       action: { label: 'Hide a group', id: 'hideLargestGroup' },
     },

@@ -134,6 +134,10 @@ export default function App() {
   // Whether the colour key is shrunk to a pill. A preference about the screen
   // rather than about the work, so it is kept across modes like High contrast.
   const [legendCollapsed, setLegendCollapsed] = useState(false)
+  // The group filter's popover. Held here rather than in the legend because the
+  // walkthrough demonstrates a filter, and a demonstration inside a closed
+  // popover shows the reader a map changing for no visible reason.
+  const [filterOpen, setFilterOpen] = useState(false)
   // The walkthrough. Opens itself once, on the first visit only: this is a tool
   // the same few people use repeatedly, so it must never nag. The question mark
   // in the header brings it back for a workshop or a new colleague.
@@ -1450,6 +1454,11 @@ export default function App() {
         setAnimatedHops(0)
       }
       if (id === 'hideLargestGroup') {
+        // Open the filter first. The control the step is teaching now lives in a
+        // popover, and hiding a group while it is shut would demonstrate the
+        // effect while concealing the cause.
+        setLegendCollapsed(false)
+        setFilterOpen(true)
         // The biggest group, so the change is impossible to miss on a map of 108
         // boxes. Remembered so it can be put back when the reader moves on.
         const groups =
@@ -1583,9 +1592,6 @@ export default function App() {
           }
           interventionPersona={interventionPersona !== null}
           gapsOnly={gapsOnly}
-          bottomInset={
-            profiling || mode === 'intervention' ? PROFILE_BAR_PX : 0
-          }
           highContrast={highContrast}
         />
 
@@ -1699,9 +1705,8 @@ export default function App() {
             onClear={clearTrace}
           />
         )}
-        {/* Every mode, always. The filter it houses applies to the map in all
-            three, so hiding the box in two of them left the filter switched on
-            with no way to switch it off. */}
+        {/* Every mode, always: the map paints by type in three of the four, and
+            the influence key describes arrows that are drawn in all of them. */}
         <ClusterLegend
           taxonomy={taxonomy}
           onTaxonomyChange={setTaxonomy}
@@ -1711,6 +1716,8 @@ export default function App() {
           onHideAll={hideAllGroups}
           collapsed={legendCollapsed}
           onCollapsedChange={setLegendCollapsed}
+          filterOpen={filterOpen}
+          onFilterOpenChange={setFilterOpen}
           rightInset={legendRightInset}
           // Intervention carries a bar of its own, the same height as Profile's.
           // It was left out here, so the legend sat on top of the persona picker.
