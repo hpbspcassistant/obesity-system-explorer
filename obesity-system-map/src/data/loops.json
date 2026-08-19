@@ -1,13 +1,13 @@
 {
  "_meta": {
   "source": "Derived from obesity_system_data.json by scripts/build_loops.py",
-  "description": "Every feedback loop up to 6 factors long. nodeIds lists the loop in causal order without repeating the opening factor; the loop closes from the last back to the first. Loop counts explode with length, so this is a hard cap on what is known, not a display limit.",
+  "description": "Every feedback loop up to 6 variables long. nodeIds lists the loop in causal order without repeating the opening variable; the loop closes from the last back to the first. Loop counts explode with length, so this is a hard cap on what is known, not a display limit.",
   "maxLength": 6,
   "totalLoops": 193,
   "reinforcing": 115,
   "balancing": 78,
   "verifiedAgainst": "obesity_system_map_feedback_loops.xlsx",
-  "factorsInReinforcingLoop": 73
+  "variablesInReinforcingLoop": 73
  },
  "loops": [
   {

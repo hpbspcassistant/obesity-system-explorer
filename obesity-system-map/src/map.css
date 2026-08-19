@@ -244,7 +244,7 @@
 /* ----------------------------------------------------------------- profile */
 
 /*
- * Profile drains the map, and marking gives a factor its colour back.
+ * Profile drains the map, and marking gives a variable its colour back.
  *
  * The earlier build did the opposite: it layered a purple signal *on top of*
  * the ten cluster fills and separated its three states by alpha alone — a
@@ -257,7 +257,7 @@
  * become the marking signal themselves. The three states differ by WHERE the
  * colour is, which is a difference in kind on every axis at once:
  *
- *   marked    — the factor's own fill        (colour inside)
+ *   marked    — the variable's own fill        (colour inside)
  *   suggested — white box, coloured ring     (colour on the edge)
  *   neutral   — flat grey, grey hairline     (no colour at all)
  *
@@ -337,10 +337,10 @@
 }
 
 /* Unless high contrast is on, where the fill that returns is not the artwork's.
-   Marking then repaints a factor to its *type swatch*, and all ten of those are
+   Marking then repaints a variable to its *type swatch*, and all ten of those are
    light by construction — the palette was chosen so #231f20 clears 6.4:1 on
    every one. The artwork's white is wrong against them, and not marginally:
-   white on the mint measured 1.13 where a dark-inked factor on that same fill
+   white on the mint measured 1.13 where a dark-inked variable on that same fill
    measures 14.47. So in this one combination the ink follows the fill rather
    than the artwork. */
 .map-svg.has-profile.high-contrast g[data-node-id].is-marked .node-label {
@@ -362,14 +362,14 @@
    --node-ring-hc takes over under high contrast, because that mode moves
    several types to a different hue family — Social cream to pink, Biological
    blue to teal — and a ring promising the old colour would be lying about what
-   marking this factor does. */
+   marking this variable does. */
 .map-svg.has-profile g[data-node-id].is-candidate > path:last-of-type {
   stroke: var(--node-ring-hc, var(--node-ring, #475569));
   stroke-width: 1.8;
   vector-effect: non-scaling-stroke;
 }
 
-/* Marked: the factor's own colour, straight back. Flattened across every path
+/* Marked: the variable's own colour, straight back. Flattened across every path
    so a hub node reads as one solid box rather than a ring over a base.
 
    This is the one place in Profile that shows a cluster colour, so it is the
@@ -387,7 +387,7 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* Which factor the card is open on. The ring itself is drawn outside the box by
+/* Which variable the card is open on. The ring itself is drawn outside the box by
    NodeHalos, so it never competes with the box's own edge. */
 .map-svg.has-profile g[data-node-id].is-selected {
   transform: scale(1.04);
@@ -408,8 +408,8 @@
 
    An earlier version stepped this down to 0.1 the moment anything was marked,
    on the theory that the overlay now had something to say. It did not survive
-   contact: marking one factor wiped out the other 295 connections, which are
-   exactly what you read to decide what to mark next. One marked factor is the
+   contact: marking one variable wiped out the other 295 connections, which are
+   exactly what you read to decide what to mark next. One marked variable is the
    *start* of a profile, not the end of needing the map. So there is a single
    value, high enough to read at 1:1 — the marked layer stands out on its own
    terms, not by everything else disappearing. */
@@ -423,7 +423,7 @@
  *   marked    — the artwork's own ink, 2.6px      (black is a decision)
  *   available — warm grey #8a857c, 1.6px          (grey is an offer)
  *
- * "Available" covers both the connections of the factor you currently have
+ * "Available" covers both the connections of the variable you currently have
  * open and the ones whose two ends are both marked; they are the same offer,
  * and the accept-dot marks out the second kind without needing a third look.
  *
@@ -432,7 +432,7 @@
  * difference in kind while still, correctly, looking like the lesser claim.
  */
 
-/* The connections of whichever factor is open, lifted out of the fade. Same
+/* The connections of whichever variable is open, lifted out of the fade. Same
    mechanism Explore uses, but without Explore's dimming of everything else:
    `has-selection` is not set in Profile, so only this layer reacts. */
 .map-svg.has-profile [data-layer='edge-highlight'] {
@@ -646,7 +646,7 @@
   opacity: 1;
 }
 
-/* `has-trace-lit` rather than `has-trace`: the starting factor's ring and halo
+/* `has-trace-lit` rather than `has-trace`: the starting variable's ring and halo
    hang off `has-trace`, so they survive even when the answer is "nothing" —
    but nothing gets dimmed when there is nothing to dim against. */
 .map-svg.has-trace-lit [data-layer='edges'] {
@@ -679,7 +679,7 @@
 
 /* Non-scaling strokes: these are landmarks, so they hold a constant width on
    screen. At fit zoom a 3-unit stroke renders under a pixel, which is why the
-   starting factor was almost impossible to pick out. */
+   starting variable was almost impossible to pick out. */
 .map-svg g[data-node-id].is-trace-start > path:last-of-type {
   stroke: #0f766e;
   stroke-width: 3.5;
