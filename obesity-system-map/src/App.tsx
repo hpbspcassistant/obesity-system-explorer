@@ -1811,7 +1811,7 @@ export default function App() {
                 : 0
           }
           highContrast={highContrast}
-          showSwatches={mode !== 'intervention'}
+          filterOnly={mode === 'intervention'}
         />
         {mode === 'explore' && (
         <NodeDetailPanel

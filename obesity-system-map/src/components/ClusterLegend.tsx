@@ -25,14 +25,15 @@ interface ClusterLegendProps {
   /** Legend swatches follow the map's palette; see src/data/contrast.ts. */
   highContrast: boolean
   /**
-   * False where the map is not painting variables by their group.
+   * Drops everything but the filter.
    *
-   * Intervention paints every box by whether a programme reaches it, so a type
-   * swatch there promises a colour that appears nowhere — and it does it beside
-   * a second key that is telling the truth about the same boxes. The filter is
-   * still worth having, so the swatches go and the box stays.
+   * Intervention paints by reach rather than by group, so a colour key there
+   * described nothing on screen — the box called itself a key and held only the
+   * influence arrows and this button, stacked above a second box that was
+   * telling the truth about the same variables. The filter is still worth
+   * having, so it survives on its own.
    */
-  showSwatches?: boolean
+  filterOnly?: boolean
 }
 
 /** Solid line ending in an arrowhead, as printed on the original legend. */
@@ -111,7 +112,7 @@ export function ClusterLegend({
   onFilterOpenChange,
   bottomInset = 0,
   highContrast,
-  showSwatches = true,
+  filterOnly = false,
 }: ClusterLegendProps) {
   // The key always describes the artwork's own ten colours, because that is what
   // the map paints regardless of what the filter is grouping by.
@@ -151,6 +152,55 @@ export function ClusterLegend({
    */
   const maxHeight = `calc(100% - ${32 + bottomInset}px)`
 
+  const clearFilterChip = filtering && (
+    /* The whole reason the box used to be everywhere: a filter left on with
+       nothing on screen saying so. One press puts it back. */
+    <button
+      type="button"
+      onClick={onShowAll}
+      title="Show every group again"
+      className="flex min-w-0 items-center gap-1 rounded-full bg-gray-900 py-1 pl-2 pr-1.5 text-xs font-medium text-white shadow-lg hover:bg-gray-800"
+    >
+      <span className="truncate tabular-nums">{hiddenCount} hidden</span>
+      <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0" aria-hidden="true">
+        <path
+          d="M4 4l8 8M12 4l-8 8"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </svg>
+    </button>
+  )
+
+  const filterControl = (
+    <GroupFilter
+      taxonomy={taxonomy}
+      onTaxonomyChange={onTaxonomyChange}
+      groups={groups}
+      hiddenGroups={hiddenGroups}
+      onToggleGroup={onToggleGroup}
+      onShowAll={onShowAll}
+      onHideAll={onHideAll}
+      open={filterOpen}
+      onOpenChange={onFilterOpenChange}
+    />
+  )
+
+  if (filterOnly) {
+    return (
+      <div className={shell} style={position}>
+        <div className="flex items-center gap-1.5">
+          <div className="rounded-lg border border-gray-200 bg-white/95 p-1 shadow-lg">
+            {filterControl}
+          </div>
+          {clearFilterChip}
+        </div>
+      </div>
+    )
+  }
+
   if (collapsed) {
     return (
       <div className={shell} style={position}>
@@ -161,20 +211,16 @@ export function ClusterLegend({
           title="Show the key"
           className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/95 px-3 py-2 text-xs font-medium text-gray-700 shadow-lg hover:bg-gray-50"
         >
-          {/* A few swatches, so the pill says "colour key" without the words —
-              but only where those colours are on the map. In Intervention they
-              are not, which is the whole point of `showSwatches`. */}
-          {showSwatches && (
-            <span aria-hidden="true" className="flex shrink-0 gap-0.5">
-              {keyEntries.slice(0, 3).map((entry) => (
-                <span
-                  key={entry.name}
-                  className="h-3 w-3 rounded-[2px] border border-gray-300"
-                  style={{ backgroundColor: entry.swatch }}
-                />
-              ))}
-            </span>
-          )}
+          {/* A few swatches, so the pill says "colour key" without the words. */}
+          <span aria-hidden="true" className="flex shrink-0 gap-0.5">
+            {keyEntries.slice(0, 3).map((entry) => (
+              <span
+                key={entry.name}
+                className="h-3 w-3 rounded-[2px] border border-gray-300"
+                style={{ backgroundColor: entry.swatch }}
+              />
+            ))}
+          </span>
           Key
           {/* Only when something is hidden: otherwise the badge would imply a
               filter is active when nothing is filtered. */}
@@ -217,7 +263,7 @@ export function ClusterLegend({
           </button>
         </div>
 
-        {showSwatches && (
+        {(
           <>
             {/* Inert. The one part of this box that gives way when space is
                 short — the influence key and the filter button stay put. */}
@@ -245,12 +291,7 @@ export function ClusterLegend({
           </>
         )}
 
-        <div
-          className={[
-            'shrink-0 space-y-1',
-            showSwatches ? 'mt-2 border-t border-gray-200 pt-2' : '',
-          ].join(' ')}
-        >
+        <div className="mt-2 shrink-0 space-y-1 border-t border-gray-200 pt-2">
           <div className="flex items-center gap-2 text-xs text-gray-700">
             <PositiveIcon />
             <span>Positive influence</span>
@@ -262,38 +303,8 @@ export function ClusterLegend({
         </div>
 
         <div className="mt-2 flex shrink-0 items-center gap-1.5 border-t border-gray-200 pt-2">
-          <GroupFilter
-            taxonomy={taxonomy}
-            onTaxonomyChange={onTaxonomyChange}
-            groups={groups}
-            hiddenGroups={hiddenGroups}
-            onToggleGroup={onToggleGroup}
-            onShowAll={onShowAll}
-            onHideAll={onHideAll}
-            open={filterOpen}
-            onOpenChange={onFilterOpenChange}
-          />
-          {/* The whole reason the old box had to be everywhere: a filter left on
-              with nothing on screen saying so. One press puts it back. */}
-          {filtering && (
-            <button
-              type="button"
-              onClick={onShowAll}
-              title="Show every group again"
-              className="flex min-w-0 items-center gap-1 rounded-full bg-gray-900 py-1 pl-2 pr-1.5 text-xs font-medium text-white hover:bg-gray-800"
-            >
-              <span className="truncate tabular-nums">{hiddenCount} hidden</span>
-              <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0" aria-hidden="true">
-                <path
-                  d="M4 4l8 8M12 4l-8 8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </button>
-          )}
+          {filterControl}
+          {clearFilterChip}
         </div>
       </div>
     </div>
