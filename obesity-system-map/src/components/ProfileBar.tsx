@@ -40,6 +40,7 @@ export interface ProfileBarProps {
   onEditPersona: () => void
   onImportProfile: (result: ParseResult) => void
   onDeleteProfile: (id: string) => void
+  onDeleteAllProfiles: () => void
 }
 
 export function ProfileBar({
@@ -60,6 +61,7 @@ export function ProfileBar({
   onEditPersona,
   onImportProfile,
   onDeleteProfile,
+  onDeleteAllProfiles,
 }: ProfileBarProps) {
   const [open, setOpen] = useState<'persona' | 'more' | null>(null)
   const barRef = useRef<HTMLDivElement | null>(null)
@@ -190,7 +192,7 @@ export function ProfileBar({
             strokeLinejoin="round"
           />
         </svg>
-        Saved in this browser
+        Saved locally — de-identified data only
       </span>
 
       <span className="h-5 w-px shrink-0 bg-gray-200" />
@@ -254,7 +256,7 @@ export function ProfileBar({
       <ExportMenu
         state={exportState}
         choices={exportChoices}
-        footnote="Profiles are saved in this browser as you work. Export to keep a copy."
+        footnote="Profiles stay on this device until deleted. Exported JSON contains the persona details."
       />
 
       <button
@@ -317,6 +319,15 @@ export function ProfileBar({
                 setOpen(null)
               }}
             />
+            {profiles.length > 1 && (
+              <ClearAllItem
+                count={profiles.length}
+                onConfirm={() => {
+                  onDeleteAllProfiles()
+                  setOpen(null)
+                }}
+              />
+            )}
           </Menu>
         )}
       </div>
@@ -394,6 +405,56 @@ function MenuItem({
 
 function Divider() {
   return <div className="my-1 h-px bg-gray-100" />
+}
+
+/** A deliberate two-step retention control for shared or workshop devices. */
+function ClearAllItem({
+  count,
+  onConfirm,
+}: {
+  count: number
+  onConfirm: () => void
+}) {
+  const [armed, setArmed] = useState(false)
+
+  if (!armed) {
+    return (
+      <button
+        type="button"
+        role="menuitem"
+        onClick={() => setArmed(true)}
+        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-rose-700 hover:bg-rose-50"
+      >
+        <span aria-hidden="true" className="text-transparent">✓</span>
+        <span>Delete all saved profiles…</span>
+      </button>
+    )
+  }
+
+  return (
+    <div className="border-t border-gray-100 px-3 py-2">
+      <p className="mb-1.5 text-xs leading-snug text-gray-700">
+        Delete all {count} profiles saved in this browser? Exported copies are
+        unaffected. This cannot be undone.
+      </p>
+      <div className="flex gap-1.5">
+        <button
+          type="button"
+          onClick={onConfirm}
+          className="rounded bg-rose-600 px-2 py-1 text-xs font-medium text-white hover:bg-rose-700"
+        >
+          Delete all
+        </button>
+        <button
+          type="button"
+          onClick={() => setArmed(false)}
+          className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
 }
 
 /**

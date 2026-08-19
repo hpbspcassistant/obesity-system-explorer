@@ -95,6 +95,22 @@ const NONE_HIDDEN: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_MARKS: ReadonlySet<number> = Object.freeze(new Set<number>())
 const NO_EDGE_MARKS: ReadonlySet<string> = Object.freeze(new Set<string>())
 const NO_LINKS: readonly string[] = Object.freeze([])
+
+function readPreference(key: string): boolean {
+  try {
+    return localStorage.getItem(key) === '1'
+  } catch {
+    return false
+  }
+}
+
+function writePreference(key: string, value: boolean): void {
+  try {
+    localStorage.setItem(key, value ? '1' : '0')
+  } catch {
+    // Storage may be disabled by browser or kiosk policy; the session still works.
+  }
+}
 /** Width of the trace panel (w-[23rem]), so framing clears it. */
 const TRACE_PANEL_PX = 368
 /** Width of Explore's detail panel (w-[22rem]) — same job, different panel. */
@@ -146,7 +162,7 @@ export default function App() {
   // Read from storage alone. The narrow-window nudge below also sets this, but
   // must never be mistaken for the choice — see `collapseLegend`.
   const [legendCollapsed, setLegendCollapsed] = useState(
-    () => localStorage.getItem(LEGEND_KEY) === '1',
+    () => readPreference(LEGEND_KEY),
   )
   // The group filter's popover. Held here rather than in the legend because the
   // walkthrough demonstrates a filter, and a demonstration inside a closed
@@ -160,7 +176,7 @@ export default function App() {
   // asked to choose a guide before you know what the thing is answers a question
   // you cannot yet have.
   const [guide, setGuide] = useState<GuideView | null>(() =>
-    localStorage.getItem(GUIDE_KEY) === '1'
+    readPreference(GUIDE_KEY)
       ? null
       : { kind: 'section', id: 'basics', step: 0 },
   )
@@ -210,7 +226,7 @@ export default function App() {
   // A viewing preference, kept across modes and remembered between
   // sessions: whoever needs it needs it every time.
   const [highContrast, setHighContrast] = useState<boolean>(
-    () => localStorage.getItem(CONTRAST_KEY) === '1',
+    () => readPreference(CONTRAST_KEY),
   )
   const [hiddenByTaxonomy, setHiddenByTaxonomy] = useState<
     Record<Taxonomy, ReadonlySet<string>>
@@ -414,6 +430,15 @@ export default function App() {
     },
     [profiles, activeProfileId],
   )
+
+  const deleteAllProfiles = useCallback(() => {
+    setProfiles([])
+    setActiveProfileId(null)
+    setReviewOpen(false)
+    setPersonaForm(null)
+    setSelection(null)
+    setImportNotice(null)
+  }, [])
 
   /** One form serves both "name a new persona" and "rename this one". */
   const savePersona = useCallback(
@@ -686,7 +711,7 @@ export default function App() {
   const closeGuide = useCallback(() => {
     setGuide(null)
     try {
-      localStorage.setItem(GUIDE_KEY, '1')
+      writePreference(GUIDE_KEY, true)
     } catch {
       // Private browsing refuses writes; showing the tour twice is not worth
       // interrupting anyone for.
@@ -1009,7 +1034,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(CONTRAST_KEY, highContrast ? '1' : '0')
+      writePreference(CONTRAST_KEY, highContrast)
     } catch {
       // Private browsing: the setting just will not survive the session.
     }
@@ -1222,7 +1247,7 @@ export default function App() {
   const collapseLegend = useCallback((next: boolean) => {
     setLegendCollapsed(next)
     try {
-      localStorage.setItem(LEGEND_KEY, next ? '1' : '0')
+      writePreference(LEGEND_KEY, next)
     } catch {
       // Private browsing: the setting just will not survive the session.
     }
@@ -1736,6 +1761,7 @@ export default function App() {
               onEditPersona={() => setPersonaForm('edit')}
               onImportProfile={importProfile}
               onDeleteProfile={deleteProfile}
+              onDeleteAllProfiles={deleteAllProfiles}
             />
           </>
         )}

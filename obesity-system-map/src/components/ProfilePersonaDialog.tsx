@@ -45,11 +45,14 @@ export function ProfilePersonaDialog({
     profile?.characteristics ?? {},
   )
   const nameRef = useRef<HTMLInputElement | null>(null)
+  const dialogRef = useRef<HTMLDivElement | null>(null)
   /** Import is a rare route in, so it starts folded away. */
   const [importOpen, setImportOpen] = useState(false)
 
   useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
     nameRef.current?.focus()
+    return () => previous?.focus()
   }, [])
 
   /**
@@ -61,9 +64,28 @@ export function ProfilePersonaDialog({
     const leave = onCancel ?? onLeave
     if (!leave) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      event.stopPropagation()
-      leave()
+      if (event.key === 'Escape') {
+        event.stopPropagation()
+        leave()
+        return
+      }
+      if (event.key !== 'Tab') return
+
+      const focusable = Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((element) => !element.hidden)
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable.at(-1)!
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener('keydown', onKey, true)
     return () => document.removeEventListener('keydown', onKey, true)
@@ -74,6 +96,7 @@ export function ProfilePersonaDialog({
   return (
     <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/45 backdrop-blur-[2px]">
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={editing ? 'Rename persona' : 'New profile'}
@@ -89,6 +112,21 @@ export function ProfilePersonaDialog({
             the map's.
           </p>
         )}
+
+        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+          <strong className="font-semibold">Use de-identified personas only.</strong>{' '}
+          Profiles remain on this device until deleted and exported files contain
+          the profile details. Do not enter a real name, contact information, or
+          identifiable health information.{' '}
+          <a
+            href={`${import.meta.env.BASE_URL}privacy.html`}
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium underline underline-offset-2"
+          >
+            Data handling details
+          </a>
+        </div>
 
         <form
           className="mt-3"
@@ -109,7 +147,7 @@ export function ProfilePersonaDialog({
             ref={nameRef}
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="e.g. Raj"
+            placeholder="e.g. Persona A"
             className="mb-3 w-full rounded border border-gray-300 px-2 py-1.5 text-sm focus:border-gray-800 focus:outline-none"
           />
           <label
@@ -123,7 +161,7 @@ export function ProfilePersonaDialog({
             value={details}
             onChange={(event) => setDetails(event.target.value)}
             rows={3}
-            placeholder="50, taxi driver, 12-hour shifts"
+            placeholder="De-identified context only"
             className="mb-3 w-full resize-none rounded border border-gray-300 px-2 py-1.5 text-sm focus:border-gray-800 focus:outline-none"
           />
 
