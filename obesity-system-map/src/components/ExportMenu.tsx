@@ -1,63 +1,62 @@
 import { useEffect, useRef, useState } from 'react'
 
-import type { Profile } from '../lib/profile'
+/** One thing the reader can walk away with. */
+export interface ExportChoice {
+  /** Heading it sits under. Consecutive choices sharing one are grouped. */
+  group: string
+  label: string
+  /**
+   * What actually lands in the downloads folder. The reason the menu is worth
+   * opening: a row of buttons all called "Export something" cannot say this.
+   */
+  note: string
+  /** Runs straight away. Omit when `chooser` is set. */
+  onSelect?: () => void
+  /** A second step, picking which of these to include. */
+  chooser?: {
+    items: readonly { id: string; name: string }[]
+    onConfirm: (ids: string[]) => void
+    /** Label on the confirm button, e.g. "Download". */
+    confirmLabel?: string
+  }
+}
 
 export interface ExportMenuProps {
-  profiles: readonly Profile[]
-  /** The map as it currently stands, one image. */
-  onExportPng: () => void
-  /** One image per persona, plus the Anyone view. */
-  onBulkExportPng: () => void
-  /** Coverage report as JSON, for the profiles named. */
-  onExportCoverage: (profileIds: string[]) => void
+  choices: readonly ExportChoice[]
   /**
-   * `working` disables everything. Rasterising 108 boxes and 296 arrows takes
+   * `working` disables the button. Rasterising 108 boxes and 296 arrows takes
    * long enough to click twice, and two exports of one view is a confusing thing
    * to find in a downloads folder.
    */
   state: 'idle' | 'working' | 'failed'
+  /** Small print under the menu, e.g. where the work is actually kept. */
+  footnote?: string
 }
 
 /**
- * One Export button for what used to be three side by side.
+ * One Export button for what used to be several scattered controls.
  *
- * "Export PNG", "Export all PNGs" and "Export coverage" sat in a row on the bar,
- * which put the rarest actions in the tool at the same volume as the persona
- * picker beside them, and asked the reader to tell three similarly-named things
- * apart before knowing what any of them did.
+ * Intervention had three side by side on its bar; Profile had one on the bar and
+ * two more buried in a "…" menu next to Edit persona, Import and Delete. Between
+ * them that is six controls, none of which said what would arrive, several of
+ * which had to be found before they could be chosen.
  *
- * They are two questions, not three choices: what to save — the picture or the
- * numbers — and how much of it. The menu asks them in that order, so the row a
- * reader wants is found by what they are trying to end up with rather than by
- * elimination.
+ * They are not a list of choices, they are two questions: save the picture or
+ * the data, and how much of it. The menu asks them in that order, so a reader
+ * finds their row by what they want to end up with rather than by elimination.
  *
- * Coverage keeps its per-persona selection, on a second step rather than in a
- * popover of its own. Everything is ticked when it opens, so the common case is
- * still one press past the menu, and narrowing it stays possible instead of
- * being quietly dropped in the name of tidiness.
+ * Shared by both bars rather than written twice, which is also what makes the
+ * popover behave the same in both — Escape closes and returns focus, a click
+ * outside dismisses, and closing resets to the first step so reopening never
+ * lands halfway through last time's answer.
  */
-export function ExportMenu({
-  profiles,
-  onExportPng,
-  onBulkExportPng,
-  onExportCoverage,
-  state,
-}: ExportMenuProps) {
+export function ExportMenu({ choices, state, footnote }: ExportMenuProps) {
   const [open, setOpen] = useState(false)
-  // Which step is showing. Reset on close, so reopening always starts at the
-  // question rather than halfway through last time's answer.
-  const [step, setStep] = useState<'menu' | 'coverage'>('menu')
-  const [chosen, setChosen] = useState<Set<string>>(
-    () => new Set(profiles.map((p) => p.id)),
-  )
+  /** Index of the choice whose second step is showing, or null for the menu. */
+  const [choosing, setChoosing] = useState<number | null>(null)
+  const [chosen, setChosen] = useState<ReadonlySet<string>>(new Set())
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   const popoverRef = useRef<HTMLDivElement | null>(null)
-
-  // A profile added or deleted while this is shut must not leave a stale
-  // selection behind; ticking everything is also the right default.
-  useEffect(() => {
-    setChosen(new Set(profiles.map((p) => p.id)))
-  }, [profiles])
 
   useEffect(() => {
     if (!open) return
@@ -66,6 +65,7 @@ export function ExportMenu({
       if (popoverRef.current?.contains(target)) return
       if (buttonRef.current?.contains(target)) return
       setOpen(false)
+      setChoosing(null)
     }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return
@@ -73,6 +73,7 @@ export function ExportMenu({
       // behind this menu — one press, one dismissal.
       event.stopPropagation()
       setOpen(false)
+      setChoosing(null)
       buttonRef.current?.focus()
     }
     document.addEventListener('pointerdown', onPointerDown)
@@ -85,11 +86,11 @@ export function ExportMenu({
 
   const close = () => {
     setOpen(false)
-    setStep('menu')
+    setChoosing(null)
   }
 
   const working = state === 'working'
-  const hasProfiles = profiles.length > 0
+  const active = choosing === null ? null : choices[choosing]
 
   return (
     <div className="relative shrink-0">
@@ -98,10 +99,7 @@ export function ExportMenu({
         type="button"
         data-testid="export-menu"
         disabled={working}
-        onClick={() => {
-          if (open) close()
-          else setOpen(true)
-        }}
+        onClick={() => (open ? close() : setOpen(true))}
         aria-haspopup="menu"
         aria-expanded={open}
         className={[
@@ -137,122 +135,52 @@ export function ExportMenu({
           // rightward would run off the window.
           className="absolute bottom-full right-0 mb-1.5 w-64 rounded-lg border border-gray-200 bg-white p-1 shadow-[0_10px_32px_-8px_rgba(0,0,0,0.28)]"
         >
-          {step === 'menu' ? (
-            <div role="menu" aria-label="Export">
-              <Group>The picture</Group>
-              <Item
-                onClick={() => {
-                  onExportPng()
-                  close()
-                }}
-                note="The map exactly as it looks now"
-              >
-                This view, as a PNG
-              </Item>
-              {hasProfiles && (
-                <Item
-                  onClick={() => {
-                    onBulkExportPng()
-                    close()
-                  }}
-                  note={`One image each, plus the Anyone view — ${profiles.length + 1} files`}
-                >
-                  Every persona, as PNGs
-                </Item>
-              )}
-
-              <Group>The numbers</Group>
-              <Item
-                onClick={() => {
-                  if (!hasProfiles) {
-                    onExportCoverage([])
-                    close()
-                    return
-                  }
-                  setStep('coverage')
-                }}
-                note="Which variables are covered, and which are not"
-                more={hasProfiles}
-              >
-                Coverage data, as JSON
-              </Item>
-            </div>
+          {active?.chooser ? (
+            <Chooser
+              title={active.label}
+              items={active.chooser.items}
+              chosen={chosen}
+              onChosenChange={setChosen}
+              confirmLabel={active.chooser.confirmLabel ?? 'Download'}
+              onBack={() => setChoosing(null)}
+              onConfirm={() => {
+                active.chooser?.onConfirm([...chosen])
+                close()
+              }}
+            />
           ) : (
-            <div>
-              <button
-                type="button"
-                onClick={() => setStep('menu')}
-                className="flex w-full items-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
-              >
-                <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" aria-hidden="true">
-                  <path
-                    d="M6.5 1 2.5 5l4 4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Coverage data
-              </button>
-
-              <ul className="max-h-48 space-y-0.5 overflow-y-auto border-t border-gray-100 pt-1">
-                {profiles.map((profile) => (
-                  <li key={profile.id}>
-                    <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-gray-800 hover:bg-gray-50">
-                      <input
-                        type="checkbox"
-                        checked={chosen.has(profile.id)}
-                        onChange={() =>
-                          setChosen((prev) => {
-                            const next = new Set(prev)
-                            if (next.has(profile.id)) next.delete(profile.id)
-                            else next.add(profile.id)
-                            return next
-                          })
-                        }
-                        className="accent-gray-900"
-                      />
-                      <span className="min-w-0 flex-1 truncate">
-                        {profile.name}
-                      </span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-1 flex items-center justify-between gap-2 border-t border-gray-100 px-1 pt-1.5">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setChosen(
-                      chosen.size === profiles.length
-                        ? new Set()
-                        : new Set(profiles.map((p) => p.id)),
-                    )
-                  }
-                  className="text-xs text-gray-600 underline decoration-gray-300 underline-offset-2 hover:text-gray-900"
-                >
-                  {chosen.size === profiles.length ? 'Deselect all' : 'Select all'}
-                </button>
-                <button
-                  type="button"
-                  disabled={chosen.size === 0}
-                  onClick={() => {
-                    onExportCoverage([...chosen])
-                    close()
-                  }}
-                  className={[
-                    'rounded-md border px-2.5 py-1 text-xs transition-colors',
-                    chosen.size === 0
-                      ? 'cursor-not-allowed border-gray-200 text-gray-400'
-                      : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
-                  ].join(' ')}
-                >
-                  Download
-                </button>
-              </div>
+            <div role="menu" aria-label="Export">
+              {choices.map((choice, index) => (
+                <div key={choice.label}>
+                  {choice.group !== choices[index - 1]?.group && (
+                    <p className="px-2 pb-0.5 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                      {choice.group}
+                    </p>
+                  )}
+                  <Item
+                    note={choice.note}
+                    more={Boolean(choice.chooser)}
+                    onClick={() => {
+                      if (choice.chooser) {
+                        // Everything ticked on arrival, so the common case is one
+                        // press past the menu and narrowing is still possible.
+                        setChosen(new Set(choice.chooser.items.map((i) => i.id)))
+                        setChoosing(index)
+                        return
+                      }
+                      choice.onSelect?.()
+                      close()
+                    }}
+                  >
+                    {choice.label}
+                  </Item>
+                </div>
+              ))}
+              {footnote && (
+                <p className="border-t border-gray-100 px-2 pb-1 pt-1.5 text-xs leading-snug text-gray-500">
+                  {footnote}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -261,20 +189,95 @@ export function ExportMenu({
   )
 }
 
-/** A heading over a run of items, naming what they have in common. */
-function Group({ children }: { children: React.ReactNode }) {
+/** The second step: which of these to include. */
+function Chooser({
+  title,
+  items,
+  chosen,
+  onChosenChange,
+  confirmLabel,
+  onBack,
+  onConfirm,
+}: {
+  title: string
+  items: readonly { id: string; name: string }[]
+  chosen: ReadonlySet<string>
+  onChosenChange: (next: ReadonlySet<string>) => void
+  confirmLabel: string
+  onBack: () => void
+  onConfirm: () => void
+}) {
+  const all = chosen.size === items.length
   return (
-    <p className="px-2 pb-0.5 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-      {children}
-    </p>
+    <div>
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex w-full items-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+      >
+        <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" aria-hidden="true">
+          <path
+            d="M6.5 1 2.5 5l4 4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {title}
+      </button>
+
+      <ul className="max-h-48 space-y-0.5 overflow-y-auto border-t border-gray-100 pt-1">
+        {items.map((item) => (
+          <li key={item.id}>
+            <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-gray-800 hover:bg-gray-50">
+              <input
+                type="checkbox"
+                checked={chosen.has(item.id)}
+                onChange={() => {
+                  const next = new Set(chosen)
+                  if (next.has(item.id)) next.delete(item.id)
+                  else next.add(item.id)
+                  onChosenChange(next)
+                }}
+                className="accent-gray-900"
+              />
+              <span className="min-w-0 flex-1 truncate">{item.name}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-1 flex items-center justify-between gap-2 border-t border-gray-100 px-1 pt-1.5">
+        <button
+          type="button"
+          onClick={() =>
+            onChosenChange(all ? new Set() : new Set(items.map((i) => i.id)))
+          }
+          className="text-xs text-gray-600 underline decoration-gray-300 underline-offset-2 hover:text-gray-900"
+        >
+          {all ? 'Deselect all' : 'Select all'}
+        </button>
+        <button
+          type="button"
+          disabled={chosen.size === 0}
+          onClick={onConfirm}
+          className={[
+            'rounded-md border px-2.5 py-1 text-xs transition-colors',
+            chosen.size === 0
+              ? 'cursor-not-allowed border-gray-200 text-gray-400'
+              : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
+          ].join(' ')}
+        >
+          {confirmLabel}
+        </button>
+      </div>
+    </div>
   )
 }
 
-/**
- * One export. The note under the label is what makes the menu worth opening —
- * three buttons called "Export something" told the reader nothing about what
- * would land in their downloads folder.
- */
+/** One export: what it is called, and what it leaves you with. */
 function Item({
   children,
   note,

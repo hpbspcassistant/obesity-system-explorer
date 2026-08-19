@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { ExportPngButton } from './ExportPngButton'
+import { ExportMenu, type ExportChoice } from './ExportMenu'
 import { downloadProfile } from '../lib/profile'
 import type { ParseResult, Profile } from '../lib/profile'
 import { ImportButton } from './ProfilePersonaDialog'
@@ -81,6 +81,37 @@ export function ProfileBar({
       document.removeEventListener('keydown', onKey)
     }
   }, [open])
+
+  const exportChoices: ExportChoice[] = [
+    {
+      group: 'The picture',
+      label: 'This view, as a PNG',
+      // Whatever the map is currently showing, which is why there is one row
+      // here and not two: with "Marked only" on this is the profile by itself,
+      // with it off it is the profile in the context of the whole map, and both
+      // are wanted at different times.
+      note: markedOnly
+        ? 'Just the marked variables, as shown'
+        : 'The profile in the context of the whole map',
+      onSelect: onExportPng,
+    },
+    ...(profiles.length > 1
+      ? [
+          {
+            group: 'The picture',
+            label: 'Every profile, as PNGs',
+            note: `One image each — ${profiles.length} files`,
+            onSelect: onBulkExportPng,
+          },
+        ]
+      : []),
+    {
+      group: 'The profile',
+      label: `${profile.name}, as JSON`,
+      note: 'Re-importable, and the only copy that outlives this browser',
+      onSelect: () => downloadProfile(profile),
+    },
+  ]
 
   return (
     <div
@@ -200,11 +231,11 @@ export function ProfileBar({
         Marked only
       </button>
 
-      {/* Saves whatever the map is currently showing — so with "Marked only" on
-          this is the profile by itself, and with it off it is the profile in the
-          context of the whole map. Both are wanted at different times, which is
-          why there is one button rather than two. */}
-      <ExportPngButton onExport={onExportPng} state={exportState} />
+      <ExportMenu
+        state={exportState}
+        choices={exportChoices}
+        footnote="Profiles are saved in this browser as you work. Export to keep a copy."
+      />
 
       <button
         type="button"
@@ -255,24 +286,6 @@ export function ProfileBar({
             >
               Edit persona…
             </MenuItem>
-            <MenuItem
-              onClick={() => {
-                downloadProfile(profile)
-                setOpen(null)
-              }}
-            >
-              Export JSON
-            </MenuItem>
-            {profiles.length > 1 && (
-              <MenuItem
-                onClick={() => {
-                  onBulkExportPng()
-                  setOpen(null)
-                }}
-              >
-                Export all PNGs
-              </MenuItem>
-            )}
             <div className="px-1.5 py-1">
               <ImportButton onImport={onImportProfile} />
             </div>
@@ -284,9 +297,6 @@ export function ProfileBar({
                 setOpen(null)
               }}
             />
-            <p className="px-3 pb-2 pt-1 text-[10.5px] leading-snug text-gray-400">
-              Saved in this browser as you work. Export to keep a copy.
-            </p>
           </Menu>
         )}
       </div>

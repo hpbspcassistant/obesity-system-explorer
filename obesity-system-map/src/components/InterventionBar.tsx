@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { ExportMenu } from './ExportMenu'
+import { ExportMenu, type ExportChoice } from './ExportMenu'
 import type {
   Applicability,
   PersonaCharacteristics,
@@ -410,6 +410,40 @@ export function InterventionBar({
   const withPersona = personaId !== null
   const filtering = selectedProgrammes !== null
 
+  const exportChoices: ExportChoice[] = [
+    {
+      group: 'The picture',
+      label: 'This view, as a PNG',
+      note: 'The map exactly as it looks now',
+      onSelect: onExportPng,
+    },
+    ...(profiles.length > 0
+      ? [
+          {
+            group: 'The picture',
+            label: 'Every persona, as PNGs',
+            note: `One image each, plus the Anyone view — ${profiles.length + 1} files`,
+            onSelect: onBulkExportPng,
+          },
+        ]
+      : []),
+    {
+      group: 'The numbers',
+      label: 'Coverage data, as JSON',
+      note: 'Which variables are covered, and which are not',
+      // With no personas saved there is nothing to choose between, so it
+      // downloads the whole inventory straight away.
+      ...(profiles.length > 0
+        ? {
+            chooser: {
+              items: profiles.map((p) => ({ id: p.id, name: p.name })),
+              onConfirm: onExportCoverage,
+            },
+          }
+        : { onSelect: () => onExportCoverage([]) }),
+    },
+  ]
+
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-12 items-center gap-3 border-t border-gray-200 bg-white/97 px-3">
       <PersonaDropdown
@@ -507,13 +541,7 @@ export function InterventionBar({
         </button>
       )}
 
-      <ExportMenu
-        profiles={profiles}
-        onExportPng={onExportPng}
-        onBulkExportPng={onBulkExportPng}
-        onExportCoverage={onExportCoverage}
-        state={exportState}
-      />
+      <ExportMenu state={exportState} choices={exportChoices} />
     </div>
   )
 }
