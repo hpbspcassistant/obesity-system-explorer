@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { ExportPngButton } from './ExportPngButton'
+import { ExportMenu } from './ExportMenu'
 import type {
   Applicability,
   PersonaCharacteristics,
@@ -218,139 +218,6 @@ function PersonaDropdown({
             </p>
           )}
         </Menu>
-      )}
-    </div>
-  )
-}
-
-/* --------------------------------------------------- export coverage button */
-
-function ExportCoverageButton({
-  profiles,
-  onExport,
-}: {
-  profiles: readonly Profile[]
-  onExport: (profileIds: string[]) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<Set<string>>(
-    () => new Set(profiles.map((p) => p.id)),
-  )
-  const popoverRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    setSelected(new Set(profiles.map((p) => p.id)))
-  }, [profiles])
-
-  useEffect(() => {
-    if (!open) return
-    const handler = (e: MouseEvent) => {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
-
-  const toggle = (id: string) =>
-    setSelected((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-
-  if (profiles.length === 0) {
-    return (
-      <button
-        type="button"
-        onClick={() => onExport([])}
-        title="Download coverage data as JSON"
-        className="shrink-0 rounded-md border border-gray-300 px-2.5 py-1 text-[12px] text-gray-700 hover:bg-gray-50"
-      >
-        Export coverage
-      </button>
-    )
-  }
-
-  return (
-    <div className="relative">
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        title="Download coverage data as JSON"
-        className={[
-          'shrink-0 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
-          open
-            ? 'border-gray-900 bg-gray-900 text-white'
-            : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-        ].join(' ')}
-      >
-        Export coverage
-      </button>
-
-      {open && (
-        <div
-          ref={popoverRef}
-          className="absolute bottom-full right-0 mb-2 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg"
-        >
-          <p className="mb-1.5 px-1 text-[10.5px] font-semibold uppercase tracking-wide text-gray-400">
-            Export coverage for
-          </p>
-          <ul className="space-y-0.5">
-            {profiles.map((p) => (
-              <li key={p.id}>
-                <label className="flex cursor-pointer items-center gap-2 rounded px-1 py-1 text-[12px] text-gray-800 hover:bg-gray-50">
-                  <input
-                    type="checkbox"
-                    checked={selected.has(p.id)}
-                    onChange={() => toggle(p.id)}
-                    className="accent-gray-900"
-                  />
-                  {p.name}
-                </label>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-1.5 flex items-center justify-between border-t border-gray-100 pt-1.5">
-            <button
-              type="button"
-              onClick={() => {
-                if (selected.size === profiles.length)
-                  setSelected(new Set())
-                else
-                  setSelected(new Set(profiles.map((p) => p.id)))
-              }}
-              className="text-[11px] text-gray-500 underline decoration-gray-300 underline-offset-2 hover:text-gray-800"
-            >
-              {selected.size === profiles.length ? 'Deselect all' : 'Select all'}
-            </button>
-            <button
-              type="button"
-              disabled={selected.size === 0}
-              onClick={() => {
-                onExport([...selected])
-                setOpen(false)
-              }}
-              className={[
-                'rounded-md border px-2.5 py-1 text-[12px] transition-colors',
-                selected.size === 0
-                  ? 'cursor-not-allowed border-gray-200 text-gray-300'
-                  : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800',
-              ].join(' ')}
-            >
-              Download JSON
-            </button>
-          </div>
-        </div>
       )}
     </div>
   )
@@ -640,26 +507,13 @@ export function InterventionBar({
         </button>
       )}
 
-      <ExportCoverageButton profiles={profiles} onExport={onExportCoverage} />
-
-      <ExportPngButton onExport={onExportPng} state={exportState} />
-
-      {profiles.length > 0 && (
-        <button
-          type="button"
-          disabled={exportState === 'working'}
-          onClick={onBulkExportPng}
-          title="Export one PNG for each persona, plus the Anyone view"
-          className={[
-            'flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] transition-colors',
-            exportState === 'working'
-              ? 'cursor-wait border-gray-200 text-gray-400'
-              : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-          ].join(' ')}
-        >
-          Export all PNGs
-        </button>
-      )}
+      <ExportMenu
+        profiles={profiles}
+        onExportPng={onExportPng}
+        onBulkExportPng={onBulkExportPng}
+        onExportCoverage={onExportCoverage}
+        state={exportState}
+      />
     </div>
   )
 }
